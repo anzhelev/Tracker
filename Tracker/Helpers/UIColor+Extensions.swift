@@ -7,13 +7,11 @@
 import UIKit
 
 extension UIColor {
-//    static var igRed: UIColor {UIColor(named: "YP Red") ?? UIColor.red}
-//    static var igBlue: UIColor {UIColor(named: "YP Blue") ?? UIColor.blue}
-//    static var igBlack: UIColor {UIColor(named: "YP Black") ?? UIColor.black}
-//    static var igBackground: UIColor {UIColor(named: "YP Background") ?? UIColor.darkGray}
-//    static var igGray: UIColor {UIColor(named: "YP Gray") ?? UIColor.gray}
-//    static var igWhite: UIColor {UIColor(named: "YP White") ?? UIColor.white}
-//    static var igWhiteAlpha50: UIColor {UIColor(named: "YP White (Alpha 50)") ?? UIColor.white}
-//    static var igGradientAlpha0: UIColor {UIColor(named: "YP Gradient (Alpha 0)") ?? UIColor.lightGray}
-//    static var igGradientAlpha20: UIColor {UIColor(named: "YP Gradient (Alpha 20)") ?? UIColor.gray}
+    static var trLSBackground: UIColor {UIColor(named: "YP Launch Screen Backgound") ?? UIColor.blue}
+    static var trBlack: UIColor {UIColor(named: "YP Black") ?? UIColor.black}
+    static var trSearchFieldText: UIColor {UIColor(named: "YP Search Field Text") ?? UIColor.gray}
+    static var trSearchFieldBackgroundAlpha12: UIColor {UIColor(named: "YP Search Field Background (Alpha 12)") ?? UIColor.lightGray}
+    static var trDateButtonBackground: UIColor {UIColor(named: "YP Date Label Background") ?? UIColor.gray}
+    static var trWhite: UIColor {UIColor(named: "YP White") ?? UIColor.white}
+    static var trTabBarUpperlineAlpha30: UIColor {UIColor(named: "YP TabBar Upper Line (Alpha 30)") ?? UIColor.yellow}
 }
