@@ -1,24 +1,199 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="L3h-ed-h7V">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-Pro.ttf">
+            <string>SFPro-Regular</string>
+            <string>SFPro-Semibold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-659" y="-15"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="7xt-Q7-yfs">
+            <objects>
+                <tabBarController id="L3h-ed-h7V" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="u9T-k5-Tci">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="zPP-Bg-e96" kind="relationship" relationship="viewControllers" id="2cW-SE-9QV"/>
+                        <segue destination="BoZ-ag-ya1" kind="relationship" relationship="viewControllers" id="5ib-wI-JaT"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G9h-Zo-Nlq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="34" y="-15"/>
+        </scene>
+        <!--Трекеры-->
+        <scene sceneID="lnI-EV-iaP">
+            <objects>
+                <viewController id="zPP-Bg-e96" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gPP-ak-sx8">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GYH-V8-yHy" userLabel="UnderLine">
+                                <rect key="frame" x="0.0" y="768" width="393" height="1"/>
+                                <color key="backgroundColor" name="YP TabBar Upper Line"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="Bpf-Ee-w4m"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SBl-LZ-a9n" userLabel="Date Button">
+                                <rect key="frame" x="300" y="68" width="77" height="34"/>
+                                <color key="backgroundColor" name="YP Date Label Background"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="KPs-KG-J6X"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="77" id="faB-F1-mZK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFPro-Regular" family="SF Pro" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="04.05.24">
+                                    <color key="titleColor" name="YP Black"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cty-1G-75U" userLabel="Plus Button">
+                                <rect key="frame" x="4" y="63" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="aRo-AF-RlX"/>
+                                    <constraint firstAttribute="height" constant="44" id="ivS-Hv-CJz"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="plus_button"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Трекеры" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YFs-SI-69y" userLabel="Трекеры">
+                                <rect key="frame" x="16" y="107" width="177" height="40.666666666666657"/>
+                                <fontDescription key="fontDescription" name="SFPro-Semibold" family="SF Pro" pointSize="34"/>
+                                <color key="textColor" name="YP Black"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" text="Поиск" translatesAutoresizingMaskIntoConstraints="NO" id="2Z7-hW-OkK">
+                                <rect key="frame" x="16" y="155" width="361" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="zPP-Bg-e96" id="vvm-6C-wK0"/>
+                                </connections>
+                            </searchBar>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="tab_trackers_image" translatesAutoresizingMaskIntoConstraints="NO" id="0wT-J9-2N0" userLabel="Trackers Tab Image">
+                                <rect key="frame" x="156.66666666666666" y="374" width="80" height="80"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Что будем отслеживать?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="blh-xE-lzl">
+                                <rect key="frame" x="123.33333333333333" y="462" width="146.33333333333337" height="14.333333333333314"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="W2E-FZ-1sG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="SFPro-Regular" family="SF Pro" pointSize="12"/>
+                                <color key="textColor" name="YP Black"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="s63-uj-0bP"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="s63-uj-0bP" firstAttribute="trailing" secondItem="2Z7-hW-OkK" secondAttribute="trailing" constant="16" id="2YV-jc-PjV"/>
+                            <constraint firstItem="0wT-J9-2N0" firstAttribute="centerY" secondItem="s63-uj-0bP" secondAttribute="centerY" id="9IW-RU-9BM"/>
+                            <constraint firstItem="s63-uj-0bP" firstAttribute="trailing" secondItem="SBl-LZ-a9n" secondAttribute="trailing" constant="16" id="Gsc-L5-S6L"/>
+                            <constraint firstItem="SBl-LZ-a9n" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Cty-1G-75U" secondAttribute="trailing" constant="252" id="HJS-Mv-QPB"/>
+                            <constraint firstItem="blh-xE-lzl" firstAttribute="centerX" secondItem="0wT-J9-2N0" secondAttribute="centerX" id="Kxv-JG-y4i"/>
+                            <constraint firstItem="SBl-LZ-a9n" firstAttribute="centerY" secondItem="Cty-1G-75U" secondAttribute="centerY" id="Qw2-KS-QBw"/>
+                            <constraint firstItem="YFs-SI-69y" firstAttribute="leading" secondItem="s63-uj-0bP" secondAttribute="leading" constant="16" id="UfF-Wf-Jqr"/>
+                            <constraint firstItem="2Z7-hW-OkK" firstAttribute="leading" secondItem="s63-uj-0bP" secondAttribute="leading" constant="16" id="WEz-jH-Za5"/>
+                            <constraint firstItem="Cty-1G-75U" firstAttribute="top" secondItem="s63-uj-0bP" secondAttribute="top" constant="4" id="Xtm-IK-gnb"/>
+                            <constraint firstItem="blh-xE-lzl" firstAttribute="top" secondItem="0wT-J9-2N0" secondAttribute="bottom" constant="8" id="fCw-4g-O7z"/>
+                            <constraint firstItem="s63-uj-0bP" firstAttribute="trailing" secondItem="GYH-V8-yHy" secondAttribute="trailing" id="gUr-qw-wcF"/>
+                            <constraint firstItem="0wT-J9-2N0" firstAttribute="centerX" secondItem="s63-uj-0bP" secondAttribute="centerX" id="laj-JP-gDc"/>
+                            <constraint firstItem="s63-uj-0bP" firstAttribute="bottom" secondItem="GYH-V8-yHy" secondAttribute="bottom" id="pfh-Fy-Xtg"/>
+                            <constraint firstItem="Cty-1G-75U" firstAttribute="leading" secondItem="s63-uj-0bP" secondAttribute="leading" constant="4" id="sIf-fK-2WN"/>
+                            <constraint firstItem="GYH-V8-yHy" firstAttribute="leading" secondItem="s63-uj-0bP" secondAttribute="leading" id="ssW-6t-5lm"/>
+                            <constraint firstItem="YFs-SI-69y" firstAttribute="top" secondItem="Cty-1G-75U" secondAttribute="bottom" id="vau-Wd-ES8"/>
+                            <constraint firstItem="s63-uj-0bP" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="YFs-SI-69y" secondAttribute="trailing" constant="200" id="vwx-Nd-rj5"/>
+                            <constraint firstItem="2Z7-hW-OkK" firstAttribute="top" secondItem="YFs-SI-69y" secondAttribute="bottom" constant="7" id="z9T-97-VEP"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Трекеры" image="tab_bar_trackers_tab" id="OKE-b8-Xdl"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b5W-JR-4G9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="834.35114503816794" y="-321.12676056338029"/>
+        </scene>
+        <!--Статистика-->
+        <scene sceneID="oRy-3J-zCv">
+            <objects>
+                <viewController id="BoZ-ag-ya1" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jyf-Ug-4m7">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3dk-lM-I7U" userLabel="UnderLine">
+                                <rect key="frame" x="0.0" y="768" width="393" height="1"/>
+                                <color key="backgroundColor" name="YP TabBar Upper Line"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="8vE-pu-sjd"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="AY5-I0-oI8"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="AY5-I0-oI8" firstAttribute="trailing" secondItem="3dk-lM-I7U" secondAttribute="trailing" id="5sg-n0-FoB"/>
+                            <constraint firstItem="3dk-lM-I7U" firstAttribute="leading" secondItem="AY5-I0-oI8" secondAttribute="leading" id="a7W-QZ-tl3"/>
+                            <constraint firstItem="AY5-I0-oI8" firstAttribute="bottom" secondItem="3dk-lM-I7U" secondAttribute="bottom" id="fRS-1O-ag9"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Статистика" image="tab_bar_statistics_tab" id="e7S-ha-44a"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5bU-Qz-GqP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="834" y="365"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="plus_button" width="19" height="18"/>
+        <image name="tab_bar_statistics_tab" width="28" height="20"/>
+        <image name="tab_bar_trackers_tab" width="20" height="19"/>
+        <image name="tab_trackers_image" width="80" height="80"/>
+        <namedColor name="YP Black">
+            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP Date Label Background">
+            <color red="0.94099998474121094" green="0.94099998474121094" blue="0.94099998474121094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP TabBar Upper Line">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.30000001192092896" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
