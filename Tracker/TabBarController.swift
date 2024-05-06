@@ -35,13 +35,15 @@ final class TabBarController: UITabBarController {
     }
     
     private func setUpperLine () {
+        //        tabBar.layer.borderWidth = 0.50
+        //        tabBar.clipsToBounds = true
         let upperLine = UIView()
         upperLine.backgroundColor = .trTabBarUpperlineAlpha30
-        upperLine.translatesAutoresizingMaskIntoConstraints = false        
+        upperLine.translatesAutoresizingMaskIntoConstraints = false
         self.tabBar.addSubview(upperLine)
         
         NSLayoutConstraint.activate([
-            upperLine.heightAnchor.constraint(equalToConstant: 1),
+            upperLine.heightAnchor.constraint(equalToConstant: 0.5),
             upperLine.topAnchor.constraint(equalTo: tabBar.safeAreaLayoutGuide.topAnchor, constant: 0),
             upperLine.leadingAnchor.constraint(equalTo: tabBar.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             upperLine.trailingAnchor.constraint(equalTo: tabBar.safeAreaLayoutGuide.trailingAnchor, constant: 0)
