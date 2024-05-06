@@ -15,18 +15,11 @@ final class TrackersTabViewController: UIViewController {
     // MARK: - Private Properties
     private var plusButton: UIButton?
     private let dateToStringFormatter = DateFormatter()
-    private let datePicker: UIDatePicker = UIDatePicker()
     private var selectedDate = Date()
-    private var dateTextField = UITextField()
-    private let datePickerToolBar = UIToolbar()
-    private var tapGesture = UITapGestureRecognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         dateToStringFormatter.dateFormat = "dd.MM.yy"
-        setupDatePicker()
-        setupDatePickerToolBar()
-        setupTapGesture()
         configureUIElements()
     }
     
@@ -43,21 +36,24 @@ final class TrackersTabViewController: UIViewController {
         plusButton.accessibilityIdentifier = "plusButton"
         self.plusButton = plusButton
         
-        let dateTextField = UITextField()
-        dateTextField.text = "\(dateToStringFormatter.string(from: selectedDate))"
-        dateTextField.textAlignment = .center
-        dateTextField.textColor = .trBlack
-        dateTextField.font = UIFont(name: "SFPro-Regular", size: 17)
-        dateTextField.borderStyle = .none
-        dateTextField.layer.masksToBounds = true
-        dateTextField.layer.cornerRadius = 8
-        dateTextField.backgroundColor = .trDateButtonBackground
-        dateTextField.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(dateTextField)
-        dateTextField.accessibilityIdentifier = "dateTextField"
-        self.dateTextField = dateTextField
-        self.dateTextField.inputView = self.datePicker
-        self.dateTextField.inputAccessoryView = datePickerToolBar
+        let dateSelector = UIDatePicker()
+        dateSelector.calendar = .autoupdatingCurrent
+        dateSelector.datePickerMode = .date
+        let minDate = Calendar.current.date(byAdding: .year, value: -10, to: Date())
+        let maxDate = Calendar.current.date(byAdding: .year, value: 10, to: Date())
+        dateSelector.minimumDate = minDate
+        dateSelector.maximumDate = maxDate
+        if let localeID = Locale.preferredLanguages.first {
+            dateSelector.locale = Locale(identifier: localeID)
+        }
+        dateSelector.layer.masksToBounds = true
+        dateSelector.layer.cornerRadius = 8
+        dateSelector.backgroundColor = .trDateButtonBackground
+        dateSelector.addTarget(self, action: #selector(dateSelectorChanged(datePicker:)), for: .valueChanged)
+        //        dateSelector.tintColor = .trBlackr
+        dateSelector.setDate(Date(), animated: true)
+        dateSelector.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(dateSelector)
         
         let titleLabel = UILabel()
         titleLabel.text = "Трекеры"
@@ -94,11 +90,11 @@ final class TrackersTabViewController: UIViewController {
             plusButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 2),
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             
-            dateTextField.heightAnchor.constraint(equalToConstant: 34),
-            dateTextField.widthAnchor.constraint(greaterThanOrEqualToConstant: 80),
-            dateTextField.centerYAnchor.constraint(equalTo: plusButton.centerYAnchor),
-            dateTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            dateTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            dateSelector.heightAnchor.constraint(equalToConstant: 34),
+            dateSelector.widthAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            dateSelector.centerYAnchor.constraint(equalTo: plusButton.centerYAnchor),
+            dateSelector.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            dateSelector.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             titleLabel.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 0),
@@ -125,44 +121,8 @@ final class TrackersTabViewController: UIViewController {
         print("CONSOLE: plusButtonAction" )
     }
     
-    private func setupDatePicker() {
-        let minDate = Calendar.current.date(byAdding: .year, value: -10, to: Date())
-        let maxDate = Calendar.current.date(byAdding: .year, value: 10, to: Date())
-        datePicker.minimumDate = minDate
-        datePicker.maximumDate = maxDate
-        datePicker.calendar = .autoupdatingCurrent
-        datePicker.locale = .current
-        datePicker.preferredDatePickerStyle = .wheels
-        datePicker.datePickerMode = .date
-        datePicker.addTarget(self, action: #selector(datePickerChanged(datePicker:)), for: .valueChanged)
-    }
-    
-    private func setupDatePickerToolBar() {
-        datePickerToolBar.sizeToFit()
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.closeDatePicker))
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        doneButton.tintColor = .trBlack
-        datePickerToolBar.setItems([flexSpace, doneButton], animated: true)
-    }
-    
-    private func setupTapGesture() {
-        tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGestureDone))
-        self.view.addGestureRecognizer(tapGesture)
-        tapGesture.isEnabled = false
-    }
-    
-    @objc func closeDatePicker() {
-        view.endEditing(true)
-        tapGesture.isEnabled = false
-    }
-    
-    @objc func tapGestureDone() {
-        closeDatePicker()
-    }
-    
-    @objc func datePickerChanged(datePicker: UIDatePicker) {
-        tapGesture.isEnabled = true
+    @objc func dateSelectorChanged(datePicker: UIDatePicker) {
         selectedDate = datePicker.date
-        dateTextField.text = "\(dateToStringFormatter.string(from: selectedDate))"
+        print("CONSOLE: dateSelectorChanged", selectedDate)
     }
 }
