@@ -16,6 +16,9 @@ final class TrackersTabViewController: UIViewController {
     private var plusButton: UIButton?
     private let dateToStringFormatter = DateFormatter()
     private var selectedDate = Date()
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,21 +40,16 @@ final class TrackersTabViewController: UIViewController {
         self.plusButton = plusButton
         
         let dateSelector = UIDatePicker()
-        dateSelector.calendar = .autoupdatingCurrent
         dateSelector.datePickerMode = .date
         let minDate = Calendar.current.date(byAdding: .year, value: -10, to: Date())
         let maxDate = Calendar.current.date(byAdding: .year, value: 10, to: Date())
         dateSelector.minimumDate = minDate
         dateSelector.maximumDate = maxDate
-        if let localeID = Locale.preferredLanguages.first {
-            dateSelector.locale = Locale(identifier: localeID)
-        }
+        dateSelector.locale = Locale(identifier: "ru_RU")
         dateSelector.layer.masksToBounds = true
         dateSelector.layer.cornerRadius = 8
-        dateSelector.backgroundColor = .trDateButtonBackground
         dateSelector.addTarget(self, action: #selector(dateSelectorChanged(datePicker:)), for: .valueChanged)
-        //        dateSelector.tintColor = .trBlackr
-        dateSelector.setDate(Date(), animated: true)
+        
         dateSelector.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(dateSelector)
         
@@ -68,7 +66,7 @@ final class TrackersTabViewController: UIViewController {
         searchField.placeholder = "Поиск"
         searchField.textColor = .trBlack
         searchField.tintColor = .trSearchFieldText
-        searchField.backgroundColor = .trWhite
+        searchField.backgroundColor = .trSearchFieldBackgroundAlpha12
         searchField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchField)
         
@@ -91,9 +89,8 @@ final class TrackersTabViewController: UIViewController {
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             
             dateSelector.heightAnchor.constraint(equalToConstant: 34),
-            dateSelector.widthAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            dateSelector.widthAnchor.constraint(equalToConstant: 110),
             dateSelector.centerYAnchor.constraint(equalTo: plusButton.centerYAnchor),
-            dateSelector.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             dateSelector.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -119,6 +116,10 @@ final class TrackersTabViewController: UIViewController {
     /// действие по нажатию кнопки "＋"
     @objc func plusButtonAction() {
         print("CONSOLE: plusButtonAction" )
+        let newTrackerCreationVC = NewTrackerCreationVC()
+        newTrackerCreationVC.delegate = self
+        let newTrackerNavigation = UINavigationController(rootViewController: newTrackerCreationVC)
+        present(newTrackerNavigation, animated: true)
     }
     
     @objc func dateSelectorChanged(datePicker: UIDatePicker) {
