@@ -55,14 +55,14 @@ final class TrackersTabViewController: UIViewController {
         
         let titleLabel = UILabel()
         titleLabel.text = "Трекеры"
-        titleLabel.font = UIFont(name: "SFPro-Bold", size: 34)
+        titleLabel.font = UIFont(name: SFPro.bold, size: 34)
         titleLabel.textColor = .trBlack
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
         let searchField = UISearchTextField()
         searchField.borderStyle = .roundedRect
-        searchField.font = UIFont(name: "SFPro-Regular", size: 17)
+        searchField.font = UIFont(name: SFPro.regular, size: 17)
         searchField.placeholder = "Поиск"
         searchField.textColor = .trBlack
         searchField.tintColor = .trSearchFieldText
@@ -77,7 +77,7 @@ final class TrackersTabViewController: UIViewController {
         
         let questionLabel = UILabel()
         questionLabel.text = "Что будем отслеживать?"
-        questionLabel.font = UIFont(name: "SFPro-Regular", size: 12)
+        questionLabel.font = UIFont(name: SFPro.regular, size: 12)
         questionLabel.textColor = .trBlack
         questionLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(questionLabel)
@@ -116,7 +116,7 @@ final class TrackersTabViewController: UIViewController {
     /// действие по нажатию кнопки "＋"
     @objc func plusButtonAction() {
         print("CONSOLE: plusButtonAction" )
-        let newTrackerCreationVC = NewTrackerCreationVC()
+        let newTrackerCreationVC = NewTrackerTypeChoiceVC()
         newTrackerCreationVC.delegate = self
         let newTrackerNavigation = UINavigationController(rootViewController: newTrackerCreationVC)
         present(newTrackerNavigation, animated: true)

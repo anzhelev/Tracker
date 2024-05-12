@@ -13,5 +13,7 @@ extension UIColor {
     static var trSearchFieldBackgroundAlpha12: UIColor {UIColor(named: "YP Search Field Background (Alpha 12)") ?? UIColor.lightGray}
     static var trDatePickerBackground: UIColor {UIColor(named: "YP Date Picker Background") ?? UIColor.gray}
     static var trWhite: UIColor {UIColor(named: "YP White") ?? UIColor.white}
-    static var trTabBarUpperlineAlpha30: UIColor {UIColor(named: "YP TabBar Upper Line (Alpha 30)") ?? UIColor.yellow}
+    static var trTabBarUpperlineAlpha30: UIColor {UIColor(named: "YP TabBar Upper Line (Alpha 30)") ?? UIColor.lightGray}
+    static var trNewTrackerTitleBGAlpha30: UIColor {UIColor(named: "YP Tracker Title Background (Alpha 30)") ?? UIColor.lightGray}
+    static var trNewTrackerTitleInputCancelButton: UIColor {UIColor(named: "YP Tracker Title Background (Alpha 30)") ?? UIColor.gray}
 }

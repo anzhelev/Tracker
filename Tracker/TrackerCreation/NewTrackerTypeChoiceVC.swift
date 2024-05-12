@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewTrackerCreationVC: UIViewController {
+final class NewTrackerTypeChoiceVC: UIViewController {
     
     weak var delegate: TrackersTabViewController?
     
@@ -15,8 +15,6 @@ final class NewTrackerCreationVC: UIViewController {
         super.viewDidLoad()
         
         configureUIElements()
-        
-        
     }
     
     private func configureUIElements() {
@@ -24,7 +22,7 @@ final class NewTrackerCreationVC: UIViewController {
         
         let titleLabel = UILabel()
         titleLabel.text = "Создание трекера"
-        titleLabel.font = UIFont(name: "SFPro-Semibold", size: 16)
+        titleLabel.font = UIFont(name: SFPro.semibold, size: 16)
         titleLabel.textColor = .trBlack
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -32,9 +30,9 @@ final class NewTrackerCreationVC: UIViewController {
         let newHabitCreationButton = UIButton()
         newHabitCreationButton.backgroundColor = .trBlack
         newHabitCreationButton.setTitle("Привычка", for: .normal)
-        newHabitCreationButton.addTarget(self, action: #selector(switchToNewHabitViewController), for: .touchUpInside)
+        newHabitCreationButton.addTarget(self, action: #selector(createNewHabit), for: .touchUpInside)
         newHabitCreationButton.setTitleColor(.trWhite, for: .normal)
-        newHabitCreationButton.titleLabel?.font = UIFont(name: "SFPro-Semibold", size: 16)
+        newHabitCreationButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
         newHabitCreationButton.layer.masksToBounds = true
         newHabitCreationButton.layer.cornerRadius = 16
         newHabitCreationButton.translatesAutoresizingMaskIntoConstraints = false
@@ -43,9 +41,9 @@ final class NewTrackerCreationVC: UIViewController {
         let newEventCreationButton = UIButton()
         newEventCreationButton.backgroundColor = .trBlack
         newEventCreationButton.setTitle("Нерегулярное событие", for: .normal)
-        newEventCreationButton.addTarget(self, action: #selector(switchToNewEventViewController), for: .touchUpInside)
+        newEventCreationButton.addTarget(self, action: #selector(createNewEvent), for: .touchUpInside)
         newEventCreationButton.setTitleColor(.trWhite, for: .normal)
-        newEventCreationButton.titleLabel?.font = UIFont(name: "SFPro-Semibold", size: 16)
+        newEventCreationButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
         newEventCreationButton.layer.masksToBounds = true
         newEventCreationButton.layer.cornerRadius = 16
         newEventCreationButton.translatesAutoresizingMaskIntoConstraints = false
@@ -69,18 +67,15 @@ final class NewTrackerCreationVC: UIViewController {
         ])
     }
     
-    
-    @objc private func switchToNewHabitViewController() {
-        let newHabitViewController = NewHabitViewController()
-        newHabitViewController.delegate = self
-        let newTrackerNavigation = UINavigationController(rootViewController: newHabitViewController)
+    @objc private func createNewHabit() {
+        let vc = NewTrackerCreationVC(newTrackerType: .habit, delegate: self)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
     
-    @objc private func switchToNewEventViewController() {
-        let newEventViewController = NewEventViewController()
-        newEventViewController.delegate = self
-        let newTrackerNavigation = UINavigationController(rootViewController: newEventViewController)
+    @objc private func createNewEvent() {
+        let vc = NewTrackerCreationVC(newTrackerType: .event, delegate: self)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
 }
