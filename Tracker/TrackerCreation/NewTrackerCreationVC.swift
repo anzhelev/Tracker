@@ -18,6 +18,12 @@ final class NewTrackerCreationVC: UIViewController {
     weak var delegate: NewTrackerTypeChoiceVC?
     
     private var inputCancelButton = UIButton()
+    private var newTrackerTitleView = UIView()
+    private var newTrackerAddCategoryButton = UIButton()
+    private var newTrackerAddScheduleButton = UIButton()
+    private var cancelButton = UIButton()
+    private var createButton = UIButton()
+    
     
     init(newTrackerType: TrackerType, delegate: NewTrackerTypeChoiceVC? = nil) {
         self.newTrackerType = newTrackerType
@@ -30,47 +36,38 @@ final class NewTrackerCreationVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .trWhite
         
-        switch newTrackerType {
-        case .habit:
-            configureUIElementsForHabit()
-        case .event:
-            configureUIElementsForEvent()
+        configureUIElements(for : newTrackerType)
+    }
+    
+    private func configureUIElements(for tracker : TrackerType) {
+        setTitle(for: tracker)
+        setCategoryButton(for: tracker)
+        if tracker == .habit {
+            setScheduleButton()
         }
-        
+        setBottomButtons()
     }
     
-    private func configureUIElementsForEvent() {
-        setTitle(forTracker: .event)
-        
-        
-    }
-    
-    private func configureUIElementsForHabit() {
-        setTitle(forTracker: .habit)
-        
-    }
-    
-    private func setTitle(forTracker : TrackerType) {
+    private func setTitle(for tracker : TrackerType) {
         let titleLabel = UILabel()
-        titleLabel.text = forTracker == .habit ? "Привычка" : "Нерегулярное событие"
+        titleLabel.text = tracker == .habit ? "Новая привычка" : "Новое нерегулярное событие"
         titleLabel.font = UIFont(name: SFPro.semibold, size: 16)
         titleLabel.textColor = .trBlack
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
-        
-        var newTrackerTitleInputView = UIView()
-        newTrackerTitleInputView.backgroundColor = .trNewTrackerTitleBGAlpha30
-        newTrackerTitleInputView.layer.masksToBounds = true
-        newTrackerTitleInputView.layer.cornerRadius = 16
-        newTrackerTitleInputView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(newTrackerTitleInputView)
+        let newTrackerTitleView = UIView()
+        newTrackerTitleView.backgroundColor = .trNewTrackerTitleBGAlpha30
+        newTrackerTitleView.layer.masksToBounds = true
+        newTrackerTitleView.layer.cornerRadius = 16
+        newTrackerTitleView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(newTrackerTitleView)
+        self.newTrackerTitleView = newTrackerTitleView
         
         let titleTextField = UITextField()
         titleTextField.placeholder = "Введите название трекера"
@@ -78,32 +75,61 @@ final class NewTrackerCreationVC: UIViewController {
         titleTextField.textColor = .trBlack
         titleTextField.font = UIFont(name: SFPro.regular, size: 17)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        newTrackerTitleInputView.addSubview(titleTextField)
+        newTrackerTitleView.addSubview(titleTextField)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
+            
+            newTrackerTitleView.heightAnchor.constraint(equalToConstant: 75),
+            newTrackerTitleView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            newTrackerTitleView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            newTrackerTitleView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            titleTextField.centerYAnchor.constraint(equalTo: newTrackerTitleView.centerYAnchor),
+            titleTextField.leadingAnchor.constraint(equalTo: newTrackerTitleView.leadingAnchor, constant: 16),
+            titleTextField.trailingAnchor.constraint(equalTo: newTrackerTitleView.trailingAnchor, constant: -16)
+        ])
+        
+    }
+    
+    
+    private func setTitle_2(for tracker : TrackerType) {
+        let titleLabel = UILabel()
+        titleLabel.text = tracker == .habit ? "Новая привычка" : "Новое нерегулярное событие"
+        titleLabel.font = UIFont(name: SFPro.semibold, size: 16)
+        titleLabel.textColor = .trBlack
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let newTrackerTitleInputView = UIView()
+        newTrackerTitleInputView.backgroundColor = .trNewTrackerTitleBGAlpha30
+        newTrackerTitleInputView.layer.masksToBounds = true
+        newTrackerTitleInputView.layer.cornerRadius = 16
+        newTrackerTitleInputView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let textView = UITextView()
+        textView.isEditable = true
+        textView.textContainerInset = .init(top: 10, left: 10, bottom: 10, right: 10)
+        //        textView.
+        textView.textColor = .trBlack
+        textView.backgroundColor = .lightGray
+        textView.text = "Введите название трекера"
+        textView.font = UIFont(name: SFPro.regular, size: 17)
+        textView.translatesAutoresizingMaskIntoConstraints = false
         
         
-        //        var textArea = UIView()
-        //        textArea.layer.masksToBounds = true
-        //        textArea.autoresizesSubviews = true
-        //        textArea.translatesAutoresizingMaskIntoConstraints = false
-        //        newTrackerTitleInputView.addSubview(textArea)
-        //
-        //        var newTrackerTitleTextView = UITextView()
-        //        newTrackerTitleTextView = UITextView(frame: textArea.bounds)
-        //        newTrackerTitleTextView.isEditable = true
-        //        newTrackerTitleTextView.textColor = .trBlack
-        //        newTrackerTitleTextView.backgroundColor = .lightGray
-        //        newTrackerTitleTextView.text = "adfasdfasfasdfasdfasdfasdf adfadgf"
-        //        newTrackerTitleTextView.font = UIFont(name: SFPro.regular, size: 17)
-        //        newTrackerTitleTextView.translatesAutoresizingMaskIntoConstraints = false
-        //        textArea.addSubview(newTrackerTitleTextView)
+        guard let image = UIImage(named: "newTrackerTitleInputCancelButton") else { return }
+        let inputCancelButton = UIButton.systemButton(with: image, target: self, action: #selector(textInputCancel))
+        inputCancelButton.tintColor = .lightGray// .trNewTrackerTitleInputCancelButton
+        inputCancelButton.translatesAutoresizingMaskIntoConstraints = false
+        newTrackerTitleInputView.addSubview(inputCancelButton)
+        self.inputCancelButton = inputCancelButton
+        inputCancelButton.isHidden = false
         
-        //        guard let image = UIImage(named: "newTrackerTitleInputCancelButton") else { return }
-        //        let inputCancelButton = UIButton.systemButton(with: image, target: self, action: #selector(textInputCancel))
-        //        inputCancelButton.tintColor = .lightGray// .trNewTrackerTitleInputCancelButton
-        //        inputCancelButton.translatesAutoresizingMaskIntoConstraints = false
-        //        newTrackerTitleInputView.addSubview(inputCancelButton)
-        //        self.inputCancelButton = inputCancelButton
-        //        inputCancelButton.isHidden = true
+        newTrackerTitleInputView.addSubview(textView)
+        newTrackerTitleInputView.addSubview(inputCancelButton)
+        view.addSubview(newTrackerTitleInputView)
+        view.addSubview(titleLabel)
         
         
         NSLayoutConstraint.activate([
@@ -115,31 +141,144 @@ final class NewTrackerCreationVC: UIViewController {
             newTrackerTitleInputView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             newTrackerTitleInputView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
-            titleTextField.centerYAnchor.constraint(equalTo: newTrackerTitleInputView.centerYAnchor),
-            titleTextField.leadingAnchor.constraint(equalTo: newTrackerTitleInputView.leadingAnchor, constant: 16),
-            titleTextField.trailingAnchor.constraint(equalTo: newTrackerTitleInputView.trailingAnchor, constant: -16)
+            //            textView.heightAnchor.constraint(lessThanOrEqualToConstant: 54),
+            textView.centerYAnchor.constraint(equalTo: newTrackerTitleInputView.centerYAnchor),
+            textView.leadingAnchor.constraint(equalTo: newTrackerTitleInputView.leadingAnchor, constant: 0),
+            textView.trailingAnchor.constraint(equalTo: inputCancelButton.trailingAnchor, constant: -44),
+            textView.bottomAnchor.constraint(equalTo: newTrackerTitleInputView.bottomAnchor, constant: 0),
+            textView.topAnchor.constraint(equalTo: newTrackerTitleInputView.topAnchor, constant: 0),
             
-//            textArea.leadingAnchor.constraint(equalTo: newTrackerTitleInputView.leadingAnchor, constant: 16),
-//            textArea.topAnchor.constraint(equalTo: newTrackerTitleInputView.topAnchor, constant: 16),
-//            textArea.bottomAnchor.constraint(equalTo: newTrackerTitleInputView.bottomAnchor, constant: -16),
-//            textArea.trailingAnchor.constraint(equalTo: newTrackerTitleInputView.trailingAnchor, constant: -70),
+            inputCancelButton.heightAnchor.constraint(equalToConstant: 17),
+            inputCancelButton.widthAnchor.constraint(equalToConstant: 17),
+            inputCancelButton.centerYAnchor.constraint(equalTo: newTrackerTitleInputView.centerYAnchor),
+            inputCancelButton.trailingAnchor.constraint(equalTo: newTrackerTitleInputView.trailingAnchor, constant: -12)
+        ])
+    }
+    
+    private func setCategoryButton(for tracker: TrackerType) {
+        let newTrackerAddCategoryButton = UIButton()
+        newTrackerAddCategoryButton.addTarget(self, action: #selector(setCategoryButtonPressed), for: .touchUpInside)
+        newTrackerAddCategoryButton.backgroundColor = .trNewTrackerTitleBGAlpha30
+        newTrackerAddCategoryButton.layer.masksToBounds = true
+        if tracker == .habit {
+            newTrackerAddCategoryButton.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        }
+        newTrackerAddCategoryButton.layer.cornerRadius = 16
+        newTrackerAddCategoryButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(newTrackerAddCategoryButton)
+        self.newTrackerAddCategoryButton = newTrackerAddCategoryButton
+        
+        NSLayoutConstraint.activate([
+            newTrackerAddCategoryButton.heightAnchor.constraint(equalToConstant: 75),
+            newTrackerAddCategoryButton.topAnchor.constraint(equalTo: newTrackerTitleView.bottomAnchor, constant: 24),
+            newTrackerAddCategoryButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            newTrackerAddCategoryButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
             
-//            newTrackerTitleTextView.leadingAnchor.constraint(equalTo: textArea.leadingAnchor, constant: 0),
-            //            newTrackerTitleTextView.trailingAnchor.constraint(equalTo: textArea.trailingAnchor, constant: 0),
-            //            newTrackerTitleTextView.bottomAnchor.constraint(greaterThanOrEqualTo: textArea.bottomAnchor, constant: 0),
-            //            newTrackerTitleTextView.topAnchor.constraint(greaterThanOrEqualTo: textArea.topAnchor, constant: 0)
-            //            newTrackerTitleTextView.bottomAnchor.constraint(greaterThanOrEqualTo: textArea.bottomAnchor, constant: 6)
-            
-            //            inputCancelButton.heightAnchor.constraint(equalToConstant: 44),
-            //            inputCancelButton.widthAnchor.constraint(equalToConstant: 44),
-            //            inputCancelButton.centerYAnchor.constraint(equalTo: newTrackerTitleInputView.centerYAnchor),
-            //            inputCancelButton.leadingAnchor.constraint(equalTo: newTrackerTitle.trailingAnchor, constant: 25),
-            //            inputCancelButton.trailingAnchor.constraint(equalTo: newTrackerTitleInputView.trailingAnchor)
+        ])
+        addChevronOnButton(on: newTrackerAddCategoryButton)
+    }
+    
+    private func setScheduleButton() {
+        let newTrackerAddScheduleButton = UIButton()
+        newTrackerAddScheduleButton.addTarget(self, action: #selector(setScheduleButtonPressed), for: .touchUpInside)
+        newTrackerAddScheduleButton.backgroundColor = .trNewTrackerTitleBGAlpha30
+        newTrackerAddScheduleButton.layer.masksToBounds = true
+        newTrackerAddScheduleButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        newTrackerAddScheduleButton.layer.cornerRadius = 16
+        newTrackerAddScheduleButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(newTrackerAddScheduleButton)
+        self.newTrackerAddScheduleButton = newTrackerAddScheduleButton
+        
+        let buttonDivider = UIView()
+        buttonDivider.backgroundColor = .trTabBarUpperlineAlpha30
+        buttonDivider.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(buttonDivider)
+        
+        NSLayoutConstraint.activate([
+            newTrackerAddScheduleButton.heightAnchor.constraint(equalToConstant: 75),
+            newTrackerAddScheduleButton.topAnchor.constraint(equalTo: newTrackerAddCategoryButton.bottomAnchor, constant: 0),
+            newTrackerAddScheduleButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            newTrackerAddScheduleButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            buttonDivider.heightAnchor.constraint(equalToConstant: 0.5),
+            buttonDivider.centerYAnchor.constraint(equalTo: newTrackerAddScheduleButton.topAnchor, constant: 0),
+            buttonDivider.leadingAnchor.constraint(equalTo: newTrackerAddScheduleButton.leadingAnchor, constant: 16),
+            buttonDivider.trailingAnchor.constraint(equalTo: newTrackerAddScheduleButton.trailingAnchor, constant: -16)
+        ])
+        addChevronOnButton(on: newTrackerAddScheduleButton)
+    }
+    
+    private func addChevronOnButton(on buttonView: UIView) {
+        let chevron = UIImageView(image: UIImage(named: "chevron"))
+        chevron.tintColor = .trNewTrackerTitleInputCancelButton
+        chevron.translatesAutoresizingMaskIntoConstraints = false
+        buttonView.addSubview(chevron)
+        
+        NSLayoutConstraint.activate([
+            chevron.centerYAnchor.constraint(equalTo: buttonView.centerYAnchor),
+            chevron.trailingAnchor.constraint(equalTo: buttonView.trailingAnchor, constant: -33)
         ])
         
     }
     
-    @objc private func textInputCancel() {
+    private func setBottomButtons() {
+        let cancelButton = UIButton()
+        cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
+        cancelButton.backgroundColor = .trWhite
+        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
+        cancelButton.setTitleColor(.trCancelButtonText, for: .normal)
+        cancelButton.clipsToBounds = true
+        cancelButton.layer.borderWidth = 1
+        cancelButton.layer.borderColor = UIColor.trCancelButtonText.cgColor
+        cancelButton.layer.masksToBounds = true
+        cancelButton.layer.cornerRadius = 16
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cancelButton)
+        self.cancelButton = cancelButton
         
+        let createButton = UIButton()
+        createButton.addTarget(self, action: #selector(createButtonPressed), for: .touchUpInside)
+        createButton.backgroundColor = .trTabBarUpperlineAlpha30 // .trNewTrackerTitleInputCancelButton
+        createButton.setTitle("Создать", for: .normal)
+        createButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
+        createButton.setTitleColor(.trWhite, for: .normal)
+        createButton.layer.masksToBounds = true
+        createButton.layer.cornerRadius = 16
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(createButton)
+        //        createButton.isEnabled = false
+        self.createButton = createButton
+        
+        NSLayoutConstraint.activate([
+            cancelButton.heightAnchor.constraint(equalToConstant: 60),
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            cancelButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            cancelButton.trailingAnchor.constraint(equalTo: createButton.leadingAnchor, constant: -8),
+            createButton.heightAnchor.constraint(equalTo: cancelButton.heightAnchor),
+            createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor),
+            createButton.centerYAnchor.constraint(equalTo: cancelButton.centerYAnchor, constant: 0),
+            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        ])
+    }
+    
+    @objc private func setCategoryButtonPressed() {
+        print("CONSOLE: setCategoryButtonPressed" )
+    }
+    
+    @objc private func setScheduleButtonPressed() {
+        print("CONSOLE: setScheduleButtonPressed" )
+    }
+    
+    @objc private func cancelButtonPressed() {
+        print("CONSOLE: cancelButtonPressed" )
+    }
+    
+    @objc private func createButtonPressed() {
+        print("CONSOLE: createButtonPressed" )
+    }
+        
+    @objc private func textInputCancel() {
+        print("CONSOLE: " )
+        newTrackerAddCategoryButton.backgroundColor = .gray
     }
 }

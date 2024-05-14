@@ -16,4 +16,5 @@ extension UIColor {
     static var trTabBarUpperlineAlpha30: UIColor {UIColor(named: "YP TabBar Upper Line (Alpha 30)") ?? UIColor.lightGray}
     static var trNewTrackerTitleBGAlpha30: UIColor {UIColor(named: "YP Tracker Title Background (Alpha 30)") ?? UIColor.lightGray}
     static var trNewTrackerTitleInputCancelButton: UIColor {UIColor(named: "YP Tracker Title Background (Alpha 30)") ?? UIColor.gray}
+    static var trCancelButtonText: UIColor {UIColor(named: "YP Cancel Button Text And Border") ?? UIColor.red}
 }
