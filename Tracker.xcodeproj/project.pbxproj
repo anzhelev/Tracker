@@ -23,6 +23,8 @@
 		D4E75A1E2BE666F000BB04FF /* TrackersTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E75A1D2BE666F000BB04FF /* TrackersTabViewController.swift */; };
 		D4E75A202BE6671400BB04FF /* StatisticsTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E75A1F2BE6671400BB04FF /* StatisticsTabViewController.swift */; };
 		D4FE35C72BF3D680000C3AB8 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4FE35C62BF3D680000C3AB8 /* Launch Screen.storyboard */; };
+		D4FE35C92BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FE35C82BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift */; };
+		D4FE35CB2BF52194000C3AB8 /* NTCButtonCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FE35CA2BF52194000C3AB8 /* NTCButtonCollectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		D4E75A1D2BE666F000BB04FF /* TrackersTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersTabViewController.swift; sourceTree = "<group>"; };
 		D4E75A1F2BE6671400BB04FF /* StatisticsTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTabViewController.swift; sourceTree = "<group>"; };
 		D4FE35C62BF3D680000C3AB8 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		D4FE35C82BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTCButtonsCollectionCell.swift; sourceTree = "<group>"; };
+		D4FE35CA2BF52194000C3AB8 /* NTCButtonCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTCButtonCollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,7 @@
 			children = (
 				D468CE692BEFE52B00679649 /* NewTrackerTypeChoiceVC.swift */,
 				D41FD3EA2BF0ACFA00CD6A33 /* NewTrackerCreationVC.swift */,
+				D4FE35C82BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift */,
 			);
 			path = TrackerCreation;
 			sourceTree = "<group>";
@@ -105,6 +110,7 @@
 		D45C6D892BE58007001E067B = {
 			isa = PBXGroup;
 			children = (
+				D4FE35CA2BF52194000C3AB8 /* NTCButtonCollectionView.swift */,
 				D4FE35C62BF3D680000C3AB8 /* Launch Screen.storyboard */,
 				D45C6D942BE58007001E067B /* Tracker */,
 				D45C6D932BE58007001E067B /* Products */,
@@ -213,7 +219,9 @@
 				D438DC8A2BEE4119009CC86B /* TrackerRecord.swift in Sources */,
 				D4E75A1E2BE666F000BB04FF /* TrackersTabViewController.swift in Sources */,
 				D43EA1662BE59687003E0FD9 /* UIColor+Extensions.swift in Sources */,
+				D4FE35C92BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift in Sources */,
 				D438DC8C2BEE419D009CC86B /* TrackerCategory.swift in Sources */,
+				D4FE35CB2BF52194000C3AB8 /* NTCButtonCollectionView.swift in Sources */,
 				D41FD3EB2BF0ACFA00CD6A33 /* NewTrackerCreationVC.swift in Sources */,
 				D4E75A1C2BE6664400BB04FF /* TabBarController.swift in Sources */,
 				D45C6D962BE58007001E067B /* AppDelegate.swift in Sources */,

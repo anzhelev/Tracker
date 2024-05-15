@@ -12,4 +12,3 @@ enum SFPro {
     static let semibold = "SFPro-Semibold"
     static let bold = "SFPro-Bold"
 }
-
