@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D41FD3EB2BF0ACFA00CD6A33 /* NewTrackerCreationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41FD3EA2BF0ACFA00CD6A33 /* NewTrackerCreationVC.swift */; };
 		D41FD3ED2BF0C3D400CD6A33 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41FD3EC2BF0C3D400CD6A33 /* Constants.swift */; };
 		D438DC882BEE3C4D009CC86B /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D438DC872BEE3C4D009CC86B /* Tracker.swift */; };
 		D438DC8A2BEE4119009CC86B /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D438DC892BEE4119009CC86B /* TrackerRecord.swift */; };
@@ -24,11 +23,10 @@
 		D4E75A202BE6671400BB04FF /* StatisticsTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E75A1F2BE6671400BB04FF /* StatisticsTabViewController.swift */; };
 		D4FE35C72BF3D680000C3AB8 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4FE35C62BF3D680000C3AB8 /* Launch Screen.storyboard */; };
 		D4FE35C92BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FE35C82BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift */; };
-		D4FE35CB2BF52194000C3AB8 /* NTCButtonCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FE35CA2BF52194000C3AB8 /* NTCButtonCollectionView.swift */; };
+		D4FE35CD2BF61DF7000C3AB8 /* NewTrackerCreationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FE35CC2BF61DF7000C3AB8 /* NewTrackerCreationVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D41FD3EA2BF0ACFA00CD6A33 /* NewTrackerCreationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerCreationVC.swift; sourceTree = "<group>"; };
 		D41FD3EC2BF0C3D400CD6A33 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D438DC872BEE3C4D009CC86B /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		D438DC892BEE4119009CC86B /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
@@ -47,7 +45,7 @@
 		D4E75A1F2BE6671400BB04FF /* StatisticsTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTabViewController.swift; sourceTree = "<group>"; };
 		D4FE35C62BF3D680000C3AB8 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		D4FE35C82BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTCButtonsCollectionCell.swift; sourceTree = "<group>"; };
-		D4FE35CA2BF52194000C3AB8 /* NTCButtonCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTCButtonCollectionView.swift; sourceTree = "<group>"; };
+		D4FE35CC2BF61DF7000C3AB8 /* NewTrackerCreationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerCreationVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,9 +63,8 @@
 			isa = PBXGroup;
 			children = (
 				D468CE692BEFE52B00679649 /* NewTrackerTypeChoiceVC.swift */,
-				D41FD3EA2BF0ACFA00CD6A33 /* NewTrackerCreationVC.swift */,
-				D4FE35CA2BF52194000C3AB8 /* NTCButtonCollectionView.swift */,
 				D4FE35C82BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift */,
+				D4FE35CC2BF61DF7000C3AB8 /* NewTrackerCreationVC.swift */,
 			);
 			path = TrackerCreation;
 			sourceTree = "<group>";
@@ -221,8 +218,7 @@
 				D43EA1662BE59687003E0FD9 /* UIColor+Extensions.swift in Sources */,
 				D4FE35C92BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift in Sources */,
 				D438DC8C2BEE419D009CC86B /* TrackerCategory.swift in Sources */,
-				D4FE35CB2BF52194000C3AB8 /* NTCButtonCollectionView.swift in Sources */,
-				D41FD3EB2BF0ACFA00CD6A33 /* NewTrackerCreationVC.swift in Sources */,
+				D4FE35CD2BF61DF7000C3AB8 /* NewTrackerCreationVC.swift in Sources */,
 				D4E75A1C2BE6664400BB04FF /* TabBarController.swift in Sources */,
 				D45C6D962BE58007001E067B /* AppDelegate.swift in Sources */,
 				D45C6D982BE58007001E067B /* SceneDelegate.swift in Sources */,
