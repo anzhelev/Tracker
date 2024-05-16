@@ -14,13 +14,14 @@ enum TrackerType: String {
 
 final class NewTrackerCreationVC: UIViewController {
     
-    let newTrackerType: TrackerType
-    var categoryButtonsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    var newTrackerType: TrackerType
+//    var categoryButtonsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    var categoryCollectionView: NTCButtonCollectionView
+    var scheduleCollectionView: NTCButtonCollectionView?
     weak var delegate: NewTrackerTypeChoiceVC?
     
     private var inputCancelButton = UIButton()
     private var newTrackerTitleView = UIView()
-//    private var newTrackerAddCategoryButtonBGView = UIView()
     private var newTrackerAddCategoryButton = UIButton()
     private var newTrackerAddScheduleButton = UIButton()
     private var cancelButton = UIButton()
@@ -39,6 +40,13 @@ final class NewTrackerCreationVC: UIViewController {
     init(newTrackerType: TrackerType, delegate: NewTrackerTypeChoiceVC? = nil) {
         self.newTrackerType = newTrackerType
         self.delegate = delegate
+        switch newTrackerType {
+        case .habit:
+            categoryCollectionView = NTCButtonCollectionView(using: CollectionParams(configType: .habitCategory, rowCount: 1))
+            scheduleCollectionView = NTCButtonCollectionView(using: CollectionParams(configType: .habitShedule, rowCount: 1))
+        case .event:
+            categoryCollectionView = NTCButtonCollectionView(using: CollectionParams(configType: .eventCategoyy, rowCount: 1))
+        }
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -51,14 +59,13 @@ final class NewTrackerCreationVC: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .trWhite
-        
+ 
         configureUIElements(for : newTrackerType)
-        
     }
     
     private func configureUIElements(for tracker : TrackerType) {
         setTitle(for: tracker)
-        setCategoryButtonsCollectionView(for: tracker)
+        setCategoryCollectionView()
         setCategoryButton(for: tracker)
         
         if tracker == .habit {
@@ -67,33 +74,12 @@ final class NewTrackerCreationVC: UIViewController {
         setBottomButtons()
     }
     
-    private func setCategoryButtonsCollectionView(for tracker : TrackerType) {
-        categoryButtonsCollectionView.dataSource = self
-        categoryButtonsCollectionView.delegate = self
-        categoryButtonsCollectionView.register(NTCButtonsCollectionCell.self, forCellWithReuseIdentifier: "cell")
-        categoryButtonsCollectionView.backgroundColor = .trNewTrackerTitleBGAlpha30 //.none
-        
-        categoryButtonsCollectionView.layer.masksToBounds = true
-        categoryButtonsCollectionView.layer.cornerRadius = 16
-        if tracker == .habit {
-            categoryButtonsCollectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        }
-        categoryButtonsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(categoryButtonsCollectionView)
-
-        NSLayoutConstraint.activate([
-            categoryButtonsCollectionView.heightAnchor.constraint(equalToConstant: 75),
-            categoryButtonsCollectionView.topAnchor.constraint(equalTo: newTrackerTitleView.bottomAnchor, constant: 24),
-            categoryButtonsCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            categoryButtonsCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
-        ])
-    }
-    
-    private func setCollectionViewContentPosition(for cellHeight: CGFloat) {
-        let inset = max((categoryButtonsCollectionView.frame.height - cellHeight * CGFloat(categoryButtonsCollectionViewCellsCount)) / 2 - minimumLineSpacing, 0)
-        categoryButtonsCollectionView.contentInset.top = inset
-        categoryButtonsCollectionView.contentInset.left = 16
-        categoryButtonsCollectionView.contentInset.right = 50
+    private func setCategoryCollectionView() {
+        categoryCollectionView.dataSource = self
+        categoryCollectionView.delegate = self
+        categoryCollectionView.register(NTCButtonsCollectionCell.self, forCellWithReuseIdentifier: "cell")
+        categoryCollectionView.config(vcView: self.view)
+        categoryCollectionView.topAnchor.constraint(equalTo: newTrackerTitleView.bottomAnchor, constant: 24).isActive = true
     }
     
     private func setTitle(for tracker : TrackerType) {
@@ -140,7 +126,7 @@ final class NewTrackerCreationVC: UIViewController {
         
         let newTrackerAddCategoryButton = UIButton()
         newTrackerAddCategoryButton.addTarget(self, action: #selector(setCategoryButtonPressed), for: .touchUpInside)
-        newTrackerAddCategoryButton.backgroundColor = .none // .trNewTrackerTitleBGAlpha30
+        newTrackerAddCategoryButton.backgroundColor = .none
         newTrackerAddCategoryButton.layer.masksToBounds = true
         newTrackerAddCategoryButton.layer.cornerRadius = 16
         newTrackerAddCategoryButton.translatesAutoresizingMaskIntoConstraints = false
@@ -152,10 +138,10 @@ final class NewTrackerCreationVC: UIViewController {
         }
         
         NSLayoutConstraint.activate([
-            newTrackerAddCategoryButton.heightAnchor.constraint(equalTo: categoryButtonsCollectionView.heightAnchor),
-            newTrackerAddCategoryButton.topAnchor.constraint(equalTo: categoryButtonsCollectionView.topAnchor),
-            newTrackerAddCategoryButton.leadingAnchor.constraint(equalTo: categoryButtonsCollectionView.leadingAnchor),
-            newTrackerAddCategoryButton.trailingAnchor.constraint(equalTo: categoryButtonsCollectionView.trailingAnchor)
+            newTrackerAddCategoryButton.heightAnchor.constraint(equalTo: categoryCollectionView.heightAnchor),
+            newTrackerAddCategoryButton.topAnchor.constraint(equalTo: categoryCollectionView.topAnchor),
+            newTrackerAddCategoryButton.leadingAnchor.constraint(equalTo: categoryCollectionView.leadingAnchor),
+            newTrackerAddCategoryButton.trailingAnchor.constraint(equalTo: categoryCollectionView.trailingAnchor)
         ])
         addChevronOnButton(on: newTrackerAddCategoryButton)
     }
@@ -245,8 +231,10 @@ final class NewTrackerCreationVC: UIViewController {
     
     @objc private func setCategoryButtonPressed() {
         newTrackerAddCategoryButton.backgroundColor = .trSearchFieldBackgroundAlpha12
-        categoryButtonsCollectionViewCellsCount += 1
-        categoryButtonsCollectionView.reloadData()
+        categoryCollectionView.params.rowCount = categoryCollectionView.params.rowCount == 1 ? 2 : 1
+        categoryCollectionView.reloadSections(IndexSet(integer: 0))
+//        categoryCollectionView.reloadData()
+        categoryCollectionView.setContentInsets()
         print("CONSOLE: setCategoryButtonPressed" )
     }
     
@@ -270,14 +258,22 @@ final class NewTrackerCreationVC: UIViewController {
 
 extension NewTrackerCreationVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        categoryButtonsCollectionViewCellsCount
+       return categoryCollectionView.params.rowCount
+    }
+    
+    func collectionView(_ collectionView: NTCButtonCollectionView, numberOfItemsInSection section: Int) -> Int {
+      return collectionView.params.rowCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? NTCButtonsCollectionCell {
+            var title  = "Не срослось ("
+            if collectionView == categoryCollectionView {
+                title  = "Эврика!"}
+            
             
             if indexPath.row == 0 {
-                cell.setupLabel(for: CellType.title, with: "Категория")
+                cell.setupLabel(for: CellType.title, with: title)
             } else {
                 cell.setupLabel(for: CellType.value, with: newTrackerCategory ?? "")
             }
@@ -291,14 +287,11 @@ extension NewTrackerCreationVC: UICollectionViewDataSource {
 extension NewTrackerCreationVC: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let cellHeight = collectionView.bounds.height/4
-        let cellHeight = (46 - minimumLineSpacing) / 2
-        setCollectionViewContentPosition(for: cellHeight)
-        return CGSize(width: collectionView.bounds.width - 66, height: cellHeight)
+        return CGSize(width: categoryCollectionView.bounds.width - 66, height: categoryCollectionView.params.cellHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        minimumLineSpacing
+      return minimumLineSpacing
     }
 }
 

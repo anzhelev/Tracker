@@ -66,6 +66,7 @@
 			children = (
 				D468CE692BEFE52B00679649 /* NewTrackerTypeChoiceVC.swift */,
 				D41FD3EA2BF0ACFA00CD6A33 /* NewTrackerCreationVC.swift */,
+				D4FE35CA2BF52194000C3AB8 /* NTCButtonCollectionView.swift */,
 				D4FE35C82BF40BC0000C3AB8 /* NTCButtonsCollectionCell.swift */,
 			);
 			path = TrackerCreation;
@@ -110,7 +111,6 @@
 		D45C6D892BE58007001E067B = {
 			isa = PBXGroup;
 			children = (
-				D4FE35CA2BF52194000C3AB8 /* NTCButtonCollectionView.swift */,
 				D4FE35C62BF3D680000C3AB8 /* Launch Screen.storyboard */,
 				D45C6D942BE58007001E067B /* Tracker */,
 				D45C6D932BE58007001E067B /* Products */,
