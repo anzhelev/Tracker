@@ -18,20 +18,20 @@ final class NewTrackerTypeChoiceVC: UIViewController {
     }
     
     private func configureUIElements() {
-        view.backgroundColor = .trWhite
+        view.backgroundColor = Colors.white
         
         let titleLabel = UILabel()
         titleLabel.text = "Создание трекера"
         titleLabel.font = UIFont(name: SFPro.semibold, size: 16)
-        titleLabel.textColor = .trBlack
+        titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
         let newHabitCreationButton = UIButton()
-        newHabitCreationButton.backgroundColor = .trBlack
+        newHabitCreationButton.backgroundColor = Colors.black
         newHabitCreationButton.setTitle("Привычка", for: .normal)
         newHabitCreationButton.addTarget(self, action: #selector(createNewHabit), for: .touchUpInside)
-        newHabitCreationButton.setTitleColor(.trWhite, for: .normal)
+        newHabitCreationButton.setTitleColor(Colors.white, for: .normal)
         newHabitCreationButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
         newHabitCreationButton.layer.masksToBounds = true
         newHabitCreationButton.layer.cornerRadius = 16
@@ -39,10 +39,10 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         view.addSubview(newHabitCreationButton)
         
         let newEventCreationButton = UIButton()
-        newEventCreationButton.backgroundColor = .trBlack
+        newEventCreationButton.backgroundColor = Colors.black
         newEventCreationButton.setTitle("Нерегулярное событие", for: .normal)
         newEventCreationButton.addTarget(self, action: #selector(createNewEvent), for: .touchUpInside)
-        newEventCreationButton.setTitleColor(.trWhite, for: .normal)
+        newEventCreationButton.setTitleColor(Colors.white, for: .normal)
         newEventCreationButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
         newEventCreationButton.layer.masksToBounds = true
         newEventCreationButton.layer.cornerRadius = 16

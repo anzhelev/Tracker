@@ -35,10 +35,8 @@ final class TabBarController: UITabBarController {
     }
     
     private func setUpperLine () {
-        //        tabBar.layer.borderWidth = 0.50
-        //        tabBar.clipsToBounds = true
         let upperLine = UIView()
-        upperLine.backgroundColor = .trTabBarUpperlineAlpha30
+        upperLine.backgroundColor = Colors.grayTabBarSeparator
         upperLine.translatesAutoresizingMaskIntoConstraints = false
         self.tabBar.addSubview(upperLine)
         

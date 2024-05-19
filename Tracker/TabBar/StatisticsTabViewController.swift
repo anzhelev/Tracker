@@ -17,7 +17,7 @@ final class StatisticsTabViewController: UIViewController {
     }
         
     private func configureUIElements() {
-        view.backgroundColor = .trWhite
+        view.backgroundColor = Colors.white
         
         
         

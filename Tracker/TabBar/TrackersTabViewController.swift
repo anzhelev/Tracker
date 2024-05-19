@@ -27,14 +27,14 @@ final class TrackersTabViewController: UIViewController {
     }
     
     private func configureUIElements() {
-        view.backgroundColor = .trWhite
+        view.backgroundColor = Colors.white
         
         guard let plusButtonImage = UIImage(named: "plusButton") else {
             return
         }
         let plusButton = UIButton.systemButton(with: plusButtonImage, target: self, action: #selector(self.plusButtonAction))
         plusButton.translatesAutoresizingMaskIntoConstraints = false
-        plusButton.tintColor = .trBlack
+        plusButton.tintColor = Colors.black
         view.addSubview(plusButton)
         plusButton.accessibilityIdentifier = "plusButton"
         self.plusButton = plusButton
@@ -45,18 +45,18 @@ final class TrackersTabViewController: UIViewController {
         let maxDate = Calendar.current.date(byAdding: .year, value: 10, to: Date())
         dateSelector.minimumDate = minDate
         dateSelector.maximumDate = maxDate
+        dateSelector.tintColor = Colors.black
         dateSelector.locale = Locale(identifier: "ru_RU")
         dateSelector.layer.masksToBounds = true
         dateSelector.layer.cornerRadius = 8
         dateSelector.addTarget(self, action: #selector(dateSelectorChanged(datePicker:)), for: .valueChanged)
-        
         dateSelector.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(dateSelector)
         
         let titleLabel = UILabel()
         titleLabel.text = "Трекеры"
         titleLabel.font = UIFont(name: SFPro.bold, size: 34)
-        titleLabel.textColor = .trBlack
+        titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
@@ -64,9 +64,8 @@ final class TrackersTabViewController: UIViewController {
         searchField.borderStyle = .roundedRect
         searchField.font = UIFont(name: SFPro.regular, size: 17)
         searchField.placeholder = "Поиск"
-        searchField.textColor = .trBlack
-        searchField.tintColor = .trSearchFieldText
-        searchField.backgroundColor = .trSearchFieldBackgroundAlpha12
+        searchField.textColor = Colors.black
+        searchField.backgroundColor = .clear
         searchField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchField)
         
@@ -78,7 +77,7 @@ final class TrackersTabViewController: UIViewController {
         let questionLabel = UILabel()
         questionLabel.text = "Что будем отслеживать?"
         questionLabel.font = UIFont(name: SFPro.regular, size: 12)
-        questionLabel.textColor = .trBlack
+        questionLabel.textColor = Colors.black
         questionLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(questionLabel)
         

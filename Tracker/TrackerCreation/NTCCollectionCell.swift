@@ -6,13 +6,13 @@
 //
 import UIKit
 
-enum DividerPosition: String {
+enum SeparatorPosition: String {
     case top
     case bottom
     case both
 }
 
-final class NTCButtonsCollectionCell: UICollectionViewCell {
+final class NTCCollectionCell: UICollectionViewCell {
     
     private var titleLabel = UILabel()
     private var titleTextColor = UIColor()
@@ -26,11 +26,12 @@ final class NTCButtonsCollectionCell: UICollectionViewCell {
     }
     
     func configure(new cell: MainCVCellParams, for tracker: TrackerType) {
+        self.subviews.forEach { $0.removeFromSuperview() }
         
         if cell.id == .spacer {
             self.backgroundColor = .none
         } else {
-            self.backgroundColor = .trNewTrackerTitleBGAlpha30
+            self.backgroundColor = Colors.grayCellBackground
             self.layer.masksToBounds = true
             self.layer.cornerRadius = 16
         }
@@ -41,13 +42,14 @@ final class NTCButtonsCollectionCell: UICollectionViewCell {
             addLabels(title: cell.title, value: cell.value)
             if tracker == .habit {
                 self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                addDivider(position: .bottom)
             }
+        case .separator:
+            self.layer.cornerRadius = .zero
+            addSeparator()
         case .shedule:
             addChevron()
             addLabels(title: cell.title, value: cell.value)
             self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            addDivider(position: .top)
         case .title:
             addTitleTextField(placeholder: cell.title, value: cell.value)
         default:
@@ -59,11 +61,14 @@ final class NTCButtonsCollectionCell: UICollectionViewCell {
         let titleTextField = UITextField()
         titleTextField.placeholder = placeholder
         titleTextField.clearButtonMode = .always
-        titleTextField.textColor = .trBlack
+        titleTextField.textColor = Colors.black
         if let value {
             titleTextField.text = value
         }
         titleTextField.font = UIFont(name: SFPro.regular, size: 17)
+        titleTextField.enablesReturnKeyAutomatically = true
+//        titleTextField.inputDelegate
+//        titleTextField.addAction(UIAction, for: .valueChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(titleTextField)
         
@@ -76,34 +81,35 @@ final class NTCButtonsCollectionCell: UICollectionViewCell {
         let titleLabel  = UILabel()
         titleLabel.text = title
         titleLabel.font = UIFont(name: SFPro.regular, size: 17)
-        titleLabel.textColor = .trBlack
+        titleLabel.textColor = Colors.black
         titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(titleLabel)
-        
-        titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-        
-        guard let value else {
-            titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-            return
-        }
+                
         let valueLabel = UILabel()
         valueLabel.text = value
         valueLabel.font = UIFont(name: SFPro.regular, size: 17)
-        valueLabel.textColor = .trTabBarUpperlineAlpha30
+        valueLabel.textColor = Colors.grayDisabledButton
         valueLabel.textAlignment = .left
         valueLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(valueLabel)
         
         let rowSpacing: CGFloat = 3
-        self.centerYAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rowSpacing/2).isActive = true
-        valueLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
-        valueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rowSpacing).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
+                
+        if value != nil {
+            self.addSubview(valueLabel)
+            valueLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
+            valueLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 50).isActive = true
+            valueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rowSpacing).isActive = true
+            self.centerYAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rowSpacing/2).isActive = true
+        } else {
+            titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        }
     }
     
     private func addChevron() {
         let chevron = UIImageView(image: UIImage(named: "chevron"))
-        chevron.tintColor = .trNewTrackerTitleInputCancelButton
+        chevron.tintColor = Colors.grayDisabledButton
         chevron.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(chevron)
         
@@ -113,21 +119,14 @@ final class NTCButtonsCollectionCell: UICollectionViewCell {
         ])
     }
     
-    private func addDivider(position: DividerPosition) {
-        let divider = UIView()
-        divider.backgroundColor = .trTabBarUpperlineAlpha30
-        divider.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(divider)
-        switch position {
-        case .top:
-            divider.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        case .bottom:
-            divider.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        case .both:
-            break
-        }
-        divider.heightAnchor.constraint(equalToConstant: 0.25).isActive = true
-        divider.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-        divider.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
+    private func addSeparator() {
+        let sellSeparator = UIView()
+        sellSeparator.backgroundColor = Colors.grayDisabledButton
+        sellSeparator.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(sellSeparator)
+        sellSeparator.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        sellSeparator.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        sellSeparator.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
+        sellSeparator.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
     }
 }

@@ -22,7 +22,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="aPx-h4-CDf"/>
-                        <color key="backgroundColor" name="YP Launch Screen Backgound"/>
+                        <color key="backgroundColor" name="YP Blue"/>
                         <constraints>
                             <constraint firstItem="VVa-Ih-yJa" firstAttribute="centerX" secondItem="I1Y-sW-hJy" secondAttribute="centerX" id="lB2-nz-2kN"/>
                             <constraint firstItem="VVa-Ih-yJa" firstAttribute="centerY" secondItem="I1Y-sW-hJy" secondAttribute="centerY" id="uz4-yV-3kR"/>
@@ -36,8 +36,8 @@
     </scenes>
     <resources>
         <image name="launchScreenLogo" width="91" height="94"/>
-        <namedColor name="YP Launch Screen Backgound">
-            <color red="0.21600000560283661" green="0.44699999690055847" blue="0.90600001811981201" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="YP Blue">
+            <color red="0.21568627450980393" green="0.44705882352941173" blue="0.90588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
