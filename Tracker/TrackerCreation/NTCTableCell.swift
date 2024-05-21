@@ -12,29 +12,24 @@ enum SeparatorPosition: String {
     case both
 }
 
-final class NTCCollectionCell: UICollectionViewCell {
+final class NTCTableCell: UITableViewCell {
     
+    weak var delegate: NewTrackerCreationVC?
     private var titleLabel = UILabel()
     private var titleTextColor = UIColor()
+    private var titleTextField = UITextField()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configure(new cell: MainCVCellParams, for tracker: TrackerType) {
-        self.subviews.forEach { $0.removeFromSuperview() }
+    override func prepareForReuse() {
+        super.prepareForReuse()
         
-        if cell.id == .spacer {
-            self.backgroundColor = .none
-        } else {
-            self.backgroundColor = Colors.grayCellBackground
-            self.layer.masksToBounds = true
-            self.layer.cornerRadius = 16
-        }
+        self.contentView.subviews.forEach { $0.removeFromSuperview() }
+    }
+    
+    func configure(new cell: MainTableCellParams, for tracker: TrackerType) {
+        self.selectionStyle = .none
+        self.backgroundColor = Colors.grayCellBackground
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = 16
         
         switch cell.id {
         case .category:
@@ -42,18 +37,23 @@ final class NTCCollectionCell: UICollectionViewCell {
             addLabels(title: cell.title, value: cell.value)
             if tracker == .habit {
                 self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+                self.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            } else {
+                self.separatorInset = UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
             }
-        case .separator:
-            self.layer.cornerRadius = .zero
-            addSeparator()
         case .shedule:
             addChevron()
             addLabels(title: cell.title, value: cell.value)
             self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            self.separatorInset = UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
         case .title:
+            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner, .layerMaxXMinYCorner]
+            self.separatorInset = UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
             addTitleTextField(placeholder: cell.title, value: cell.value)
-        default:
-            break
+        case .spacer:
+            self.backgroundColor = .none
+            self.layer.maskedCorners = []
+            self.separatorInset = UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
         }
     }
     
@@ -67,10 +67,10 @@ final class NTCCollectionCell: UICollectionViewCell {
         }
         titleTextField.font = UIFont(name: SFPro.regular, size: 17)
         titleTextField.enablesReturnKeyAutomatically = true
-//        titleTextField.inputDelegate
-//        titleTextField.addAction(UIAction, for: .valueChanged)
+        titleTextField.addTarget(self, action: #selector(updateNewTrackerName), for: .editingChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(titleTextField)
+        self.contentView.addSubview(titleTextField)
+        self.titleTextField = titleTextField
         
         titleTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
         titleTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
@@ -84,8 +84,8 @@ final class NTCCollectionCell: UICollectionViewCell {
         titleLabel.textColor = Colors.black
         titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(titleLabel)
-                
+        self.contentView.addSubview(titleLabel)
+        
         let valueLabel = UILabel()
         valueLabel.text = value
         valueLabel.font = UIFont(name: SFPro.regular, size: 17)
@@ -95,9 +95,9 @@ final class NTCCollectionCell: UICollectionViewCell {
         
         let rowSpacing: CGFloat = 3
         titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-                
+        
         if value != nil {
-            self.addSubview(valueLabel)
+            self.contentView.addSubview(valueLabel)
             valueLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
             valueLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 50).isActive = true
             valueLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rowSpacing).isActive = true
@@ -107,26 +107,19 @@ final class NTCCollectionCell: UICollectionViewCell {
         }
     }
     
+    @objc func updateNewTrackerName() {
+        self.delegate?.updateNewTrackerName(with: self.titleTextField.text)
+    }
+    
     private func addChevron() {
         let chevron = UIImageView(image: UIImage(named: "chevron"))
         chevron.tintColor = Colors.grayDisabledButton
         chevron.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(chevron)
+        self.contentView.addSubview(chevron)
         
         NSLayoutConstraint.activate([
             chevron.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             chevron.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -33)
         ])
-    }
-    
-    private func addSeparator() {
-        let sellSeparator = UIView()
-        sellSeparator.backgroundColor = Colors.grayDisabledButton
-        sellSeparator.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(sellSeparator)
-        sellSeparator.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        sellSeparator.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        sellSeparator.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-        sellSeparator.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
     }
 }

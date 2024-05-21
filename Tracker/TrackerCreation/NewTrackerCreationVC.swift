@@ -16,10 +16,9 @@ enum CellID: String {
     case category = "category"
     case shedule = "shedule"
     case spacer = "spacer"
-    case separator = "separator"
 }
 
-struct MainCVCellParams {
+struct MainTableCellParams {
     let id: CellID
     let cellHeight: CGFloat
     let title: String
@@ -29,25 +28,36 @@ struct MainCVCellParams {
 final class NewTrackerCreationVC: UIViewController {
     
     weak var delegate: NewTrackerTypeChoiceVC?
+    var mainTableView = UITableView()
     var newTrackerType: TrackerType
-    var newTrackerSchedule: Set<Int> = []
-    var newTrackerScheduleLabelText: String? {
+    var newTrackerTitle: String? {
         didSet {
-            self.mainCVCells[4].value = newTrackerScheduleLabelText
-            updateCollectionView()
+            self.mainTableCells[0].value = newTrackerTitle
+            updateButtonState()
         }
     }
-    var mainCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    //    var newTracker = Tracker(id: UUID(),
-    //                             name: "",
-    //                             color: nil,
-    //                             emoji: nil,
-    //                             schedule: [])
+    var newTrackerCategory: String? {
+        didSet {
+            self.mainTableCells[2].value = newTrackerCategory
+            updateTableView()
+            updateButtonState()
+        }
+    }
+    var newTrackerSchedule: Set<Int>?
+    var newTrackerScheduleLabelText: String? {
+        didSet {
+            self.mainTableCells[3].value = newTrackerScheduleLabelText
+            updateTableView()
+            updateButtonState()
+        }
+    }
     
-    private var mainCVCells: [MainCVCellParams] = []
+    private var storage = DataStorage.storage
+    private var mainTableCells: [MainTableCellParams] = []
     private var cancelButton = UIButton()
     private var createButton = UIButton()
-    
+    private var minimumTitleLength = 3
+    private var maximumTitleLength = 38
     
     init(newTrackerType: TrackerType, delegate: NewTrackerTypeChoiceVC) {
         self.newTrackerType = newTrackerType
@@ -64,36 +74,37 @@ final class NewTrackerCreationVC: UIViewController {
         super.viewDidLoad()
         
         configureCommonUIElements(for : newTrackerType)
-        configureMainCV(for: newTrackerType)
+        configureMainTable(for: newTrackerType)
     }
     
     private func configureCommonUIElements(for tracker: TrackerType) {
         view.backgroundColor = Colors.white
         setTitle(for: newTrackerType)
         setButtons()
+        updateButtonState()
     }
     
-    private func configureMainCV(for tracker: TrackerType) {
-        self.mainCVCells.append(MainCVCellParams(id: .title, cellHeight: 75, title: "Введите название трекера"))
-        self.mainCVCells.append(MainCVCellParams(id: .spacer, cellHeight: 24, title: ""))
-        self.mainCVCells.append(MainCVCellParams(id: .category, cellHeight: 75, title: "Категория", value: "Быт"))
+    private func configureMainTable(for tracker: TrackerType) {
+        self.mainTableCells.append(MainTableCellParams(id: .title, cellHeight: 75, title: "Введите название трекера"))
+        self.mainTableCells.append(MainTableCellParams(id: .spacer, cellHeight: 24, title: ""))
+        self.mainTableCells.append(MainTableCellParams(id: .category, cellHeight: 75, title: "Категория", value: nil))
         if tracker == .habit {
-            self.mainCVCells.append(MainCVCellParams(id: .separator, cellHeight: 0.25, title: ""))
-            self.mainCVCells.append(MainCVCellParams(id: .shedule, cellHeight: 75, title: "Расписание", value: nil))
+            self.mainTableCells.append(MainTableCellParams(id: .shedule, cellHeight: 75, title: "Расписание", value: nil))
         }
-        mainCollectionView.dataSource = self
-        mainCollectionView.delegate = self
-        mainCollectionView.backgroundColor = .none
-        mainCollectionView.register(NTCCollectionCell.self, forCellWithReuseIdentifier: "mainCollectionCell")
+        mainTableView.dataSource = self
+        mainTableView.delegate = self
+        mainTableView.backgroundColor = .none
+        mainTableView.separatorStyle = .singleLine
+        mainTableView.register(NTCTableCell.self, forCellReuseIdentifier: "mainTableCell")
         
-        mainCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(mainCollectionView)
+        mainTableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mainTableView)
         
         NSLayoutConstraint.activate([
-            mainCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 87),
-            mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -200),
-            mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            mainCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+            mainTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 87),
+            mainTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -200),
+            mainTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            mainTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
     }
     
@@ -137,7 +148,7 @@ final class NewTrackerCreationVC: UIViewController {
         createButton.layer.cornerRadius = 16
         createButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(createButton)
-        //        createButton.isEnabled = false
+        createButton.isEnabled = false
         self.createButton = createButton
         
         NSLayoutConstraint.activate([
@@ -152,21 +163,32 @@ final class NewTrackerCreationVC: UIViewController {
         ])
     }
     
+    @objc func updateNewTrackerName(with title: String?) {
+        guard let title
+        else {
+            return
+        }
+        newTrackerTitle = title
+    }
+    
     @objc private func cancelButtonPressed() {
-        //        print("CONSOLE: cancelButtonPressed" )
+        self.dismiss(animated: true)
     }
     
     @objc private func createButtonPressed() {
-        //        print("CONSOLE: createButtonPressed" )
-        updateCollectionView()
-    }
-    
-    @objc private func setCategoryButtonPressed() {
-        //        print("CONSOLE: setCategoryButtonPressed" )
-    }
-    
-    @objc private func setScheduleButtonPressed() {
-        //        print("CONSOLE: setScheduleButtonPressed" )
+        let tracker = Tracker(id: UUID(),
+                              name: self.newTrackerTitle ?? "б/н",
+                              color: .ypBlue,
+                              emoji: "😎",
+                              schedule: self.newTrackerSchedule
+        )
+        
+        if let category = self.newTrackerCategory {
+            self.storage.addNew(tracker: tracker, to: category)
+            print(category)
+        }
+        print (tracker)
+        
     }
     
     private func switchToScheduleVC () {
@@ -176,47 +198,68 @@ final class NewTrackerCreationVC: UIViewController {
     }
     
     private func switchToCategoryVC () {
-        let vc = CategoryVC()
+        let vc = CategoryVC(delegate: self)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
     
-    private func updateCollectionView() {
-        mainCollectionView.reloadData()
-        //        mainCollectionView.performBatchUpdates {
-        //            mainCollectionView.reloadItems(at: [IndexPath(row: 4, section: 0)])
-        //        }
+    private func updateButtonState() {
+        let count = self.newTrackerTitle?.count ?? 0
+        if count >= minimumTitleLength,
+           count <= maximumTitleLength,
+           self.newTrackerCategory != nil,
+           self.newTrackerSchedule != nil || self.newTrackerType == .event {
+            createButton.isEnabled = true
+        } else {
+            createButton.isEnabled = false
+        }
+        createButton.backgroundColor = createButton.isEnabled ? Colors.black : Colors.grayDisabledButton
+    }
+    
+    private func updateTableView() {
+        mainTableView.reloadData()
     }
 }
 
-extension NewTrackerCreationVC: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mainCVCells.count
+extension NewTrackerCreationVC: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        mainTableCells.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "mainCollectionCell", for: indexPath) as? NTCCollectionCell {
-            cell.configure(new: mainCVCells[indexPath.row], for: newTrackerType)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "mainTableCell", for: indexPath) as? NTCTableCell {
+            cell.delegate = self
+            cell.configure(new: mainTableCells[indexPath.row], for: newTrackerType)
             return cell
         }
         fatalError("Проблема с подготовкой ячейки")
     }
 }
 
-extension NewTrackerCreationVC: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellHeight = mainCVCells[indexPath.row].cellHeight
-        return CGSize(width: collectionView.bounds.width, height: cellHeight)
+extension NewTrackerCreationVC: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return mainTableCells[indexPath.row].cellHeight
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
-}
-
-extension NewTrackerCreationVC: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch mainCVCells[indexPath.row].id {
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch mainTableCells[indexPath.row].id {
         case .shedule:
             switchToScheduleVC()
         case .category:

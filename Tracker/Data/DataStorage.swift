@@ -10,6 +10,7 @@ final class DataStorage {
     
     // MARK: - Public Properties
     static let storage = DataStorage()
+    var categories: Set<String> = []
     var myTrackers: [TrackerCategory] = []
     var completedTasks: [TrackerRecord] = []
     
@@ -20,7 +21,7 @@ final class DataStorage {
         
         addMockedData()
     }
-
+    
     func addMockedData() {
         
         let trackers = [
@@ -86,5 +87,17 @@ final class DataStorage {
                             )
         ]
         myTrackers = trackers
+        for tracker in myTrackers {
+            categories.insert(tracker.category)
+        }
     }
+    
+    func addNew(tracker: Tracker, to category: String) {
+        
+    }
+    
+    func updateCategories(with newCategories: Set<String>) {
+        self.categories = newCategories
+    }
+    
 }

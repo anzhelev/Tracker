@@ -19,7 +19,7 @@ final class ScheduleVC: UIViewController {
     
     init(delegate: NewTrackerCreationVC) {
         self.delegate = delegate
-        self.schedule = delegate.newTrackerSchedule
+        self.schedule = delegate.newTrackerSchedule ?? []
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -115,7 +115,7 @@ final class ScheduleVC: UIViewController {
         label.textColor = Colors.black
         label.font = UIFont(name: SFPro.regular, size: 17)
         label.translatesAutoresizingMaskIntoConstraints = false
-        cell.addSubview(label)
+        cell.contentView.addSubview(label)
         
         let switcher = UISwitch()
         switcher.onTintColor = Colors.blue
@@ -123,7 +123,7 @@ final class ScheduleVC: UIViewController {
         switcher.tag = row
         switcher.addTarget(self, action: #selector(switcherChanged(_:)), for: .valueChanged)
         switcher.translatesAutoresizingMaskIntoConstraints = false
-        cell.addSubview(switcher)
+        cell.contentView.addSubview(switcher)
         
         label.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 16).isActive = true
         label.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
@@ -142,21 +142,26 @@ final class ScheduleVC: UIViewController {
     }
     
     @objc private func confirmButtonPressed() {
-        self.delegate?.newTrackerSchedule = schedule
-        
-        var selectedIndexes: Set<Int> = []
-        for index in 0...6 {
-            if schedule.contains(getDayIndexFromRowIndex(for: index)) {
-                selectedIndexes.insert(index)
+        if schedule.count > 0 {
+            self.delegate?.newTrackerSchedule = schedule
+            
+            var selectedIndexes: Set<Int> = []
+            for index in 0...6 {
+                if schedule.contains(getDayIndexFromRowIndex(for: index)) {
+                    selectedIndexes.insert(index)
+                }
             }
+            
+            var days: [String] = []
+            selectedIndexes.sorted().forEach { index in
+                days.append(self.daysOfWeekShort[index])
+            }
+            self.delegate?.newTrackerScheduleLabelText = days.joined(separator: ", ")
+        } else {
+            self.delegate?.newTrackerSchedule = nil
+            self.delegate?.newTrackerScheduleLabelText = nil
         }
-        
-        var days: [String] = []
-        selectedIndexes.sorted().forEach { index in
-            days.append(self.daysOfWeekShort[index])
-        }
-        self.delegate?.newTrackerScheduleLabelText = days.joined(separator: ", ")
-        self.dismiss(animated: false)
+        self.dismiss(animated: true)
     }
     
     private func updateButtonState() {
