@@ -27,7 +27,8 @@ struct MainTableCellParams {
 
 final class NewTrackerCreationVC: UIViewController {
     
-    weak var delegate: TrackersViewController?
+    weak var delegate: NewTrackerTypeChoiceVC?
+    weak var superDelegate: TrackersViewController?
     var mainTableView = UITableView()
     var newTrackerType: TrackerType
     var newTrackerTitle: String? {
@@ -54,16 +55,17 @@ final class NewTrackerCreationVC: UIViewController {
     
     var categories: Set<String> = []
     
-//    private var trackersVC: TrackersViewController = TrackersViewController()
+    //    private var trackersVC: TrackersViewController = TrackersViewController()
     private var mainTableCells: [MainTableCellParams] = []
     private var cancelButton = UIButton()
     private var createButton = UIButton()
     private var minimumTitleLength = 3
     private var maximumTitleLength = 38
     
-    init(newTrackerType: TrackerType, delegate: TrackersViewController) {
+    init(newTrackerType: TrackerType, delegate: NewTrackerTypeChoiceVC, superDelegate: TrackersViewController) {
         self.newTrackerType = newTrackerType
         self.delegate = delegate
+        self.superDelegate = superDelegate
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -179,7 +181,7 @@ final class NewTrackerCreationVC: UIViewController {
     }
     
     @objc private func createButtonPressed() {
-        self.delegate?.updateCategories(with: categories)
+        self.superDelegate?.updateCategories(with: categories)
         let tracker = Tracker(id: UUID(),
                               name: self.newTrackerTitle ?? "б/н",
                               color: .ypBlue,
@@ -188,19 +190,19 @@ final class NewTrackerCreationVC: UIViewController {
         )
         
         if let category = self.newTrackerCategory {
-            self.delegate?.addNew(tracker: tracker, to: category)
-            print(category)
+            self.superDelegate?.addNew(tracker: tracker, to: category)
         }
-        print (tracker)
         
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
     private func getCategoriesList() {
         var categories: Set<String> = []
-        self.delegate?.categories.forEach{
+        self.superDelegate?.categories.forEach{
             categories.insert($0.category)
         }
         self.categories = categories
+        print (superDelegate)
     }
     
     private func switchToScheduleVC() {

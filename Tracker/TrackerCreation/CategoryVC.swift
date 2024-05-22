@@ -11,8 +11,8 @@ final class CategoryVC: UIViewController {
     weak var delegate: NewTrackerCreationVC?
     var categories: Set<String> = [] {
         didSet {
-            updateStub()
             updateTableView()
+            updateStub()
         }
     }
     
@@ -44,8 +44,8 @@ final class CategoryVC: UIViewController {
         view.backgroundColor = Colors.white
         setTitle()        
         setStubImage()
-//        updateStub()
         setTableView()
+        updateStub()
         setButton()
     }
     
@@ -66,9 +66,9 @@ final class CategoryVC: UIViewController {
     
     private func setStubImage() {
         let stubView = UIView()
-        stubView.backgroundColor = .yellow
+        stubView.backgroundColor = .none
         stubView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stubView)
+        self.view.addSubview(stubView)
         self.stubView = stubView
         
         let image = UIImage(named: "tabTrackersImage")
@@ -90,33 +90,30 @@ final class CategoryVC: UIViewController {
         label2.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(label2)
         
-        
         NSLayoutConstraint.activate([
             stubView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-//            stubView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             stubView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             stubView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             stubView.heightAnchor.constraint(equalToConstant: 300),
-//            stubView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             stubImageView.heightAnchor.constraint(equalToConstant: 80),
             stubImageView.widthAnchor.constraint(equalToConstant: 80),
-            stubImageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            stubImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stubImageView.bottomAnchor.constraint(equalTo: stubView.centerYAnchor),
+            stubImageView.centerXAnchor.constraint(equalTo: stubView.centerXAnchor),
             label1.heightAnchor.constraint(equalToConstant: 18),
             label1.topAnchor.constraint(equalTo: stubImageView.bottomAnchor, constant: 8),
-            label1.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            label1.centerXAnchor.constraint(equalTo: stubView.centerXAnchor),
             label2.heightAnchor.constraint(equalTo: label1.heightAnchor),
             label2.topAnchor.constraint(equalTo: label1.bottomAnchor, constant: 0),
-            label2.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
+            label2.centerXAnchor.constraint(equalTo: stubView.centerXAnchor)
         ])
     }
     
     private func updateStub() {
         self.stubView.isHidden = !self.categories.isEmpty
+        self.categoriesTableView.isHidden = self.categories.isEmpty
     }
     
     private func setTableView() {
-        
         categoriesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
@@ -143,6 +140,7 @@ final class CategoryVC: UIViewController {
         
         if self.categories.count == 1 {
             cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.midX, bottom: 0, right: cell.bounds.midX)
         } else if row == 0 {
             cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         } else if row == self.categories.count - 1 {

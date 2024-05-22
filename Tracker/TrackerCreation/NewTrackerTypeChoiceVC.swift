@@ -68,13 +68,19 @@ final class NewTrackerTypeChoiceVC: UIViewController {
     }
     
     @objc private func createNewHabit() {
-        let vc = NewTrackerCreationVC(newTrackerType: .habit, delegate: self.delegate!)
+        guard let superDelegate = self.delegate else {
+            return
+        }
+        let vc = NewTrackerCreationVC(newTrackerType: .habit, delegate: self, superDelegate: superDelegate)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
     
     @objc private func createNewEvent() {
-        let vc = NewTrackerCreationVC(newTrackerType: .event, delegate: self.delegate!)
+        guard let superDelegate = self.delegate else {
+            return
+        }
+        let vc = NewTrackerCreationVC(newTrackerType: .event, delegate: self, superDelegate: superDelegate)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }

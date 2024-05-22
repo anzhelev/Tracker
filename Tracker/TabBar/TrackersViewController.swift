@@ -1,5 +1,5 @@
 //
-//  TrackersTabViewController.swift
+//  TrackersViewController.swift
 //  Tracker
 //
 //  Created by Andrey Zhelev on 04.05.2024.
@@ -26,7 +26,7 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        categories = mock.categories
+        categories = mock.categories
         dateToStringFormatter.dateFormat = "dd.MM.yy"
         configureUIElements()
     }
@@ -165,7 +165,7 @@ final class TrackersViewController: UIViewController {
         for item in categories {
             existingCategories.insert(item.category)
         }
-        var newCategories = newlist.subtracting(existingCategories)
+        let newCategories = newlist.subtracting(existingCategories)
         
         for item in newCategories {
             let trackers: [Tracker] = []
