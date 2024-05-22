@@ -1,30 +1,23 @@
 //
-//  DataStorage.swift
+//  MockData.swift
 //  Tracker
 //
 //  Created by Andrey Zhelev on 19.05.2024.
 //
 import Foundation
 
-final class DataStorage {
+final class MockData {
     
     // MARK: - Public Properties
-    static let storage = DataStorage()
-    var categories: Set<String> = []
-    var myTrackers: [TrackerCategory] = []
-    var completedTasks: [TrackerRecord] = []
+    static let storage = MockData()
+    var categories: [TrackerCategory] = []
     
-    // MARK: - Private Properties
-    
-    // MARK: - Initializers
     private init() {
-        
-        addMockedData()
+        addMockData()
     }
     
-    func addMockedData() {
-        
-        let trackers = [
+    func addMockData() {
+        categories = [
             TrackerCategory (category: "Быт",
                              trackers: [
                                 Tracker(id: UUID(),
@@ -86,18 +79,5 @@ final class DataStorage {
                              ]
                             )
         ]
-        myTrackers = trackers
-        for tracker in myTrackers {
-            categories.insert(tracker.category)
-        }
     }
-    
-    func addNew(tracker: Tracker, to category: String) {
-        
-    }
-    
-    func updateCategories(with newCategories: Set<String>) {
-        self.categories = newCategories
-    }
-    
 }

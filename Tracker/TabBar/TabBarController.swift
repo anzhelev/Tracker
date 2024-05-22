@@ -18,20 +18,20 @@ final class TabBarController: UITabBarController {
     
     private func setupBars() {
         
-        let trackersTabViewController = TrackersTabViewController()
-        trackersTabViewController.tabBarItem = UITabBarItem(
+        let trackersViewController = TrackersViewController()
+        trackersViewController.tabBarItem = UITabBarItem(
             title: "Трекеры",
             image: UIImage(named: "tabBarTrackersTab"),
             selectedImage: nil
         )
         
-        let statisticsTabViewController = StatisticsTabViewController()
-        statisticsTabViewController.tabBarItem = UITabBarItem(
+        let statisticsViewController = StatisticsViewController()
+        statisticsViewController.tabBarItem = UITabBarItem(
             title: "Статистика",
             image: UIImage(named: "tabBarStatisticsTab"),
             selectedImage: nil
         )
-        self.viewControllers = [trackersTabViewController, statisticsTabViewController]
+        self.viewControllers = [trackersViewController, statisticsViewController]
     }
     
     private func setUpperLine () {

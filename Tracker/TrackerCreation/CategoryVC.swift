@@ -11,20 +11,21 @@ final class CategoryVC: UIViewController {
     weak var delegate: NewTrackerCreationVC?
     var categories: Set<String> = [] {
         didSet {
+            updateStub()
             updateTableView()
         }
     }
     
-    private var storage = DataStorage.storage
     private var titleLabel = UILabel()
+    private var stubView = UIView()
     private var selectedCategory: String?
     private let categoriesTableView = UITableView()
     private var categoryCreationButton = UIButton()
     
-    init(delegate: NewTrackerCreationVC) {
+    init(delegate: NewTrackerCreationVC, categories: Set<String>) {
         self.delegate = delegate
-        self.categories = storage.categories
         selectedCategory = delegate.newTrackerCategory
+        self.categories = categories
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -41,8 +42,10 @@ final class CategoryVC: UIViewController {
     
     private func configureUIElements() {
         view.backgroundColor = Colors.white
-        setTitle()
-        self.categories.isEmpty ? setStubImage() : setTableView()
+        setTitle()        
+        setStubImage()
+//        updateStub()
+        setTableView()
         setButton()
     }
     
@@ -62,27 +65,39 @@ final class CategoryVC: UIViewController {
     }
     
     private func setStubImage() {
+        let stubView = UIView()
+        stubView.backgroundColor = .yellow
+        stubView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stubView)
+        self.stubView = stubView
+        
         let image = UIImage(named: "tabTrackersImage")
         let stubImageView = UIImageView(image: image)
         stubImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stubImageView)
+        stubView.addSubview(stubImageView)
         
         let label1 = UILabel()
         label1.text = "Привычки и события можно"
         label1.font = UIFont(name: SFPro.regular, size: 12)
         label1.textColor = Colors.black
         label1.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label1)
+        stubView.addSubview(label1)
         
         let label2 = UILabel()
         label2.text = "объединить по смыслу"
         label2.font = UIFont(name: SFPro.regular, size: 12)
         label2.textColor = Colors.black
         label2.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label2)
+        stubView.addSubview(label2)
         
         
         NSLayoutConstraint.activate([
+            stubView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+//            stubView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stubView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stubView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stubView.heightAnchor.constraint(equalToConstant: 300),
+//            stubView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             stubImageView.heightAnchor.constraint(equalToConstant: 80),
             stubImageView.widthAnchor.constraint(equalToConstant: 80),
             stubImageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
@@ -94,6 +109,10 @@ final class CategoryVC: UIViewController {
             label2.topAnchor.constraint(equalTo: label1.bottomAnchor, constant: 0),
             label2.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
         ])
+    }
+    
+    private func updateStub() {
+        self.stubView.isHidden = !self.categories.isEmpty
     }
     
     private func setTableView() {
@@ -215,8 +234,7 @@ extension CategoryVC: UITableViewDelegate {
         let cell = categoriesTableView.cellForRow(at: indexPath)
         cell?.contentView.subviews.last?.isHidden = false
         self.delegate?.newTrackerCategory = categories.sorted()[indexPath.row]
-        self.storage.updateCategories(with: categories)
-//        self.storage.categories = categories
+        self.delegate?.categories = categories
         self.dismiss(animated: true)
     }
     

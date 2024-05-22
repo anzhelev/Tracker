@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class StatisticsTabViewController: UIViewController {
+final class StatisticsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()

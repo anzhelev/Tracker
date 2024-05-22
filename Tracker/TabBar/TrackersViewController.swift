@@ -7,21 +7,26 @@
 import Foundation
 import UIKit
 
-final class TrackersTabViewController: UIViewController {
+final class TrackersViewController: UIViewController {
     
     // MARK: - Public Properties
     
     
     // MARK: - Private Properties
+    var categories: [TrackerCategory] = []
+    var completedTrackers: [TrackerRecord] = []
+    
     private var plusButton: UIButton?
     private let dateToStringFormatter = DateFormatter()
     private var selectedDate = Date()
-    private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
+    private let mock = MockData.storage
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        categories = mock.categories
         dateToStringFormatter.dateFormat = "dd.MM.yy"
         configureUIElements()
     }
@@ -124,5 +129,54 @@ final class TrackersTabViewController: UIViewController {
     @objc func dateSelectorChanged(datePicker: UIDatePicker) {
         selectedDate = datePicker.date
         print("CONSOLE: dateSelectorChanged", selectedDate)
+    }
+    
+    func addNew(tracker: Tracker, to category: String) {
+        var newCategories: [TrackerCategory] = []
+        var existingCategories: Set<String> = []
+        
+        for item in categories {
+            existingCategories.insert(item.category)
+            if item.category != category {
+                newCategories.append(item)
+            } else {
+                var trackers: [Tracker] = item.trackers
+                trackers.append(tracker)
+                newCategories.append(TrackerCategory(category: category,
+                                                     trackers: trackers
+                                                    )
+                )
+            }
+        }
+        
+        if !existingCategories.contains(category) {
+            let trackers: [Tracker] = [tracker]
+            newCategories.append(TrackerCategory(category: category,
+                                                 trackers: trackers
+                                                )
+            )
+        }
+        self.categories = newCategories
+    }
+    
+    func updateCategories(with newlist: Set<String>) {
+        var existingCategories: Set<String> = []
+        
+        for item in categories {
+            existingCategories.insert(item.category)
+        }
+        var newCategories = newlist.subtracting(existingCategories)
+        
+        for item in newCategories {
+            let trackers: [Tracker] = []
+            categories.append(TrackerCategory(category: item,
+                                              trackers: trackers
+                                             )
+            )
+        }
+    }
+    
+    private func addNew(record: TrackerRecord) {
+        
     }
 }

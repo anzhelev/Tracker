@@ -9,7 +9,7 @@ import UIKit
 
 final class NewTrackerTypeChoiceVC: UIViewController {
     
-    weak var delegate: TrackersTabViewController?
+    weak var delegate: TrackersViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,13 +68,13 @@ final class NewTrackerTypeChoiceVC: UIViewController {
     }
     
     @objc private func createNewHabit() {
-        let vc = NewTrackerCreationVC(newTrackerType: .habit, delegate: self)
+        let vc = NewTrackerCreationVC(newTrackerType: .habit, delegate: self.delegate!)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
     
     @objc private func createNewEvent() {
-        let vc = NewTrackerCreationVC(newTrackerType: .event, delegate: self)
+        let vc = NewTrackerCreationVC(newTrackerType: .event, delegate: self.delegate!)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }

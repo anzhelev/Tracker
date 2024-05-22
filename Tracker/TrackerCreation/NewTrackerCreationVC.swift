@@ -27,7 +27,7 @@ struct MainTableCellParams {
 
 final class NewTrackerCreationVC: UIViewController {
     
-    weak var delegate: NewTrackerTypeChoiceVC?
+    weak var delegate: TrackersViewController?
     var mainTableView = UITableView()
     var newTrackerType: TrackerType
     var newTrackerTitle: String? {
@@ -52,14 +52,16 @@ final class NewTrackerCreationVC: UIViewController {
         }
     }
     
-    private var storage = DataStorage.storage
+    var categories: Set<String> = []
+    
+//    private var trackersVC: TrackersViewController = TrackersViewController()
     private var mainTableCells: [MainTableCellParams] = []
     private var cancelButton = UIButton()
     private var createButton = UIButton()
     private var minimumTitleLength = 3
     private var maximumTitleLength = 38
     
-    init(newTrackerType: TrackerType, delegate: NewTrackerTypeChoiceVC) {
+    init(newTrackerType: TrackerType, delegate: TrackersViewController) {
         self.newTrackerType = newTrackerType
         self.delegate = delegate
         
@@ -73,6 +75,7 @@ final class NewTrackerCreationVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        getCategoriesList()
         configureCommonUIElements(for : newTrackerType)
         configureMainTable(for: newTrackerType)
     }
@@ -176,6 +179,7 @@ final class NewTrackerCreationVC: UIViewController {
     }
     
     @objc private func createButtonPressed() {
+        self.delegate?.updateCategories(with: categories)
         let tracker = Tracker(id: UUID(),
                               name: self.newTrackerTitle ?? "б/н",
                               color: .ypBlue,
@@ -184,21 +188,29 @@ final class NewTrackerCreationVC: UIViewController {
         )
         
         if let category = self.newTrackerCategory {
-            self.storage.addNew(tracker: tracker, to: category)
+            self.delegate?.addNew(tracker: tracker, to: category)
             print(category)
         }
         print (tracker)
         
     }
     
-    private func switchToScheduleVC () {
+    private func getCategoriesList() {
+        var categories: Set<String> = []
+        self.delegate?.categories.forEach{
+            categories.insert($0.category)
+        }
+        self.categories = categories
+    }
+    
+    private func switchToScheduleVC() {
         let vc = ScheduleVC(delegate: self)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
     
-    private func switchToCategoryVC () {
-        let vc = CategoryVC(delegate: self)
+    private func switchToCategoryVC() {
+        let vc = CategoryVC(delegate: self, categories: self.categories)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
