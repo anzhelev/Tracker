@@ -16,6 +16,8 @@ enum Colors {
     static var white: UIColor {UIColor(named: "YP White") ?? UIColor.white}
     /// new tracker creation cancel button font and border color
     static var red: UIColor {UIColor(named: "YP Red") ?? UIColor.red}
+    /// gray color for date picker background
+    static var grayDatePicker: UIColor {UIColor(named: "YP Date Picker BG") ?? UIColor.lightGray}
     /// main table and collection cells background color
     static var grayCellBackground: UIColor {UIColor(named: "YP Cells Background (Alpha 30)") ?? UIColor.lightGray}
     /// gray color for buttons in inactive state, font color for selected categories, schedule, shevron

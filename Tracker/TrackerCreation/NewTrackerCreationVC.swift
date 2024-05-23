@@ -54,8 +54,6 @@ final class NewTrackerCreationVC: UIViewController {
     }
     
     var categories: Set<String> = []
-    
-    //    private var trackersVC: TrackersViewController = TrackersViewController()
     private var mainTableCells: [MainTableCellParams] = []
     private var cancelButton = UIButton()
     private var createButton = UIButton()
@@ -177,7 +175,7 @@ final class NewTrackerCreationVC: UIViewController {
     }
     
     @objc private func cancelButtonPressed() {
-        self.dismiss(animated: true)
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
     @objc private func createButtonPressed() {
@@ -202,7 +200,6 @@ final class NewTrackerCreationVC: UIViewController {
             categories.insert($0.category)
         }
         self.categories = categories
-        print (superDelegate)
     }
     
     private func switchToScheduleVC() {
