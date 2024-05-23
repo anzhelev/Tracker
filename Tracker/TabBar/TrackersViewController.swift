@@ -7,7 +7,7 @@
 import Foundation
 import UIKit
 
-final class TrackersViewController: UIViewController, UISearchBarDelegate {
+final class TrackersViewController: UIViewController {
     
     // MARK: - Public Properties
     
@@ -15,27 +15,41 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
     // MARK: - Private Properties
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
+    var selectedDate = Date()
+    var selectedWeekDay: Int = 1
     
+    private var filtredCategories: [TrackerCategory] = []
     private var plusButton = UIButton()
     private let dateFormatter = DateFormatter()
-    private var selectedDate = Date()
+    private var datePicker = UIDatePicker()
     private var dateLabel = UILabel()
     private var stubView = UIView()
+    private var stubLabel = UILabel()
     private var titleLabel = UILabel()
     private var searchBar = UISearchBar()
+    private var searchBarText: String? = nil {
+        didSet {
+            print(searchBarText ?? "")
+            updateSearchBarCancelButtonState()
+            filterCategories()
+        }
+    }
     private let trackersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let minimumInteritemSpacing: CGFloat = 10.0
+    private let cellsInRow = 2
     
     private let mock = MockData.storage
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         categories = mock.categories
-        dateFormatter.dateFormat = "dd.MM.yy"
+        completedTrackers = mock.completedTrackers
         
+        dateFormatter.dateFormat = "dd.MM.yy"
         configureUIElements()
     }
-   
+    
     private func configureUIElements() {
         view.backgroundColor = Colors.white
         
@@ -43,12 +57,11 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
         setDatePicker()
         setTitleLabel()
         setSearchBar()
+        updateSearchBarCancelButtonState()
+        setTrackersCollectionView()
         setStubImage()
-        updateStub()
-//        searchBar.setShowsCancelButton(false, animated: false)
+        dateChanged()
     }
-
-    
     
     private func setPlusButton() {
         guard let plusButtonImage = UIImage(named: "plusButton") else {
@@ -81,8 +94,9 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
         datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.layer.masksToBounds = true
         datePicker.layer.cornerRadius = 8
-        datePicker.addTarget(self, action: #selector(dateChanged(datePicker:)), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
+        self.datePicker = datePicker
         
         let dateLabel = UILabel()
         dateLabel.textColor = .black
@@ -125,30 +139,32 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
             titleLabel.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 0)
         ])
     }
-        
+    
     private func setSearchBar() {
-        let searchField = UISearchBar()
-        searchField.placeholder = "Поиск"
-        searchField.showsCancelButton = true
-        searchField.layer.cornerRadius = 8
-        searchField.layer.masksToBounds = true
-        searchField.searchTextField.font = UIFont(name: SFPro.regular, size: 17)
-        searchField.searchTextField.textColor = .ypBlack
-        searchField.searchBarStyle = .minimal
-        searchField.enablesReturnKeyAutomatically = true
+        let searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.placeholder = "Поиск"
+        searchBar.showsCancelButton = true
+        searchBar.layer.cornerRadius = 8
+        searchBar.layer.masksToBounds = true
+        searchBar.searchTextField.font = UIFont(name: SFPro.regular, size: 17)
+        searchBar.searchTextField.textColor = .ypBlack
+        searchBar.searchBarStyle = .minimal
+        searchBar.enablesReturnKeyAutomatically = true
+        searchBar.searchTextField.clearButtonMode = .never
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отмена"
-        searchField.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(searchField)
-        self.searchBar = searchField
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchBar)
+        self.searchBar = searchBar
         
         NSLayoutConstraint.activate([
-            searchField.heightAnchor.constraint(equalToConstant: 36),
-            searchField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            searchField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
-            searchField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+            searchBar.heightAnchor.constraint(equalToConstant: 36),
+            searchBar.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
+            searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
     }
-       
+    
     private func setStubImage() {
         let stubView = UIView()
         stubView.backgroundColor = .none
@@ -161,12 +177,12 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
         stubImageView.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubImageView)
         
-        let label = UILabel()
-        label.text = "Что будем отслеживать?"
-        label.font = UIFont(name: SFPro.regular, size: 12)
-        label.textColor = Colors.black
-        label.translatesAutoresizingMaskIntoConstraints = false
-        stubView.addSubview(label)
+        stubLabel.text = "Что будем отслеживать?"
+        stubLabel.font = UIFont(name: SFPro.regular, size: 12)
+        stubLabel.textColor = Colors.black
+        stubLabel.translatesAutoresizingMaskIntoConstraints = false
+        stubView.addSubview(stubLabel)
+        
         
         NSLayoutConstraint.activate([
             stubView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
@@ -177,26 +193,25 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
             stubImageView.widthAnchor.constraint(equalToConstant: 80),
             stubImageView.bottomAnchor.constraint(equalTo: stubView.centerYAnchor),
             stubImageView.centerXAnchor.constraint(equalTo: stubView.centerXAnchor),
-            label.heightAnchor.constraint(equalToConstant: 18),
-            label.topAnchor.constraint(equalTo: stubImageView.bottomAnchor, constant: 8),
-            label.centerXAnchor.constraint(equalTo: stubView.centerXAnchor)
+            stubLabel.heightAnchor.constraint(equalToConstant: 18),
+            stubLabel.topAnchor.constraint(equalTo: stubImageView.bottomAnchor, constant: 8),
+            stubLabel.centerXAnchor.constraint(equalTo: stubView.centerXAnchor)
         ])
     }
     
-
     private func setTrackersCollectionView() {
         trackersCollectionView.dataSource = self
         trackersCollectionView.delegate = self
-        trackersCollectionView.backgroundColor = Colors.white
-        
         trackersCollectionView.register(TrackersCVCell.self, forCellWithReuseIdentifier: "cell")
         trackersCollectionView.register(TrackersCVHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-
+        
+        trackersCollectionView.backgroundColor = Colors.white
+        trackersCollectionView.showsVerticalScrollIndicator = false
         trackersCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(trackersCollectionView)
         
         NSLayoutConstraint.activate([
-            trackersCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 34),
+            trackersCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 18),
             trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             trackersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
@@ -213,10 +228,58 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
         present(newTrackerNavigation, animated: true)
     }
     
-    @objc func dateChanged(datePicker: UIDatePicker) {
+    @objc func dateChanged() {
         selectedDate = datePicker.date
+        selectedWeekDay = Calendar.current.component(.weekday, from: datePicker.date)
         dateLabel.text = getFormattedString(from: selectedDate)
-        print("CONSOLE: dateSelectorChanged", selectedDate)
+        filterCategories()
+    }
+    
+    private func updateTrackersCollectionView() {
+        trackersCollectionView.reloadData()
+    }
+    
+    func filterCategories() {
+        filtredCategories = categories.compactMap {item in
+            
+            let trackersFilteredByDate = item.trackers.filter {tracker in
+                guard let schedule = tracker.schedule else {
+                    for completedTracker in completedTrackers {
+                        if tracker.id == completedTracker.id,
+                           isSameDate(trackerDate: completedTracker.date) {
+                            return true
+                        }
+                    }
+                    return false
+                }
+                return schedule.contains(selectedWeekDay)
+            }
+            
+            let trackersFilteredByTitle = trackersFilteredByDate.filter {tracker in
+                guard let searchBarText,
+                      !searchBarText.isEmpty else {
+                    return true
+                }
+                return tracker.name.lowercased().contains(searchBarText)
+            }
+            
+            if trackersFilteredByTitle.isEmpty {
+                return nil
+            }
+            
+            return TrackerCategory(category: item.category,
+                                   trackers: trackersFilteredByTitle)
+        }
+        updateStub()
+        updateTrackersCollectionView()
+    }
+    
+    private func isSameDate(trackerDate: Date) -> Bool {
+        return Calendar.current.isDate(trackerDate, inSameDayAs: selectedDate)
+    }
+    
+    private func updateSearchBarCancelButtonState() {
+        searchBar.setShowsCancelButton(searchBarText?.count ?? 0 > 0, animated: true)
     }
     
     private func getFormattedString(from date: Date) -> String {
@@ -268,31 +331,108 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
         }
     }
     
-    private func updateStub() {
-        //        self.stubView.isHidden = !self.categories.isEmpty
-        //        self.categoriesTableView.isHidden = self.categories.isEmpty
+    func addNew(record: TrackerRecord) {
+        completedTrackers.append(record)
     }
     
-    private func addNew(record: TrackerRecord) {
-        
+    private func updateStub() {
+        if categories.isEmpty {
+            stubView.isHidden = false
+            stubLabel.text = "Что будем отслеживать?"
+        } else if filtredCategories.isEmpty {
+            stubView.isHidden = false
+            stubLabel.text = "К сожалению, ничего не нашлось :("
+        } else {
+            stubView.isHidden = true
+        }
     }
 }
 
 extension TrackersViewController: UICollectionViewDataSource {
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return filtredCategories.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        0
+        return filtredCategories[section].trackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        UICollectionViewCell()
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackersCVCell {
+            cell.delegate = self
+            let tracker = filtredCategories[indexPath.section].trackers[indexPath.item]
+            let isTrackerCompletedToday: Bool = {
+                completedTrackers.contains {record in
+                    record.id == tracker.id && isSameDate(trackerDate: record.date)
+                }
+            }()
+            
+            let count = completedTrackers.filter {record in
+                record.id == tracker.id
+            }.count
+            
+            let isEvent = tracker.schedule == nil
+            
+            cell.configure(for: tracker, with: indexPath, isEvent: isEvent, selectedDate: selectedDate, isCompleted: isTrackerCompletedToday, daysCount: count)
+            
+            return cell
+        }
+        fatalError("Проблема с подготовкой ячейки")
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? TrackersCVHeader {
+            headerView.configure(with: filtredCategories[indexPath.section].category)
+            
+            return headerView
+        }
+        fatalError("Проблема с подготовкой хедера")
     }
 }
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellsInRow = CGFloat(self.cellsInRow)
+        let cellHeight: CGFloat = 148
+        return CGSize(width: (collectionView.bounds.width - (cellsInRow - 1) * minimumInteritemSpacing) / cellsInRow, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 46)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return minimumInteritemSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        10
+    }
 }
 
-extension TrackersViewController: UICollectionViewDelegate {
+extension TrackersViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchBarText = searchText.lowercased()
+    }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
+        searchBarText = nil
+    }
+}
+
+extension TrackersViewController: TrackersCVCellDelegate {
+    func updateTrackerStatus(trackerID: UUID, indexPath: IndexPath, completeStatus: Bool) {
+        switch completeStatus {
+        case true:
+            addNew(record: TrackerRecord(id: trackerID, date: selectedDate))
+        case false:
+            completedTrackers.removeAll {record in
+                record.id == trackerID && isSameDate(trackerDate: record.date)
+            }
+        }
+        trackersCollectionView.reloadItems(at: [indexPath])
+    }
 }

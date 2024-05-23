@@ -11,7 +11,7 @@ final class CategoryCreationVC: UIViewController {
     weak var delegate: CategoryVC?
     private var doneButton = UIButton()
     private var titleTextField = UITextField()
-    private var minimumTitleLength = 3
+    private var minimumTitleLength = 1
 
     init(delegate: CategoryVC) {
         self.delegate = delegate

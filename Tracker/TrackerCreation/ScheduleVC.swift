@@ -7,7 +7,7 @@
 import UIKit
 
 final class ScheduleVC: UIViewController {
-        
+    
     weak var delegate: NewTrackerCreationVC?
     
     private var titleLabel = UILabel()
@@ -145,18 +145,21 @@ final class ScheduleVC: UIViewController {
         if schedule.count > 0 {
             self.delegate?.newTrackerSchedule = schedule
             
-            var selectedIndexes: Set<Int> = []
-            for index in 0...6 {
-                if schedule.contains(getDayIndexFromRowIndex(for: index)) {
-                    selectedIndexes.insert(index)
+            if schedule.count == 7 {
+                self.delegate?.newTrackerScheduleLabelText = "Каждый день"
+            } else {
+                var selectedIndexes: Set<Int> = []
+                for index in 0...6 {
+                    if schedule.contains(getDayIndexFromRowIndex(for: index)) {
+                        selectedIndexes.insert(index)
+                    }
+                }                
+                var days: [String] = []
+                selectedIndexes.sorted().forEach { index in
+                    days.append(self.daysOfWeekShort[index])
                 }
+                self.delegate?.newTrackerScheduleLabelText = days.joined(separator: ", ")
             }
-            
-            var days: [String] = []
-            selectedIndexes.sorted().forEach { index in
-                days.append(self.daysOfWeekShort[index])
-            }
-            self.delegate?.newTrackerScheduleLabelText = days.joined(separator: ", ")
         } else {
             self.delegate?.newTrackerSchedule = nil
             self.delegate?.newTrackerScheduleLabelText = nil

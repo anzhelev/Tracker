@@ -27,7 +27,6 @@ struct MainTableCellParams {
 
 final class NewTrackerCreationVC: UIViewController {
     
-    weak var delegate: NewTrackerTypeChoiceVC?
     weak var superDelegate: TrackersViewController?
     var mainTableView = UITableView()
     var newTrackerType: TrackerType
@@ -57,12 +56,11 @@ final class NewTrackerCreationVC: UIViewController {
     private var mainTableCells: [MainTableCellParams] = []
     private var cancelButton = UIButton()
     private var createButton = UIButton()
-    private var minimumTitleLength = 3
+    private var minimumTitleLength = 1
     private var maximumTitleLength = 38
     
     init(newTrackerType: TrackerType, delegate: NewTrackerTypeChoiceVC, superDelegate: TrackersViewController) {
         self.newTrackerType = newTrackerType
-        self.delegate = delegate
         self.superDelegate = superDelegate
         
         super.init(nibName: nil, bundle: nil)
@@ -191,6 +189,11 @@ final class NewTrackerCreationVC: UIViewController {
             self.superDelegate?.addNew(tracker: tracker, to: category)
         }
         
+        if newTrackerType == .event,
+           let date = superDelegate?.selectedDate {
+            superDelegate?.addNew(record: TrackerRecord(id: tracker.id, date: date))
+        }
+        superDelegate?.filterCategories()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     

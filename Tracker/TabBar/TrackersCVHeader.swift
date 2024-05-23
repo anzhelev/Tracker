@@ -11,7 +11,7 @@ class TrackersCVHeader: UICollectionReusableView {
     let titleLabel = UILabel()
     
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: .zero)
         
         setTitleLabel()
     }
@@ -20,16 +20,25 @@ class TrackersCVHeader: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setTitleLabel() {
-        addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-        
+    
+    func configure(with title: String) {
+        titleLabel.text = title
     }
     
+    private func setTitleLabel() {
+        titleLabel.backgroundColor = .clear
+        titleLabel.font = UIFont(name: SFPro.bold, size: 19)
+        titleLabel.textAlignment = .left
+        titleLabel.textColor = Colors.black
+        //        self.contentMode = .topLeft
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(titleLabel)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
+            titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -12),
+            titleLabel.heightAnchor.constraint(equalToConstant: 18)
+        ])
+    }
 }
