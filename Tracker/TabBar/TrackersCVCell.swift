@@ -4,7 +4,6 @@
 //
 //  Created by Andrey Zhelev on 23.05.2024.
 //
-
 import UIKit
 
 protocol TrackersCVCellDelegate: AnyObject {
@@ -13,8 +12,10 @@ protocol TrackersCVCellDelegate: AnyObject {
 
 final class TrackersCVCell: UICollectionViewCell {
     
+    // MARK: - Public Properties
     weak var delegate: TrackersCVCellDelegate?
     
+    // MARK: - Private Properties
     private var mainView = UIView()
     private var titleLabel = UITextView()
     private var emoji = UIImage(named: "emoji_01")  //🙂
@@ -26,6 +27,7 @@ final class TrackersCVCell: UICollectionViewCell {
     private var trackerIndexPath: IndexPath?
     private var selectedDate: Date = Date()
     
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -36,6 +38,7 @@ final class TrackersCVCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
     func configure(for tracker: Tracker, with index: IndexPath, isEvent: Bool, selectedDate: Date, isCompleted: Bool, daysCount: Int) {
         trackerID = tracker.id
         trackerIndexPath = index
@@ -50,6 +53,27 @@ final class TrackersCVCell: UICollectionViewCell {
         setCompleteButtomImage()
     }
     
+    // MARK: - IBAction
+    /// действие по нажатию кнопки "➕ или ✅"
+    @objc func completeButtonAction() {
+        
+        let tomorrow = Calendar.current.startOfDay(for: Date()) + 86400
+        
+        guard selectedDate < tomorrow else {
+            print("Попытка отметить выполнение трекера на будущую дату")
+            return
+        }
+        
+        isCompleted.toggle()
+        guard let trackerID,
+              let trackerIndexPath else {
+            assertionFailure("Отсутствуют данные по трекеру")
+            return
+        }
+        delegate?.updateTrackerStatus(trackerID: trackerID, indexPath: trackerIndexPath, completeStatus: isCompleted)
+    }
+    
+    // MARK: - Private Methods
     private func configureUIElements() {
         mainView.layer.masksToBounds = true
         mainView.layer.cornerRadius = 16
@@ -120,25 +144,6 @@ final class TrackersCVCell: UICollectionViewCell {
             completeButton.widthAnchor.constraint(equalToConstant: 44),
             completeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -7)
         ])
-    }
-    
-    /// действие по нажатию кнопки "＋"
-    @objc func completeButtonAction() {
-        
-        let tomorrow = Calendar.current.startOfDay(for: Date()) + 86400
-        
-        guard selectedDate < tomorrow else {
-            print("Попытка отметить выполнение трекера на будущую дату")
-            return
-        }
-        
-        isCompleted.toggle()
-        guard let trackerID,
-              let trackerIndexPath else {
-            assertionFailure("Отсутствуют данные по трекеру")
-            return
-        }
-        delegate?.updateTrackerStatus(trackerID: trackerID, indexPath: trackerIndexPath, completeStatus: isCompleted)
     }
     
     private func setCompleteButtomImage() {

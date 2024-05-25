@@ -10,14 +10,12 @@ import UIKit
 final class TrackersViewController: UIViewController {
     
     // MARK: - Public Properties
-    
-    
-    // MARK: - Private Properties
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
     var selectedDate = Date()
     var selectedWeekDay: Int = 1
     
+    // MARK: - Private Properties
     private var filtredCategories: [TrackerCategory] = []
     private var plusButton = UIButton()
     private let dateFormatter = DateFormatter()
@@ -29,7 +27,6 @@ final class TrackersViewController: UIViewController {
     private var searchBar = UISearchBar()
     private var searchBarText: String? = nil {
         didSet {
-            print(searchBarText ?? "")
             updateSearchBarCancelButtonState()
             filterCategories()
         }
@@ -40,6 +37,7 @@ final class TrackersViewController: UIViewController {
     
     private let mock = MockData.storage
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,6 +48,116 @@ final class TrackersViewController: UIViewController {
         configureUIElements()
     }
     
+    // MARK: - Public Methods
+    func filterCategories() {
+        filtredCategories = categories.compactMap {item in
+            
+            // фильтруем трекеры по дате
+            let trackersFilteredByDate = item.trackers.filter {tracker in
+                guard let schedule = tracker.schedule else {
+                    for completedTracker in completedTrackers {
+                        if tracker.id == completedTracker.id,
+                           isSameDate(trackerDate: completedTracker.date) {
+                            return true
+                        }
+                    }
+                    return false
+                }
+                return schedule.contains(selectedWeekDay)
+            }
+            
+            // далее фильтруем полученные трекеры по названию
+            let trackersFilteredByTitle = trackersFilteredByDate.filter {tracker in
+                guard let searchBarText,
+                      !searchBarText.isEmpty else {
+                    return true
+                }
+                return tracker.name.lowercased().contains(searchBarText)
+            }
+            
+            if trackersFilteredByTitle.isEmpty {
+                return nil
+            }
+            
+            return TrackerCategory(category: item.category,
+                                   trackers: trackersFilteredByTitle)
+        }
+        
+        updateStub()
+        updateTrackersCollectionView()
+    }
+    
+    // добавляем новый трекер в массив
+    func addNew(tracker: Tracker, to category: String) {
+        var newCategories: [TrackerCategory] = []
+        var existingCategories: Set<String> = []
+        
+        for item in categories {
+            existingCategories.insert(item.category)
+            if item.category != category {
+                newCategories.append(item)
+            } else {
+                var trackers: [Tracker] = item.trackers
+                trackers.append(tracker)
+                newCategories.append(TrackerCategory(category: category,
+                                                     trackers: trackers
+                                                    )
+                )
+            }
+        }
+        
+        if !existingCategories.contains(category) {
+            let trackers: [Tracker] = [tracker]
+            newCategories.append(TrackerCategory(category: category,
+                                                 trackers: trackers
+                                                )
+            )
+        }
+        self.categories = newCategories
+    }
+    
+    // обновляем массив если созданы новые категории без трекеров
+    func updateCategories(with newlist: Set<String>) {
+        var existingCategories: Set<String> = []
+        
+        for item in categories {
+            existingCategories.insert(item.category)
+        }
+        let newCategories = newlist.subtracting(existingCategories)
+        
+        for item in newCategories {
+            let trackers: [Tracker] = []
+            categories.append(TrackerCategory(category: item,
+                                              trackers: trackers
+                                             )
+            )
+        }
+    }
+    
+    // добавляем новую запись в массив выполненных трекеров
+    func addNew(record: TrackerRecord) {
+        completedTrackers.append(record)
+    }
+    
+    // MARK: - IBAction
+    /// действие по нажатию кнопки "＋"
+    @objc func plusButtonAction() {
+        let newTrackerCreationVC = NewTrackerTypeChoiceVC()
+        newTrackerCreationVC.delegate = self
+        let newTrackerNavigation = UINavigationController(rootViewController: newTrackerCreationVC)
+        present(newTrackerNavigation, animated: true)
+    }
+    
+    /// действие при выборе новой даты
+    @objc func dateChanged() {
+        selectedDate = datePicker.date
+        selectedWeekDay = Calendar.current.component(.weekday, from: datePicker.date)
+        dateLabel.text = getFormattedString(from: selectedDate)
+        filterCategories()
+    }
+    
+    // MARK: - Private Methods
+    /// настраиваем внешний вид экрана и графические элементы
     private func configureUIElements() {
         view.backgroundColor = Colors.white
         
@@ -109,10 +217,9 @@ final class TrackersViewController: UIViewController {
         dateLabel.layer.masksToBounds = true
         dateLabel.layer.cornerRadius = 8
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.dateLabel = dateLabel
-        
         view.addSubview(datePicker)
         datePicker.addSubview(dateLabel)
+        self.dateLabel = dateLabel
         
         NSLayoutConstraint.activate([
             datePicker.heightAnchor.constraint(equalToConstant: 34),
@@ -183,7 +290,6 @@ final class TrackersViewController: UIViewController {
         stubLabel.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubLabel)
         
-        
         NSLayoutConstraint.activate([
             stubView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stubView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -211,128 +317,19 @@ final class TrackersViewController: UIViewController {
         view.addSubview(trackersCollectionView)
         
         NSLayoutConstraint.activate([
-            trackersCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 18),
+            trackersCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
             trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             trackersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
     }
     
-    // MARK: - IBAction
-    /// действие по нажатию кнопки "＋"
-    @objc func plusButtonAction() {
-        print("CONSOLE: plusButtonAction" )
-        let newTrackerCreationVC = NewTrackerTypeChoiceVC()
-        newTrackerCreationVC.delegate = self
-        let newTrackerNavigation = UINavigationController(rootViewController: newTrackerCreationVC)
-        present(newTrackerNavigation, animated: true)
-    }
-    
-    @objc func dateChanged() {
-        selectedDate = datePicker.date
-        selectedWeekDay = Calendar.current.component(.weekday, from: datePicker.date)
-        dateLabel.text = getFormattedString(from: selectedDate)
-        filterCategories()
-    }
-    
     private func updateTrackersCollectionView() {
         trackersCollectionView.reloadData()
     }
     
-    func filterCategories() {
-        filtredCategories = categories.compactMap {item in
-            
-            let trackersFilteredByDate = item.trackers.filter {tracker in
-                guard let schedule = tracker.schedule else {
-                    for completedTracker in completedTrackers {
-                        if tracker.id == completedTracker.id,
-                           isSameDate(trackerDate: completedTracker.date) {
-                            return true
-                        }
-                    }
-                    return false
-                }
-                return schedule.contains(selectedWeekDay)
-            }
-            
-            let trackersFilteredByTitle = trackersFilteredByDate.filter {tracker in
-                guard let searchBarText,
-                      !searchBarText.isEmpty else {
-                    return true
-                }
-                return tracker.name.lowercased().contains(searchBarText)
-            }
-            
-            if trackersFilteredByTitle.isEmpty {
-                return nil
-            }
-            
-            return TrackerCategory(category: item.category,
-                                   trackers: trackersFilteredByTitle)
-        }
-        updateStub()
-        updateTrackersCollectionView()
-    }
-    
-    private func isSameDate(trackerDate: Date) -> Bool {
-        return Calendar.current.isDate(trackerDate, inSameDayAs: selectedDate)
-    }
-    
     private func updateSearchBarCancelButtonState() {
         searchBar.setShowsCancelButton(searchBarText?.count ?? 0 > 0, animated: true)
-    }
-    
-    private func getFormattedString(from date: Date) -> String {
-        return dateFormatter.string(from: date)
-    }
-    
-    func addNew(tracker: Tracker, to category: String) {
-        var newCategories: [TrackerCategory] = []
-        var existingCategories: Set<String> = []
-        
-        for item in categories {
-            existingCategories.insert(item.category)
-            if item.category != category {
-                newCategories.append(item)
-            } else {
-                var trackers: [Tracker] = item.trackers
-                trackers.append(tracker)
-                newCategories.append(TrackerCategory(category: category,
-                                                     trackers: trackers
-                                                    )
-                )
-            }
-        }
-        
-        if !existingCategories.contains(category) {
-            let trackers: [Tracker] = [tracker]
-            newCategories.append(TrackerCategory(category: category,
-                                                 trackers: trackers
-                                                )
-            )
-        }
-        self.categories = newCategories
-    }
-    
-    func updateCategories(with newlist: Set<String>) {
-        var existingCategories: Set<String> = []
-        
-        for item in categories {
-            existingCategories.insert(item.category)
-        }
-        let newCategories = newlist.subtracting(existingCategories)
-        
-        for item in newCategories {
-            let trackers: [Tracker] = []
-            categories.append(TrackerCategory(category: item,
-                                              trackers: trackers
-                                             )
-            )
-        }
-    }
-    
-    func addNew(record: TrackerRecord) {
-        completedTrackers.append(record)
     }
     
     private func updateStub() {
@@ -346,8 +343,17 @@ final class TrackersViewController: UIViewController {
             stubView.isHidden = true
         }
     }
+    
+    private func isSameDate(trackerDate: Date) -> Bool {
+        return Calendar.current.isDate(trackerDate, inSameDayAs: selectedDate)
+    }
+    
+    private func getFormattedString(from date: Date) -> String {
+        return dateFormatter.string(from: date)
+    }
 }
 
+// MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -391,6 +397,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -412,7 +419,9 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - UISearchBarDelegate
 extension TrackersViewController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBarText = searchText.lowercased()
     }
@@ -423,7 +432,9 @@ extension TrackersViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: - TrackersCVCellDelegate
 extension TrackersViewController: TrackersCVCellDelegate {
+    
     func updateTrackerStatus(trackerID: UUID, indexPath: IndexPath, completeStatus: Bool) {
         switch completeStatus {
         case true:

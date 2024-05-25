@@ -16,8 +16,7 @@ final class TabBarController: UITabBarController {
         setupBars()
     }
     
-    private func setupBars() {
-        
+    private func setupBars() {        
         let trackersViewController = TrackersViewController()
         trackersViewController.tabBarItem = UITabBarItem(
             title: "Трекеры",

@@ -6,25 +6,28 @@
 //
 import UIKit
 
-enum SeparatorPosition: String {
-    case top
-    case bottom
-    case both
+protocol NTCTableCellDelegate: AnyObject {
+    func updateNewTrackerName(with title: String?)
 }
 
 final class NTCTableCell: UITableViewCell {
     
-    weak var delegate: NewTrackerCreationVC?
+    // MARK: - Public Properties
+    weak var delegate: NTCTableCellDelegate?
+    
+    // MARK: - Private Properties
     private var titleLabel = UILabel()
     private var titleTextColor = UIColor()
     private var titleTextField = UITextField()
     
+    // MARK: - Override
     override func prepareForReuse() {
         super.prepareForReuse()
         
         self.contentView.subviews.forEach { $0.removeFromSuperview() }
     }
     
+    // MARK: - Public methods
     func configure(new cell: MainTableCellParams, for tracker: TrackerType) {
         self.selectionStyle = .none
         self.backgroundColor = Colors.grayCellBackground
@@ -57,6 +60,12 @@ final class NTCTableCell: UITableViewCell {
         }
     }
     
+    // MARK: - IBAction
+    @objc func updateTitle() {
+        self.delegate?.updateNewTrackerName(with: self.titleTextField.text)
+    }
+    
+    // MARK: - Private Methods
     private func addTitleTextField(placeholder: String, value: String?) {
         let titleTextField = UITextField()
         titleTextField.placeholder = placeholder
@@ -67,7 +76,7 @@ final class NTCTableCell: UITableViewCell {
         }
         titleTextField.font = UIFont(name: SFPro.regular, size: 17)
         titleTextField.enablesReturnKeyAutomatically = true
-        titleTextField.addTarget(self, action: #selector(updateNewTrackerName), for: .editingChanged)
+        titleTextField.addTarget(self, action: #selector(updateTitle), for: .editingChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(titleTextField)
         self.titleTextField = titleTextField
@@ -105,10 +114,6 @@ final class NTCTableCell: UITableViewCell {
         } else {
             titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         }
-    }
-    
-    @objc func updateNewTrackerName() {
-        self.delegate?.updateNewTrackerName(with: self.titleTextField.text)
     }
     
     private func addChevron() {

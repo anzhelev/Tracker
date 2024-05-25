@@ -4,19 +4,40 @@
 //
 //  Created by Andrey Zhelev on 11.05.2024.
 //
-
 import UIKit
 
 final class NewTrackerTypeChoiceVC: UIViewController {
     
+    // MARK: - Public Properties
     weak var delegate: TrackersViewController?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUIElements()
     }
     
+    // MARK: - IBAction
+    @objc private func createNewHabit() {
+        guard let superDelegate = self.delegate else {
+            return
+        }
+        let vc = NewTrackerCreationVC(newTrackerType: .habit, delegate: self, superDelegate: superDelegate)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
+    }
+    
+    @objc private func createNewEvent() {
+        guard let superDelegate = self.delegate else {
+            return
+        }
+        let vc = NewTrackerCreationVC(newTrackerType: .event, delegate: self, superDelegate: superDelegate)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
+    }
+    
+    // MARK: - Private Methods
     private func configureUIElements() {
         view.backgroundColor = Colors.white
         
@@ -49,7 +70,6 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         newEventCreationButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(newEventCreationButton)
         
-        
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -63,25 +83,6 @@ final class NewTrackerTypeChoiceVC: UIViewController {
             newEventCreationButton.topAnchor.constraint(equalTo: newHabitCreationButton.bottomAnchor, constant: 16),
             newEventCreationButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             newEventCreationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
-            
         ])
-    }
-    
-    @objc private func createNewHabit() {
-        guard let superDelegate = self.delegate else {
-            return
-        }
-        let vc = NewTrackerCreationVC(newTrackerType: .habit, delegate: self, superDelegate: superDelegate)
-        let newTrackerNavigation = UINavigationController(rootViewController: vc)
-        present(newTrackerNavigation, animated: true)
-    }
-    
-    @objc private func createNewEvent() {
-        guard let superDelegate = self.delegate else {
-            return
-        }
-        let vc = NewTrackerCreationVC(newTrackerType: .event, delegate: self, superDelegate: superDelegate)
-        let newTrackerNavigation = UINavigationController(rootViewController: vc)
-        present(newTrackerNavigation, animated: true)
     }
 }

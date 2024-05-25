@@ -4,12 +4,14 @@
 //
 //  Created by Andrey Zhelev on 23.05.2024.
 //
-
 import UIKit
 
 class TrackersCVHeader: UICollectionReusableView {
-    let titleLabel = UILabel()
     
+    // MARK: - Private Properties
+    private let titleLabel = UILabel()
+    
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
@@ -20,18 +22,17 @@ class TrackersCVHeader: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
+    // MARK: - Public Methods
     func configure(with title: String) {
         titleLabel.text = title
     }
     
+    // MARK: - Private Methods
     private func setTitleLabel() {
         titleLabel.backgroundColor = .clear
         titleLabel.font = UIFont(name: SFPro.bold, size: 19)
         titleLabel.textAlignment = .left
         titleLabel.textColor = Colors.black
-        //        self.contentMode = .topLeft
-        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
         

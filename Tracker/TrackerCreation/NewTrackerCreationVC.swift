@@ -27,6 +27,7 @@ struct MainTableCellParams {
 
 final class NewTrackerCreationVC: UIViewController {
     
+    // MARK: - Public Properties
     weak var superDelegate: TrackersViewController?
     var mainTableView = UITableView()
     var newTrackerType: TrackerType
@@ -51,14 +52,16 @@ final class NewTrackerCreationVC: UIViewController {
             updateButtonState()
         }
     }
-    
     var categories: Set<String> = []
+    
+    // MARK: - Private Properties
     private var mainTableCells: [MainTableCellParams] = []
     private var cancelButton = UIButton()
     private var createButton = UIButton()
     private var minimumTitleLength = 1
     private var maximumTitleLength = 38
     
+    // MARK: - Initializers
     init(newTrackerType: TrackerType, delegate: NewTrackerTypeChoiceVC, superDelegate: TrackersViewController) {
         self.newTrackerType = newTrackerType
         self.superDelegate = superDelegate
@@ -70,6 +73,7 @@ final class NewTrackerCreationVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,6 +82,45 @@ final class NewTrackerCreationVC: UIViewController {
         configureMainTable(for: newTrackerType)
     }
     
+    // MARK: - IBAction
+    @objc private func cancelButtonPressed() {
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func createButtonPressed() {
+        self.superDelegate?.updateCategories(with: categories)
+        let tracker = Tracker(id: UUID(),
+                              name: self.newTrackerTitle ?? "б/н",
+                              color: .ypBlue,
+                              emoji: "😎",
+                              schedule: self.newTrackerSchedule
+        )
+        
+        if let category = self.newTrackerCategory {
+            self.superDelegate?.addNew(tracker: tracker, to: category)
+        }
+        
+        if newTrackerType == .event,
+           let date = superDelegate?.selectedDate {
+            superDelegate?.addNew(record: TrackerRecord(id: tracker.id, date: date))
+        }
+        superDelegate?.filterCategories()
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    private func switchToCategoryVC() {
+        let vc = CategoryVC(delegate: self, categories: self.categories)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
+    }
+    
+    private func switchToScheduleVC() {
+        let vc = ScheduleVC(delegate: self)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
+    }
+
+    // MARK: - Private Methods
     private func configureCommonUIElements(for tracker: TrackerType) {
         view.backgroundColor = Colors.white
         setTitle(for: newTrackerType)
@@ -97,7 +140,6 @@ final class NewTrackerCreationVC: UIViewController {
         mainTableView.backgroundColor = .none
         mainTableView.separatorStyle = .singleLine
         mainTableView.register(NTCTableCell.self, forCellReuseIdentifier: "mainTableCell")
-        
         mainTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainTableView)
         
@@ -164,39 +206,6 @@ final class NewTrackerCreationVC: UIViewController {
         ])
     }
     
-    @objc func updateNewTrackerName(with title: String?) {
-        guard let title
-        else {
-            return
-        }
-        newTrackerTitle = title
-    }
-    
-    @objc private func cancelButtonPressed() {
-        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
-    }
-    
-    @objc private func createButtonPressed() {
-        self.superDelegate?.updateCategories(with: categories)
-        let tracker = Tracker(id: UUID(),
-                              name: self.newTrackerTitle ?? "б/н",
-                              color: .ypBlue,
-                              emoji: "😎",
-                              schedule: self.newTrackerSchedule
-        )
-        
-        if let category = self.newTrackerCategory {
-            self.superDelegate?.addNew(tracker: tracker, to: category)
-        }
-        
-        if newTrackerType == .event,
-           let date = superDelegate?.selectedDate {
-            superDelegate?.addNew(record: TrackerRecord(id: tracker.id, date: date))
-        }
-        superDelegate?.filterCategories()
-        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
-    }
-    
     private func getCategoriesList() {
         var categories: Set<String> = []
         self.superDelegate?.categories.forEach{
@@ -204,19 +213,7 @@ final class NewTrackerCreationVC: UIViewController {
         }
         self.categories = categories
     }
-    
-    private func switchToScheduleVC() {
-        let vc = ScheduleVC(delegate: self)
-        let newTrackerNavigation = UINavigationController(rootViewController: vc)
-        present(newTrackerNavigation, animated: true)
-    }
-    
-    private func switchToCategoryVC() {
-        let vc = CategoryVC(delegate: self, categories: self.categories)
-        let newTrackerNavigation = UINavigationController(rootViewController: vc)
-        present(newTrackerNavigation, animated: true)
-    }
-    
+  
     private func updateButtonState() {
         let count = self.newTrackerTitle?.count ?? 0
         if count >= minimumTitleLength,
@@ -235,7 +232,9 @@ final class NewTrackerCreationVC: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
 extension NewTrackerCreationVC: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         mainTableCells.count
     }
@@ -250,6 +249,7 @@ extension NewTrackerCreationVC: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension NewTrackerCreationVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -282,4 +282,16 @@ extension NewTrackerCreationVC: UITableViewDelegate {
             return
         }
     }
+}
+
+// MARK: - NTCTableCellDelegate
+extension NewTrackerCreationVC: NTCTableCellDelegate {
+    
+    func updateNewTrackerName(with title: String?) {
+        guard let title
+        else {
+            return
+        }
+        newTrackerTitle = title
+    }    
 }

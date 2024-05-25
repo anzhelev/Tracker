@@ -8,8 +8,10 @@ import UIKit
 
 final class ScheduleVC: UIViewController {
     
+    // MARK: - Public Properties
     weak var delegate: NewTrackerCreationVC?
     
+    // MARK: - Private Properties
     private var titleLabel = UILabel()
     private let weekDaysTableView = UITableView()
     private var confirmButton = UIButton()
@@ -17,6 +19,7 @@ final class ScheduleVC: UIViewController {
     private let daysOfWeekShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
     private var schedule: Set<Int>
     
+    // MARK: - Initializers
     init(delegate: NewTrackerCreationVC) {
         self.delegate = delegate
         self.schedule = delegate.newTrackerSchedule ?? []
@@ -28,11 +31,50 @@ final class ScheduleVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUIElements()
     }
     
+    // MARK: - IBAction
+    @objc private func switcherChanged(_ sender: UISwitch) {
+        switch sender.isOn {
+        case true:
+            self.schedule.insert(getDayIndexFromRowIndex(for: sender.tag))
+        case false:
+            self.schedule.remove(getDayIndexFromRowIndex(for: sender.tag))
+        }
+        updateButtonState()
+    }
+    
+    @objc private func confirmButtonPressed() {
+        if schedule.count > 0 {
+            self.delegate?.newTrackerSchedule = schedule
+            
+            if schedule.count == 7 {
+                self.delegate?.newTrackerScheduleLabelText = "Каждый день"
+            } else {
+                var selectedIndexes: Set<Int> = []
+                for index in 0...6 {
+                    if schedule.contains(getDayIndexFromRowIndex(for: index)) {
+                        selectedIndexes.insert(index)
+                    }
+                }
+                var days: [String] = []
+                selectedIndexes.sorted().forEach { index in
+                    days.append(self.daysOfWeekShort[index])
+                }
+                self.delegate?.newTrackerScheduleLabelText = days.joined(separator: ", ")
+            }
+        } else {
+            self.delegate?.newTrackerSchedule = nil
+            self.delegate?.newTrackerScheduleLabelText = nil
+        }
+        self.dismiss(animated: true)
+    }
+    
+    // MARK: - Private Properties
     private func configureUIElements() {
         view.backgroundColor = Colors.white
         setTitle()
@@ -131,42 +173,6 @@ final class ScheduleVC: UIViewController {
         switcher.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -16).isActive = true
     }
     
-    @objc private func switcherChanged(_ sender: UISwitch) {
-        switch sender.isOn {
-        case true:
-            self.schedule.insert(getDayIndexFromRowIndex(for: sender.tag))
-        case false:
-            self.schedule.remove(getDayIndexFromRowIndex(for: sender.tag))
-        }
-        updateButtonState()
-    }
-    
-    @objc private func confirmButtonPressed() {
-        if schedule.count > 0 {
-            self.delegate?.newTrackerSchedule = schedule
-            
-            if schedule.count == 7 {
-                self.delegate?.newTrackerScheduleLabelText = "Каждый день"
-            } else {
-                var selectedIndexes: Set<Int> = []
-                for index in 0...6 {
-                    if schedule.contains(getDayIndexFromRowIndex(for: index)) {
-                        selectedIndexes.insert(index)
-                    }
-                }                
-                var days: [String] = []
-                selectedIndexes.sorted().forEach { index in
-                    days.append(self.daysOfWeekShort[index])
-                }
-                self.delegate?.newTrackerScheduleLabelText = days.joined(separator: ", ")
-            }
-        } else {
-            self.delegate?.newTrackerSchedule = nil
-            self.delegate?.newTrackerScheduleLabelText = nil
-        }
-        self.dismiss(animated: true)
-    }
-    
     private func updateButtonState() {
         confirmButton.isEnabled = !schedule.isEmpty
         confirmButton.backgroundColor = confirmButton.isEnabled ? Colors.black : Colors.grayDisabledButton
@@ -178,30 +184,9 @@ final class ScheduleVC: UIViewController {
     }
 }
 
-extension ScheduleVC: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
-    }
-}
-
+// MARK: - UITableViewDataSource
 extension ScheduleVC: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return daysOfWeek.count
     }
@@ -210,5 +195,13 @@ extension ScheduleVC: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         configure(new: cell, for: indexPath.row)
         return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension ScheduleVC: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
     }
 }

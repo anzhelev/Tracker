@@ -8,6 +8,7 @@ import UIKit
 
 final class CategoryVC: UIViewController {
     
+    // MARK: - Public Properties
     weak var delegate: NewTrackerCreationVC?
     var categories: Set<String> = [] {
         didSet {
@@ -16,12 +17,14 @@ final class CategoryVC: UIViewController {
         }
     }
     
+    // MARK: - Private Properties
     private var titleLabel = UILabel()
     private var stubView = UIView()
     private var selectedCategory: String?
     private let categoriesTableView = UITableView()
     private var categoryCreationButton = UIButton()
     
+    // MARK: - Initializers
     init(delegate: NewTrackerCreationVC, categories: Set<String>) {
         self.delegate = delegate
         selectedCategory = delegate.newTrackerCategory
@@ -34,15 +37,24 @@ final class CategoryVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUIElements()
     }
     
+    // MARK: - IBAction
+    @objc private func categoryCreationButtonPressed() {
+        let vc = CategoryCreationVC(delegate: self)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
+    }
+    
+    // MARK: - Private Methods
     private func configureUIElements() {
         view.backgroundColor = Colors.white
-        setTitle()        
+        setTitle()
         setStubImage()
         setTableView()
         updateStub()
@@ -195,37 +207,30 @@ final class CategoryVC: UIViewController {
         ])
     }
     
-    @objc private func categoryCreationButtonPressed() {
-        let vc = CategoryCreationVC(delegate: self)
-        let newTrackerNavigation = UINavigationController(rootViewController: vc)
-        present(newTrackerNavigation, animated: true)
-    }
-    
     private func updateTableView() {
         categoriesTableView.reloadData()
     }
 }
 
+// MARK: - UITableViewDataSource
+extension CategoryVC: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categories.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        configure(new: cell, for: indexPath.row)
+        return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
 extension CategoryVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -239,17 +244,5 @@ extension CategoryVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = categoriesTableView.cellForRow(at: indexPath)
         cell?.contentView.subviews.last?.isHidden = true
-    }
-}
-
-extension CategoryVC: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        configure(new: cell, for: indexPath.row)
-        return cell
     }
 }

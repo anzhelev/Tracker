@@ -8,27 +8,41 @@ import UIKit
 
 final class CategoryCreationVC: UIViewController {
     
+    // MARK: - Public Properties
     weak var delegate: CategoryVC?
+    
+    // MARK: - Private Properties
     private var doneButton = UIButton()
     private var titleTextField = UITextField()
     private var minimumTitleLength = 1
-
+    
+    // MARK: - Initializers
     init(delegate: CategoryVC) {
         self.delegate = delegate
-
+        
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-  
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUIElements()
     }
- 
+    
+    // MARK: - IBAction
+    @objc private func categoryCreationButtonPressed() {
+        if let newCaterory = titleTextField.text {
+            self.delegate?.categories.insert(newCaterory)
+            self.dismiss(animated: true)
+        }
+    }
+    
+    // MARK: - Private Methods
     private func configureUIElements() {
         view.backgroundColor = Colors.white
         setTitle()
@@ -50,7 +64,7 @@ final class CategoryCreationVC: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27)
         ])
     }
-
+    
     private func setCategoryNameInputField() {
         let titleInputView = UIView()
         titleInputView.backgroundColor = Colors.grayCellBackground
@@ -75,11 +89,10 @@ final class CategoryCreationVC: UIViewController {
         titleInputView.heightAnchor.constraint(equalToConstant: 75).isActive = true
         titleInputView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         titleInputView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        titleTextField.leadingAnchor.constraint(equalTo: titleInputView.leadingAnchor, constant: 16).isActive = true        
+        titleTextField.leadingAnchor.constraint(equalTo: titleInputView.leadingAnchor, constant: 16).isActive = true
         titleTextField.trailingAnchor.constraint(equalTo: titleInputView.trailingAnchor, constant: -10).isActive = true
         titleTextField.centerYAnchor.constraint(equalTo: titleInputView.centerYAnchor).isActive = true
     }
-    
     
     private func setButton() {
         let doneButton = UIButton()
@@ -93,7 +106,7 @@ final class CategoryCreationVC: UIViewController {
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(doneButton)
         self.doneButton = doneButton
-                
+        
         NSLayoutConstraint.activate([
             doneButton.heightAnchor.constraint(equalToConstant: 60),
             doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
@@ -105,12 +118,5 @@ final class CategoryCreationVC: UIViewController {
     @objc private func updateButtonState() {
         doneButton.isEnabled = titleTextField.text?.count ?? 0 >= minimumTitleLength
         doneButton.backgroundColor = doneButton.isEnabled ? Colors.black : Colors.grayDisabledButton
-    }
-    
-    @objc private func categoryCreationButtonPressed() {
-        if let newCaterory = titleTextField.text {
-            self.delegate?.categories.insert(newCaterory)
-            self.dismiss(animated: true)
-        }
     }
 }
