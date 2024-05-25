@@ -68,6 +68,7 @@ final class NTCTableCell: UITableViewCell {
     // MARK: - Private Methods
     private func addTitleTextField(placeholder: String, value: String?) {
         let titleTextField = UITextField()
+        titleTextField.delegate = self
         titleTextField.placeholder = placeholder
         titleTextField.clearButtonMode = .always
         titleTextField.textColor = Colors.black
@@ -75,7 +76,7 @@ final class NTCTableCell: UITableViewCell {
             titleTextField.text = value
         }
         titleTextField.font = UIFont(name: SFPro.regular, size: 17)
-        titleTextField.enablesReturnKeyAutomatically = true
+        titleTextField.enablesReturnKeyAutomatically = false
         titleTextField.addTarget(self, action: #selector(updateTitle), for: .editingChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(titleTextField)
@@ -126,5 +127,13 @@ final class NTCTableCell: UITableViewCell {
             chevron.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             chevron.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -33)
         ])
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension NTCTableCell: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.endEditing(true)
+        return false
     }
 }

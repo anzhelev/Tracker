@@ -250,6 +250,7 @@ final class TrackersViewController: UIViewController {
     private func setSearchBar() {
         let searchBar = UISearchBar()
         searchBar.delegate = self
+        searchBar.searchTextField.delegate = self
         searchBar.placeholder = "Поиск"
         searchBar.showsCancelButton = true
         searchBar.layer.cornerRadius = 8
@@ -257,7 +258,7 @@ final class TrackersViewController: UIViewController {
         searchBar.searchTextField.font = UIFont(name: SFPro.regular, size: 17)
         searchBar.searchTextField.textColor = .ypBlack
         searchBar.searchBarStyle = .minimal
-        searchBar.enablesReturnKeyAutomatically = true
+        searchBar.enablesReturnKeyAutomatically = false
         searchBar.searchTextField.clearButtonMode = .never
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отмена"
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -429,6 +430,15 @@ extension TrackersViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = nil
         searchBarText = nil
+        self.view.endEditing(true)
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension TrackersViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }
 

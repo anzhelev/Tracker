@@ -77,9 +77,9 @@ final class CategoryCreationVC: UIViewController {
         titleTextField.placeholder = "Введите название категории"
         titleTextField.clearButtonMode = .always
         titleTextField.textColor = Colors.black
-        
+        titleTextField.delegate = self
         titleTextField.font = UIFont(name: SFPro.regular, size: 17)
-        titleTextField.enablesReturnKeyAutomatically = true
+        titleTextField.enablesReturnKeyAutomatically = false
         titleTextField.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         titleInputView.addSubview(titleTextField)
@@ -118,5 +118,13 @@ final class CategoryCreationVC: UIViewController {
     @objc private func updateButtonState() {
         doneButton.isEnabled = titleTextField.text?.count ?? 0 >= minimumTitleLength
         doneButton.backgroundColor = doneButton.isEnabled ? Colors.black : Colors.grayDisabledButton
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension CategoryCreationVC: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }
