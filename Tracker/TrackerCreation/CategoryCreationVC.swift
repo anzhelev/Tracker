@@ -54,7 +54,7 @@ final class CategoryCreationVC: UIViewController {
     private func setTitle() {
         let titleLabel = UILabel()
         titleLabel.text = "Категория"
-        titleLabel.font = UIFont(name: SFPro.semibold, size: 16)
+        titleLabel.font = Fonts.SFPro16Semibold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -78,7 +78,7 @@ final class CategoryCreationVC: UIViewController {
         titleTextField.clearButtonMode = .always
         titleTextField.textColor = Colors.black
         titleTextField.delegate = self
-        titleTextField.font = UIFont(name: SFPro.regular, size: 17)
+        titleTextField.font = Fonts.SFPro17Regular
         titleTextField.enablesReturnKeyAutomatically = false
         titleTextField.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +99,7 @@ final class CategoryCreationVC: UIViewController {
         doneButton.addTarget(self, action: #selector(categoryCreationButtonPressed), for: .touchUpInside)
         doneButton.backgroundColor = Colors.black
         doneButton.setTitle("Готово", for: .normal)
-        doneButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
+        doneButton.titleLabel?.font = Fonts.SFPro16Semibold
         doneButton.setTitleColor(Colors.white, for: .normal)
         doneButton.layer.masksToBounds = true
         doneButton.layer.cornerRadius = 16

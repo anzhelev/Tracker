@@ -21,6 +21,7 @@ final class TrackersCVCell: UICollectionViewCell {
     private var emoji = UIImage(named: "emoji_01")  //🙂
     private var dayCounLabel = UILabel()
     private var completeButton = UIButton()
+    private var completeButtonBGView = UIView()
     private var isEvent = false
     private var isCompleted: Bool = true
     private var trackerID: UUID?
@@ -49,8 +50,7 @@ final class TrackersCVCell: UICollectionViewCell {
         mainView.backgroundColor = tracker.color
         titleLabel.text = tracker.name
         dayCounLabel.text = self.isEvent ? "Уникальное" : setStringFor(daysCount)
-        completeButton.tintColor = tracker.color
-        setCompleteButtomImage()
+        setCompleteButtomImage(with: tracker.color)
     }
     
     // MARK: - IBAction
@@ -93,7 +93,7 @@ final class TrackersCVCell: UICollectionViewCell {
         emojiCircleView.addSubview(emojiView)
         
         titleLabel.textAlignment = .left
-        titleLabel.font = UIFont(name: SFPro.bold, size: 12)
+        titleLabel.font = Fonts.SFPro12Semibold
         titleLabel.textColor = Colors.white
         titleLabel.backgroundColor = .clear
         titleLabel.isUserInteractionEnabled = false
@@ -104,11 +104,15 @@ final class TrackersCVCell: UICollectionViewCell {
         dayCounLabel.backgroundColor = .clear
         dayCounLabel.textAlignment = .left
         dayCounLabel.textColor = Colors.black
-        dayCounLabel.font = UIFont(name: SFPro.semibold, size: 12)
+        dayCounLabel.font = Fonts.SFPro12Semibold
         dayCounLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(dayCounLabel)
         
-        setCompleteButtomImage()
+        completeButtonBGView.layer.masksToBounds = true
+        completeButtonBGView.layer.cornerRadius = 17
+        completeButtonBGView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(completeButtonBGView)
+        
         completeButton.addTarget(self, action: #selector(completeButtonAction), for: .touchUpInside)
         completeButton.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(completeButton)
@@ -142,15 +146,33 @@ final class TrackersCVCell: UICollectionViewCell {
             completeButton.centerYAnchor.constraint(equalTo: dayCounLabel.centerYAnchor),
             completeButton.heightAnchor.constraint(equalToConstant: 44),
             completeButton.widthAnchor.constraint(equalToConstant: 44),
-            completeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -7)
+            completeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -7),
+            
+            completeButtonBGView.centerXAnchor.constraint(equalTo: completeButton.centerXAnchor),
+            completeButtonBGView.centerYAnchor.constraint(equalTo: completeButton.centerYAnchor),
+            completeButtonBGView.heightAnchor.constraint(equalToConstant: 34),
+            completeButtonBGView.widthAnchor.constraint(equalToConstant: 34)
         ])
     }
     
-    private func setCompleteButtomImage() {
-        guard let buttonImage = isCompleted ? UIImage(named: "checkSignButtonForCell") : UIImage(named: "plusButtonForCell") else {
-            return
+    private func setCompleteButtomImage(with color: UIColor?) {
+                guard let image = isCompleted ? UIImage(named: "doneSignForCell") : UIImage(named: "plusButtonForCell") else {
+                    return
+                }
+        switch isCompleted {
+            
+        case true:
+            completeButtonBGView.backgroundColor = color?.withAlphaComponent(0.3)
+            let buttonImage = image.withRenderingMode(.alwaysOriginal)
+            completeButton.setImage(buttonImage, for: .normal)
+            completeButton.tintColor = .clear
+            
+        case false:
+            completeButtonBGView.backgroundColor = Colors.white
+            let buttonImage = image.withRenderingMode(.alwaysTemplate)
+            completeButton.setImage(buttonImage, for: .normal)
+            completeButton.tintColor = color
         }
-        completeButton.setImage(buttonImage, for: .normal)
     }
     
     private func setStringFor(_ count: Int) -> String {

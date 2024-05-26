@@ -75,7 +75,7 @@ final class NTCTableCell: UITableViewCell {
         if let value {
             titleTextField.text = value
         }
-        titleTextField.font = UIFont(name: SFPro.regular, size: 17)
+        titleTextField.font = Fonts.SFPro17Regular
         titleTextField.enablesReturnKeyAutomatically = false
         titleTextField.addTarget(self, action: #selector(updateTitle), for: .editingChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -90,7 +90,7 @@ final class NTCTableCell: UITableViewCell {
     private func addLabels(title: String, value: String?) {
         let titleLabel  = UILabel()
         titleLabel.text = title
-        titleLabel.font = UIFont(name: SFPro.regular, size: 17)
+        titleLabel.font = Fonts.SFPro17Regular
         titleLabel.textColor = Colors.black
         titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +98,7 @@ final class NTCTableCell: UITableViewCell {
         
         let valueLabel = UILabel()
         valueLabel.text = value
-        valueLabel.font = UIFont(name: SFPro.regular, size: 17)
+        valueLabel.font = Fonts.SFPro17Regular
         valueLabel.textColor = Colors.grayDisabledButton
         valueLabel.textAlignment = .left
         valueLabel.translatesAutoresizingMaskIntoConstraints = false

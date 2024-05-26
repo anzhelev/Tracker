@@ -154,7 +154,7 @@ final class NewTrackerCreationVC: UIViewController {
     private func setTitle(for tracker : TrackerType) {
         let titleLabel = UILabel()
         titleLabel.text = tracker == .habit ? "Новая привычка" : "Новое нерегулярное событие"
-        titleLabel.font = UIFont(name: SFPro.semibold, size: 16)
+        titleLabel.font = Fonts.SFPro16Semibold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -170,7 +170,7 @@ final class NewTrackerCreationVC: UIViewController {
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
         cancelButton.backgroundColor = Colors.white
         cancelButton.setTitle("Отменить", for: .normal)
-        cancelButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
+        cancelButton.titleLabel?.font = Fonts.SFPro16Semibold
         cancelButton.setTitleColor(Colors.red, for: .normal)
         cancelButton.clipsToBounds = true
         cancelButton.layer.borderWidth = 1
@@ -185,7 +185,7 @@ final class NewTrackerCreationVC: UIViewController {
         createButton.addTarget(self, action: #selector(createButtonPressed), for: .touchUpInside)
         createButton.backgroundColor = Colors.grayDisabledButton
         createButton.setTitle("Создать", for: .normal)
-        createButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
+        createButton.titleLabel?.font = Fonts.SFPro16Semibold
         createButton.setTitleColor(Colors.white, for: .normal)
         createButton.layer.masksToBounds = true
         createButton.layer.cornerRadius = 16

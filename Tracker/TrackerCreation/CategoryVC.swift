@@ -64,7 +64,7 @@ final class CategoryVC: UIViewController {
     private func setTitle() {
         let titleLabel = UILabel()
         titleLabel.text = "Категория"
-        titleLabel.font = UIFont(name: SFPro.semibold, size: 16)
+        titleLabel.font = Fonts.SFPro16Semibold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -90,14 +90,14 @@ final class CategoryVC: UIViewController {
         
         let label1 = UILabel()
         label1.text = "Привычки и события можно"
-        label1.font = UIFont(name: SFPro.regular, size: 12)
+        label1.font = Fonts.SFPro12Semibold
         label1.textColor = Colors.black
         label1.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(label1)
         
         let label2 = UILabel()
         label2.text = "объединить по смыслу"
-        label2.font = UIFont(name: SFPro.regular, size: 12)
+        label2.font = Fonts.SFPro12Semibold
         label2.textColor = Colors.black
         label2.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(label2)
@@ -165,7 +165,7 @@ final class CategoryVC: UIViewController {
         let label = UILabel()
         label.text = categories.sorted()[row]
         label.textColor = Colors.black
-        label.font = UIFont(name: SFPro.regular, size: 17)
+        label.font = Fonts.SFPro17Regular
         label.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(label)
         
@@ -191,7 +191,7 @@ final class CategoryVC: UIViewController {
         categoryCreationButton.addTarget(self, action: #selector(categoryCreationButtonPressed), for: .touchUpInside)
         categoryCreationButton.backgroundColor = Colors.black
         categoryCreationButton.setTitle("Добавить категорию", for: .normal)
-        categoryCreationButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
+        categoryCreationButton.titleLabel?.font = Fonts.SFPro16Semibold
         categoryCreationButton.setTitleColor(Colors.white, for: .normal)
         categoryCreationButton.layer.masksToBounds = true
         categoryCreationButton.layer.cornerRadius = 16

@@ -30,7 +30,7 @@ class TrackersCVHeader: UICollectionReusableView {
     // MARK: - Private Methods
     private func setTitleLabel() {
         titleLabel.backgroundColor = .clear
-        titleLabel.font = UIFont(name: SFPro.bold, size: 19)
+        titleLabel.font = Fonts.SFPro19Bold
         titleLabel.textAlignment = .left
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

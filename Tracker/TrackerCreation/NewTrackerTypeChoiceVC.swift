@@ -43,7 +43,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         
         let titleLabel = UILabel()
         titleLabel.text = "Создание трекера"
-        titleLabel.font = UIFont(name: SFPro.semibold, size: 16)
+        titleLabel.font = Fonts.SFPro16Semibold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -53,7 +53,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         newHabitCreationButton.setTitle("Привычка", for: .normal)
         newHabitCreationButton.addTarget(self, action: #selector(createNewHabit), for: .touchUpInside)
         newHabitCreationButton.setTitleColor(Colors.white, for: .normal)
-        newHabitCreationButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
+        newHabitCreationButton.titleLabel?.font = Fonts.SFPro16Semibold
         newHabitCreationButton.layer.masksToBounds = true
         newHabitCreationButton.layer.cornerRadius = 16
         newHabitCreationButton.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +64,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         newEventCreationButton.setTitle("Нерегулярное событие", for: .normal)
         newEventCreationButton.addTarget(self, action: #selector(createNewEvent), for: .touchUpInside)
         newEventCreationButton.setTitleColor(Colors.white, for: .normal)
-        newEventCreationButton.titleLabel?.font = UIFont(name: SFPro.semibold, size: 16)
+        newEventCreationButton.titleLabel?.font = Fonts.SFPro16Semibold
         newEventCreationButton.layer.masksToBounds = true
         newEventCreationButton.layer.cornerRadius = 16
         newEventCreationButton.translatesAutoresizingMaskIntoConstraints = false

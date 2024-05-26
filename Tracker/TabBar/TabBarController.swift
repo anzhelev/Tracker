@@ -11,7 +11,6 @@ final class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sleep(5)
         setUpperLine()
         setupBars()
     }

@@ -22,6 +22,7 @@ final class TrackersViewController: UIViewController {
     private var datePicker = UIDatePicker()
     private var dateLabel = UILabel()
     private var stubView = UIView()
+    private var stubImageView = UIImageView()
     private var stubLabel = UILabel()
     private var titleLabel = UILabel()
     private var searchBar = UISearchBar()
@@ -208,7 +209,7 @@ final class TrackersViewController: UIViewController {
         
         let dateLabel = UILabel()
         dateLabel.textColor = .black
-        dateLabel.font = UIFont(name: SFPro.regular, size: 17)
+        dateLabel.font = Fonts.SFPro17Regular
         dateLabel.text = getFormattedString(from: Date())
         dateLabel.textAlignment = .center
         dateLabel.backgroundColor = Colors.grayDatePicker
@@ -235,7 +236,7 @@ final class TrackersViewController: UIViewController {
     private func setTitleLabel() {
         let titleLabel = UILabel()
         titleLabel.text = "Трекеры"
-        titleLabel.font = UIFont(name: SFPro.bold, size: 34)
+        titleLabel.font = Fonts.SFPro34Bold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -255,7 +256,7 @@ final class TrackersViewController: UIViewController {
         searchBar.showsCancelButton = true
         searchBar.layer.cornerRadius = 8
         searchBar.layer.masksToBounds = true
-        searchBar.searchTextField.font = UIFont(name: SFPro.regular, size: 17)
+        searchBar.searchTextField.font = Fonts.SFPro17Regular
         searchBar.searchTextField.textColor = .ypBlack
         searchBar.searchBarStyle = .minimal
         searchBar.enablesReturnKeyAutomatically = false
@@ -280,13 +281,14 @@ final class TrackersViewController: UIViewController {
         self.view.addSubview(stubView)
         self.stubView = stubView
         
-        let image = UIImage(named: "tabTrackersImage")
+        let image = UIImage(named: "stubImageForTrackers")
         let stubImageView = UIImageView(image: image)
         stubImageView.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubImageView)
+        self.stubImageView = stubImageView
         
         stubLabel.text = "Что будем отслеживать?"
-        stubLabel.font = UIFont(name: SFPro.regular, size: 12)
+        stubLabel.font = Fonts.SFPro12Semibold
         stubLabel.textColor = Colors.black
         stubLabel.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubLabel)
@@ -335,11 +337,15 @@ final class TrackersViewController: UIViewController {
     
     private func updateStub() {
         if categories.isEmpty {
-            stubView.isHidden = false
+            let image = UIImage(named: "stubImageForTrackers")
+            stubImageView.image = image
             stubLabel.text = "Что будем отслеживать?"
-        } else if filtredCategories.isEmpty {
             stubView.isHidden = false
-            stubLabel.text = "К сожалению, ничего не нашлось :("
+        } else if filtredCategories.isEmpty {
+            let image = UIImage(named: "stubImageForSearch")
+            stubImageView.image = image
+            stubLabel.text = "Ничего не найдено"
+            stubView.isHidden = false
         } else {
             stubView.isHidden = true
         }
