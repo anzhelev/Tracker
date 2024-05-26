@@ -55,7 +55,7 @@ final class TrackersCVCell: UICollectionViewCell {
     
     // MARK: - IBAction
     /// действие по нажатию кнопки "➕ или ✅"
-    @objc func completeButtonAction() {
+    @objc private func completeButtonAction() {
         
         let tomorrow = Calendar.current.startOfDay(for: Date()) + 86400
         
