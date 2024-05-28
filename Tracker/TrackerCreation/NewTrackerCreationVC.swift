@@ -16,11 +16,19 @@ enum CellID: String {
     case category = "category"
     case shedule = "shedule"
     case spacer = "spacer"
+    case emoji = "emoji"
+    case color = "color"
+}
+
+enum ReuseID: String {
+    case text = "mainTableCell"
+    case collection = "mainTableCellWithCollection"
 }
 
 struct MainTableCellParams {
     let id: CellID
-    let cellHeight: CGFloat
+    let reuseID: ReuseID
+    var cellHeight: CGFloat
     let title: String
     var value: String? = nil
 }
@@ -52,6 +60,7 @@ final class NewTrackerCreationVC: UIViewController {
             updateButtonState()
         }
     }
+    
     var categories: Set<String> = []
     
     // MARK: - Private Properties
@@ -60,6 +69,8 @@ final class NewTrackerCreationVC: UIViewController {
     private var createButton = UIButton()
     private var minimumTitleLength = 1
     private var maximumTitleLength = 38
+    private var newTrackerEmoji: Int?
+    private var newTrackerColor: Int?
     
     // MARK: - Initializers
     init(newTrackerType: TrackerType, delegate: NewTrackerTypeChoiceVC, superDelegate: TrackersViewController) {
@@ -91,8 +102,8 @@ final class NewTrackerCreationVC: UIViewController {
         self.superDelegate?.updateCategories(with: categories)
         let tracker = Tracker(id: UUID(),
                               name: self.newTrackerTitle ?? "б/н",
-                              color: .ypBlue,
-                              emoji: "😎",
+                              color: self.newTrackerColor,
+                              emoji: self.newTrackerEmoji,
                               schedule: self.newTrackerSchedule
         )
         
@@ -119,7 +130,7 @@ final class NewTrackerCreationVC: UIViewController {
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
-
+    
     // MARK: - Private Methods
     private func configureCommonUIElements(for tracker: TrackerType) {
         view.backgroundColor = Colors.white
@@ -129,23 +140,29 @@ final class NewTrackerCreationVC: UIViewController {
     }
     
     private func configureMainTable(for tracker: TrackerType) {
-        self.mainTableCells.append(MainTableCellParams(id: .title, cellHeight: 75, title: "Введите название трекера"))
-        self.mainTableCells.append(MainTableCellParams(id: .spacer, cellHeight: 24, title: ""))
-        self.mainTableCells.append(MainTableCellParams(id: .category, cellHeight: 75, title: "Категория", value: nil))
+        self.mainTableCells.append(MainTableCellParams(id: .title, reuseID: .text, cellHeight: 75, title: "Введите название трекера"))
+        self.mainTableCells.append(MainTableCellParams(id: .spacer, reuseID: .text, cellHeight: 24, title: ""))
+        self.mainTableCells.append(MainTableCellParams(id: .category, reuseID: .text, cellHeight: 75, title: "Категория", value: nil))
         if tracker == .habit {
-            self.mainTableCells.append(MainTableCellParams(id: .shedule, cellHeight: 75, title: "Расписание", value: nil))
+            self.mainTableCells.append(MainTableCellParams(id: .shedule, reuseID: .text, cellHeight: 75, title: "Расписание", value: nil))
         }
+        self.mainTableCells.append(MainTableCellParams(id: .emoji, reuseID: .collection, cellHeight: 0, title: "Emoji", value: nil))
+        self.mainTableCells.append(MainTableCellParams(id: .color, reuseID: .collection, cellHeight: 0, title: "Цвет", value: nil))
+        
         mainTableView.dataSource = self
         mainTableView.delegate = self
         mainTableView.backgroundColor = .none
         mainTableView.separatorStyle = .singleLine
-        mainTableView.register(NTCTableCell.self, forCellReuseIdentifier: "mainTableCell")
+        mainTableView.showsVerticalScrollIndicator = false
+        mainTableView.register(NTCTableCell.self, forCellReuseIdentifier: ReuseID.text.rawValue)
+        mainTableView.register(NTCTableCellwithCollection.self, forCellReuseIdentifier: ReuseID.collection.rawValue)
+        mainTableView.contentInset.top = 24
         mainTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainTableView)
         
         NSLayoutConstraint.activate([
-            mainTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 87),
-            mainTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -200),
+            mainTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 63),
+            mainTableView.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -16),
             mainTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             mainTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
@@ -213,13 +230,15 @@ final class NewTrackerCreationVC: UIViewController {
         }
         self.categories = categories
     }
-  
+    
     private func updateButtonState() {
         let count = self.newTrackerTitle?.count ?? 0
         if count >= minimumTitleLength,
            count <= maximumTitleLength,
            self.newTrackerCategory != nil,
-           self.newTrackerSchedule != nil || self.newTrackerType == .event {
+           self.newTrackerSchedule != nil || self.newTrackerType == .event,
+           self.newTrackerColor != nil,
+           self.newTrackerEmoji != nil {
             createButton.isEnabled = true
         } else {
             createButton.isEnabled = false
@@ -240,10 +259,21 @@ extension NewTrackerCreationVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "mainTableCell", for: indexPath) as? NTCTableCell {
-            cell.delegate = self
-            cell.configure(new: mainTableCells[indexPath.row], for: newTrackerType)
-            return cell
+        
+        switch mainTableCells[indexPath.row].reuseID {
+        case .text:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: mainTableCells[indexPath.row].reuseID.rawValue, for: indexPath) as? NTCTableCell {
+                cell.delegate = self
+                cell.configure(new: mainTableCells[indexPath.row], for: newTrackerType)
+                return cell
+            }
+        case .collection:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: mainTableCells[indexPath.row].reuseID.rawValue, for: indexPath) as? NTCTableCellwithCollection {
+                cell.delegate = self
+                let selectedItem = mainTableCells[indexPath.row].id == .emoji ? newTrackerEmoji : newTrackerColor
+                cell.configure(new: mainTableCells[indexPath.row], with: selectedItem)
+                return cell
+            }
         }
         fatalError("Проблема с подготовкой ячейки")
     }
@@ -253,23 +283,20 @@ extension NewTrackerCreationVC: UITableViewDataSource {
 extension NewTrackerCreationVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return mainTableCells[indexPath.row].cellHeight
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
+        switch mainTableCells[indexPath.row].reuseID {
+        case .text:
+            return mainTableCells[indexPath.row].cellHeight
+        case .collection:
+            let horizontalInset = 2.0
+            let collectionHeaderHeight = 74.0
+            let verticalSpacing = 0.0
+            let horizontalSpacing = 5.0
+            let cellsInRow = CGFloat(6)
+            let rowCount = CGFloat(3)
+            let collectionCellWidth = (tableView.bounds.width - horizontalInset * 2 - (cellsInRow - 1) * horizontalSpacing) / cellsInRow
+            mainTableCells[indexPath.row].cellHeight = collectionCellWidth
+            return collectionCellWidth * rowCount + verticalSpacing * (rowCount - 1) + collectionHeaderHeight
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -293,5 +320,23 @@ extension NewTrackerCreationVC: NTCTableCellDelegate {
             return
         }
         newTrackerTitle = title
-    }    
+    }
+}
+
+// MARK: - NTCTableCellwithCollectionDelegate
+extension NewTrackerCreationVC: NTCTableCellwithCollectionDelegate {
+    
+    func updateNewTracker(dataType: CellID, value: Int?) {
+        
+        switch dataType {
+            
+        case .emoji:
+            newTrackerEmoji = value
+        case .color:
+            newTrackerColor = value
+        default:
+            return
+        }
+        updateButtonState()
+    }
 }

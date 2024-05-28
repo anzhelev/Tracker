@@ -25,6 +25,7 @@ final class NTCTableCell: UITableViewCell {
         super.prepareForReuse()
         
         self.contentView.subviews.forEach { $0.removeFromSuperview() }
+        self.constraints.forEach{removeConstraint($0)}
     }
     
     // MARK: - Public methods
@@ -57,6 +58,8 @@ final class NTCTableCell: UITableViewCell {
             self.backgroundColor = .none
             self.layer.maskedCorners = []
             self.separatorInset = UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
+        default:
+            break
         }
     }
     

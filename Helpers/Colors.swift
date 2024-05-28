@@ -29,3 +29,24 @@ enum Colors {
     /// semi transparent circle ror emojis
     static var whiteEmojiCircle: UIColor {UIColor(named: "Emoji Circle (Alpha 30)") ?? UIColor.clear}
 }
+
+enum ColorsForCollection {
+    static var color1: UIColor {UIColor(named: "Color1") ?? UIColor.black}
+    static var color2: UIColor {UIColor(named: "Color2") ?? UIColor.black}
+    static var color3: UIColor {UIColor(named: "Color3") ?? UIColor.black}
+    static var color4: UIColor {UIColor(named: "Color4") ?? UIColor.black}
+    static var color5: UIColor {UIColor(named: "Color5") ?? UIColor.black}
+    static var color6: UIColor {UIColor(named: "Color6") ?? UIColor.black}
+    static var color7: UIColor {UIColor(named: "Color7") ?? UIColor.black}
+    static var color8: UIColor {UIColor(named: "Color8") ?? UIColor.black}
+    static var color9: UIColor {UIColor(named: "Color9") ?? UIColor.black}
+    static var color10: UIColor {UIColor(named: "Color10") ?? UIColor.black}
+    static var color11: UIColor {UIColor(named: "Color11") ?? UIColor.black}
+    static var color12: UIColor {UIColor(named: "Color12") ?? UIColor.black}
+    static var color13: UIColor {UIColor(named: "Color13") ?? UIColor.black}
+    static var color14: UIColor {UIColor(named: "Color14") ?? UIColor.black}
+    static var color15: UIColor {UIColor(named: "Color15") ?? UIColor.black}
+    static var color16: UIColor {UIColor(named: "Color16") ?? UIColor.black}
+    static var color17: UIColor {UIColor(named: "Color17") ?? UIColor.black}
+    static var color18: UIColor {UIColor(named: "Color18") ?? UIColor.black}
+}

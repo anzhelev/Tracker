@@ -20,15 +20,15 @@ final class MockData {
     func addMockData() {
         let event1 = Tracker(id: UUID(),
                              name: "Семинар по 14 спринту",
-                             color: .purple,
-                             emoji: "🧑🏻‍🏫",
+                             color: 7,
+                             emoji: 10,
                              schedule: nil
         )
         
         let event2 = Tracker(id: UUID(),
                              name: "Ревью задачи по 14 спринту!!!",
-                             color: .red,
-                             emoji: "🧑🏻‍🏫",
+                             color: 1,
+                             emoji: 16,
                              schedule: nil
         )
         
@@ -37,20 +37,20 @@ final class MockData {
                                        trackers: [
                                         Tracker(id: UUID(),
                                                 name: "Уборка",
-                                                color: .gray,
-                                                emoji: "🧹",
+                                                color: 10,
+                                                emoji: 6,
                                                 schedule: [7] //сб
                                                ),
                                         Tracker(id: UUID(),
                                                 name: "Поход в супермаркет",
-                                                color: .black,
-                                                emoji: "🛒",
+                                                color: 13,
+                                                emoji: 13,
                                                 schedule: [6] //пт
                                                ),
                                         Tracker(id: UUID(),
                                                 name: "Готовлю еду",
-                                                color: .brown,
-                                                emoji: "🍳",
+                                                color: 9,
+                                                emoji: 12,
                                                 schedule: [1,3,5] //вт, чт, вс
                                                )
                                        ]
@@ -59,8 +59,8 @@ final class MockData {
                                        trackers: [
                                         Tracker(id: UUID(),
                                                 name: "Учеба на Яндекс Практикуме",
-                                                color: .orange,
-                                                emoji: "👨🏻‍🎓",
+                                                color: 2,
+                                                emoji: 10,
                                                 schedule: [1,2,3,4,5,6,7]
                                                ),
                                         event1,
@@ -71,14 +71,14 @@ final class MockData {
                                        trackers: [
                                         Tracker(id: UUID(),
                                                 name: "Бассейн",
-                                                color: .blue,
-                                                emoji: "🏊",
+                                                color: 8,
+                                                emoji: 15,
                                                 schedule: [2,5] //пн, чт
                                                ),
                                         Tracker(id: UUID(),
                                                 name: "Фридайвинг",
-                                                color: .magenta,
-                                                emoji: "🤿",
+                                                color: 9,
+                                                emoji: 17,
                                                 schedule: [1] //вс
                                                )
                                        ]

@@ -18,7 +18,8 @@ final class TrackersCVCell: UICollectionViewCell {
     // MARK: - Private Properties
     private var mainView = UIView()
     private var titleLabel = UITextView()
-    private var emoji = UIImage(named: "emoji_01")  //🙂
+    private var emojiView = UIImageView()
+//    private var emoji = UIImage(named: "emoji1")  //🙂
     private var dayCounLabel = UILabel()
     private var completeButton = UIButton()
     private var completeButtonBGView = UIView()
@@ -47,10 +48,11 @@ final class TrackersCVCell: UICollectionViewCell {
         self.selectedDate = selectedDate
         self.isCompleted = isCompleted
         
-        mainView.backgroundColor = tracker.color
+        mainView.backgroundColor = UIColor(named: "Color\(tracker.color ?? 1)")
         titleLabel.text = tracker.name
         dayCounLabel.text = self.isEvent ? "Уникальное" : setStringFor(daysCount)
-        setCompleteButtomImage(with: tracker.color)
+        setCompleteButtomImage(with: UIColor(named: "Color\(tracker.color ?? 1)"))
+        emojiView.image = UIImage(named: "emoji\(tracker.emoji ?? 1)")
     }
     
     // MARK: - IBAction
@@ -87,8 +89,6 @@ final class TrackersCVCell: UICollectionViewCell {
         emojiCircleView.translatesAutoresizingMaskIntoConstraints = false
         mainView.addSubview(emojiCircleView)
         
-        let emojiView = UIImageView()
-        emojiView.image = emoji
         emojiView.translatesAutoresizingMaskIntoConstraints = false
         emojiCircleView.addSubview(emojiView)
         
