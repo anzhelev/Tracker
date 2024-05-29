@@ -48,7 +48,7 @@ final class NewTrackerCreationVC: UIViewController {
     var newTrackerCategory: String? {
         didSet {
             self.mainTableCells[2].value = newTrackerCategory
-            updateTableView()
+            mainTableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
             updateButtonState()
         }
     }
@@ -56,7 +56,7 @@ final class NewTrackerCreationVC: UIViewController {
     var newTrackerScheduleLabelText: String? {
         didSet {
             self.mainTableCells[3].value = newTrackerScheduleLabelText
-            updateTableView()
+            mainTableView.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .automatic)
             updateButtonState()
         }
     }
@@ -102,8 +102,8 @@ final class NewTrackerCreationVC: UIViewController {
         self.superDelegate?.updateCategories(with: categories)
         let tracker = Tracker(id: UUID(),
                               name: self.newTrackerTitle ?? "б/н",
-                              color: self.newTrackerColor,
-                              emoji: self.newTrackerEmoji,
+                              color: (self.newTrackerColor ?? 0) + 1,
+                              emoji: (self.newTrackerEmoji ?? 0) + 1,
                               schedule: self.newTrackerSchedule
         )
         
@@ -244,10 +244,6 @@ final class NewTrackerCreationVC: UIViewController {
             createButton.isEnabled = false
         }
         createButton.backgroundColor = createButton.isEnabled ? Colors.black : Colors.grayDisabledButton
-    }
-    
-    private func updateTableView() {
-        mainTableView.reloadData()
     }
 }
 
