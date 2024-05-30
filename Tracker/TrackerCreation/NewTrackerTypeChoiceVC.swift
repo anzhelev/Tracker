@@ -23,7 +23,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         guard let superDelegate = self.delegate else {
             return
         }
-        let vc = NewTrackerCreationVC(newTrackerType: .habit, delegate: self, superDelegate: superDelegate)
+        let vc = TrackerCreationVC(newTrackerType: .habit, delegate: superDelegate)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
@@ -32,7 +32,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         guard let superDelegate = self.delegate else {
             return
         }
-        let vc = NewTrackerCreationVC(newTrackerType: .event, delegate: self, superDelegate: superDelegate)
+        let vc = TrackerCreationVC(newTrackerType: .event, delegate: superDelegate)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }

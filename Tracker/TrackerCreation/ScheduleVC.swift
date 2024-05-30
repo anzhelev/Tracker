@@ -6,10 +6,14 @@
 //
 import UIKit
 
+protocol ScheduleVCDelegate: AnyObject {
+    func updateNewTrackerSchedule(newTrackerSchedule: Set<Int>?, newTrackerScheduleLabelText: String?)
+}
+
 final class ScheduleVC: UIViewController {
     
     // MARK: - Public Properties
-    weak var delegate: NewTrackerCreationVC?
+    weak var delegate: ScheduleVCDelegate?
     
     // MARK: - Private Properties
     private var titleLabel = UILabel()
@@ -20,9 +24,9 @@ final class ScheduleVC: UIViewController {
     private var schedule: Set<Int>
     
     // MARK: - Initializers
-    init(delegate: NewTrackerCreationVC) {
+    init(delegate: TrackerCreationVC, newTrackerSchedule: Set<Int>?) {
         self.delegate = delegate
-        self.schedule = delegate.newTrackerSchedule ?? []
+        self.schedule = newTrackerSchedule ?? []
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -49,11 +53,12 @@ final class ScheduleVC: UIViewController {
     }
     
     @objc private func confirmButtonPressed() {
+        var newSchedule: Set<Int>? = nil
+        var newScheduleLabelText: String? = nil
         if schedule.count > 0 {
-            self.delegate?.newTrackerSchedule = schedule
-            
+            newSchedule = schedule
             if schedule.count == 7 {
-                self.delegate?.newTrackerScheduleLabelText = "Каждый день"
+                newScheduleLabelText = "Каждый день"
             } else {
                 var selectedIndexes: Set<Int> = []
                 for index in 0...6 {
@@ -65,12 +70,11 @@ final class ScheduleVC: UIViewController {
                 selectedIndexes.sorted().forEach { index in
                     days.append(self.daysOfWeekShort[index])
                 }
-                self.delegate?.newTrackerScheduleLabelText = days.joined(separator: ", ")
+                newScheduleLabelText = days.joined(separator: ", ")
             }
-        } else {
-            self.delegate?.newTrackerSchedule = nil
-            self.delegate?.newTrackerScheduleLabelText = nil
         }
+ 
+        delegate?.updateNewTrackerSchedule(newTrackerSchedule: newSchedule, newTrackerScheduleLabelText: newScheduleLabelText)
         self.dismiss(animated: true)
     }
     

@@ -6,10 +6,14 @@
 //
 import UIKit
 
+protocol CategoryVCDelegate: AnyObject {
+    func updateNewTrackerCategory(newTrackerCategory: String?, categories: Set<String>)
+}
+
 final class CategoryVC: UIViewController {
     
     // MARK: - Public Properties
-    weak var delegate: NewTrackerCreationVC?
+    weak var delegate: CategoryVCDelegate?
     var categories: Set<String> = [] {
         didSet {
             updateTableView()
@@ -25,9 +29,9 @@ final class CategoryVC: UIViewController {
     private var categoryCreationButton = UIButton()
     
     // MARK: - Initializers
-    init(delegate: NewTrackerCreationVC, categories: Set<String>) {
+    init(delegate: TrackerCreationVC, categories: Set<String>, newTrackerCategory: String?) {
         self.delegate = delegate
-        selectedCategory = delegate.newTrackerCategory
+        selectedCategory = newTrackerCategory
         self.categories = categories
         
         super.init(nibName: nil, bundle: nil)
@@ -236,8 +240,7 @@ extension CategoryVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = categoriesTableView.cellForRow(at: indexPath)
         cell?.contentView.subviews.last?.isHidden = false
-        self.delegate?.newTrackerCategory = categories.sorted()[indexPath.row]
-        self.delegate?.categories = categories
+        self.delegate?.updateNewTrackerCategory(newTrackerCategory: categories.sorted()[indexPath.row], categories: categories)
         self.dismiss(animated: true)
     }
     
