@@ -24,7 +24,6 @@ final class TCTableCellSingleLabel: UITableViewCell {
         label.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
         label.heightAnchor.constraint(equalToConstant: 18).isActive = true
         label.widthAnchor.constraint(equalTo: self.contentView.widthAnchor).isActive = true
-        print("@@@ лейбл инициирован")
         return label
     }()
     
