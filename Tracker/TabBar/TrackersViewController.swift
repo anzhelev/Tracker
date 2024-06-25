@@ -25,6 +25,7 @@ final class TrackersViewController: UIViewController {
     private var stubImageView = UIImageView()
     private var stubLabel = UILabel()
     private var titleLabel = UILabel()
+    private var searchBarBackground = UIView()
     private var searchBar = UISearchBar()
     private var searchBarText: String? = nil {
         didSet {
@@ -165,6 +166,7 @@ final class TrackersViewController: UIViewController {
         setPlusButton()
         setDatePicker()
         setTitleLabel()
+        setSearchBarBackgrounds()
         setSearchBar()
         updateSearchBarCancelButtonState()
         setTrackersCollectionView()
@@ -248,12 +250,42 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    private func setSearchBarBackgrounds() {
+        let searchBarBackground = UIView()
+        searchBarBackground.backgroundColor = Colors.grayDatePicker
+        searchBarBackground.layer.masksToBounds = true
+        searchBarBackground.layer.cornerRadius = 8
+        searchBarBackground.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchBarBackground)
+        
+        let searchBarWideBackground = UIView()
+        searchBarWideBackground.backgroundColor = Colors.grayDatePicker
+        searchBarWideBackground.layer.masksToBounds = true
+        searchBarWideBackground.layer.cornerRadius = 8
+        searchBarWideBackground.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchBarWideBackground)
+        self.searchBarBackground = searchBarWideBackground
+        
+        NSLayoutConstraint.activate([
+            searchBarBackground.heightAnchor.constraint(equalToConstant: 36),
+            searchBarBackground.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            searchBarBackground.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
+            searchBarBackground.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -110),
+            
+            searchBarWideBackground.heightAnchor.constraint(equalTo: searchBarBackground.heightAnchor),
+            searchBarWideBackground.leadingAnchor.constraint(equalTo: searchBarBackground.leadingAnchor),
+            searchBarWideBackground.topAnchor.constraint(equalTo: searchBarBackground.topAnchor),
+            searchBarWideBackground.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
+    }
+    
     private func setSearchBar() {
         let searchBar = UISearchBar()
         searchBar.delegate = self
         searchBar.searchTextField.delegate = self
         searchBar.placeholder = "Поиск"
         searchBar.showsCancelButton = true
+        searchBar.searchTextField.borderStyle = .none
         searchBar.layer.cornerRadius = 8
         searchBar.layer.masksToBounds = true
         searchBar.searchTextField.font = Fonts.SFPro17Regular
@@ -261,7 +293,7 @@ final class TrackersViewController: UIViewController {
         searchBar.searchBarStyle = .minimal
         searchBar.enablesReturnKeyAutomatically = false
         searchBar.searchTextField.clearButtonMode = .never
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отмена"
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отменить"
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchBar)
         self.searchBar = searchBar
@@ -332,6 +364,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func updateSearchBarCancelButtonState() {
+        searchBarBackground.isHidden = searchBarText?.count ?? 0 > 0
         searchBar.setShowsCancelButton(searchBarText?.count ?? 0 > 0, animated: true)
     }
     
