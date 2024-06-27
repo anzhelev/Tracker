@@ -12,7 +12,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Public Properties
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
-    var selectedDate = Date()
+    var selectedDate = Date().short
     var selectedWeekDay: Int = 1
     
     // MARK: - Private Properties
@@ -152,7 +152,7 @@ final class TrackersViewController: UIViewController {
     
     /// действие при выборе новой даты
     @objc func dateChanged() {
-        selectedDate = datePicker.date
+        selectedDate = datePicker.date.short
         selectedWeekDay = Calendar.current.component(.weekday, from: datePicker.date)
         dateLabel.text = getFormattedString(from: selectedDate)
         filterCategories()

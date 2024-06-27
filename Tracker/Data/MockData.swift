@@ -87,12 +87,12 @@ final class MockData {
         
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yy"
-        guard let date = formatter.date(from: "14.05.24") else {
+        guard let date = formatter.date(from: "27.06.24") else {
             return
         }
         
-        completedTrackers = [TrackerRecord(id: event1.id, date: date),
-                             TrackerRecord(id: event2.id, date: Date())
+        completedTrackers = [TrackerRecord(id: event1.id, date: date.short),
+                             TrackerRecord(id: event2.id, date: Date().short)
         ]
     }
 }
