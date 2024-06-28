@@ -16,6 +16,7 @@ final class TrackersViewController: UIViewController {
     var selectedWeekDay: Int = 1
     
     // MARK: - Private Properties
+    private let storeService = StoreService.storeService
     private var filtredCategories: [TrackerCategory] = []
     private var plusButton = UIButton()
     private let dateFormatter = DateFormatter()
@@ -43,8 +44,11 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        categories = mock.categories
-        completedTrackers = mock.completedTrackers
+//        categories = mock.categories
+//        completedTrackers = mock.completedTrackers
+        
+//        categories = storeService.getStoredCategories()
+//        completedTrackers = storeService.getStoredRecords() ?? []
         
         dateFormatter.dateFormat = "dd.MM.yy"
         configureUIElements()
@@ -91,6 +95,7 @@ final class TrackersViewController: UIViewController {
     
     // добавляем новый трекер в массив
     func addNew(tracker: Tracker, to category: String) {
+//        storeService.addTrackerToStore(tracker: tracker, to: category)
         var newCategories: [TrackerCategory] = []
         var existingCategories: Set<String> = []
         

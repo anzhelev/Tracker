@@ -14,8 +14,8 @@ final class StoreService {
     let persistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
     // MARK: - Private Properties
-    private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
+    private (set) var categories: [TrackerCategory] = []
+    private (set) var completedTrackers: [TrackerRecord] = []
     private let categoryStore = CategoryStore()
     private let trackerStore = TrackerStore()
     private let trackerRecordStore = TrackerRecordStore()
