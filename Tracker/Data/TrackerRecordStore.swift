@@ -10,18 +10,14 @@ import CoreData
 
 final class TrackerRecordStore {
     
+    private weak var delegate: StoreService?
     private let context: NSManagedObjectContext
-    private let storeService = StoreService.storeService
     
-    init(context: NSManagedObjectContext) {
-        self.context = context
+    init(delegate: StoreService) {
+        self.delegate = delegate
+        self.context = delegate.context
     }
-    
-    convenience init() {
-        let context = StoreService.storeService.persistentContainer.viewContext
-        self.init(context: context)
-    }
-    
+
     func fetchRecords() -> [TrackerRecord] {
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         
@@ -54,13 +50,13 @@ final class TrackerRecordStore {
         let trackerRecordCoreData = TrackerRecordCoreData(context: context)
         trackerRecordCoreData.uuid = record.id
         trackerRecordCoreData.date = record.date
-        storeService.saveContext()
+        delegate?.saveContext()
     }
     
     func deleteRecord(record: TrackerRecord) {
         if let trackerRecordCoreData = fetchRecordBy(id: record.id, date: record.date) {
             context.delete(trackerRecordCoreData)
-            storeService.saveContext()
+            delegate?.saveContext()
         }
     }
 }

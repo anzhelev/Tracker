@@ -16,7 +16,7 @@ final class TrackersViewController: UIViewController {
     var selectedWeekDay: Int = 1
     
     // MARK: - Private Properties
-    private let storeService = StoreService.storeService
+    private let storeService = StoreService()
     private var filtredCategories: [TrackerCategory] = []
     private var plusButton = UIButton()
     private let dateFormatter = DateFormatter()
@@ -47,8 +47,8 @@ final class TrackersViewController: UIViewController {
 //        categories = mock.categories
 //        completedTrackers = mock.completedTrackers
         
-//        categories = storeService.getStoredCategories()
-//        completedTrackers = storeService.getStoredRecords() ?? []
+        categories = storeService.getStoredCategories()
+        completedTrackers = storeService.getStoredRecords() ?? []
         
         dateFormatter.dateFormat = "dd.MM.yy"
         configureUIElements()
@@ -95,7 +95,7 @@ final class TrackersViewController: UIViewController {
     
     // добавляем новый трекер в массив
     func addNew(tracker: Tracker, to category: String) {
-//        storeService.addTrackerToStore(tracker: tracker, to: category)
+        storeService.addTrackerToStore(tracker: tracker, to: category)
         var newCategories: [TrackerCategory] = []
         var existingCategories: Set<String> = []
         
@@ -125,6 +125,7 @@ final class TrackersViewController: UIViewController {
     
     // обновляем массив если созданы новые категории без трекеров
     func updateCategories(with newlist: Set<String>) {
+        storeService.addCategoriesToStore(newlist: newlist)
         var existingCategories: Set<String> = []
         
         for item in categories {
@@ -143,6 +144,7 @@ final class TrackersViewController: UIViewController {
     
     // добавляем новую запись в массив выполненных трекеров
     func addNew(record: TrackerRecord) {
+        storeService.addTrackerRecordToStore(record: record)
         completedTrackers.append(record)
     }
     
@@ -494,6 +496,7 @@ extension TrackersViewController: TrackersCVCellDelegate {
         case true:
             addNew(record: TrackerRecord(id: trackerID, date: selectedDate))
         case false:
+            storeService.deleteRecordFromStore(record: TrackerRecord(id: trackerID, date: selectedDate))
             completedTrackers.removeAll {record in
                 record.id == trackerID && isSameDate(trackerDate: record.date)
             }

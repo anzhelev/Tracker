@@ -10,16 +10,12 @@ import CoreData
 
 final class TrackerStore {
     
+    private weak var delegate: StoreService?
     private let context: NSManagedObjectContext
-    private let storeService = StoreService.storeService
     
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
-    
-    convenience init() {
-        let context = StoreService.storeService.persistentContainer.viewContext
-        self.init(context: context)
+    init(delegate: StoreService) {
+        self.delegate = delegate
+        self.context = delegate.context
     }
     
     func addToStore(_ tracker: Tracker) -> TrackerCoreData {
@@ -29,9 +25,7 @@ final class TrackerStore {
         trackerCoreData.name = tracker.name
         trackerCoreData.color = Int16(tracker.color ?? 0)
         trackerCoreData.emoji = Int16(tracker.emoji ?? 0)
-        if let schedule = tracker.schedule {
-            trackerCoreData.daysOfWeek = NSSet(set: schedule)
-        }
+        trackerCoreData.schedule = tracker.schedule.asString
         return trackerCoreData
     }
 }

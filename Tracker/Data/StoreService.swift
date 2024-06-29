@@ -10,18 +10,22 @@ import CoreData
 
 final class StoreService {
     // MARK: - Public Properties
-    static let storeService = StoreService()
-    let persistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    let appDelegate: AppDelegate
+    let context: NSManagedObjectContext
+
     
     // MARK: - Private Properties
     private (set) var categories: [TrackerCategory] = []
     private (set) var completedTrackers: [TrackerRecord] = []
-    private let categoryStore = CategoryStore()
-    private let trackerStore = TrackerStore()
-    private let trackerRecordStore = TrackerRecordStore()
+    private lazy var trackerStore: TrackerStore = TrackerStore(delegate: self)
+    private lazy var categoryStore: CategoryStore = CategoryStore(delegate: self)
+    private lazy var trackerRecordStore: TrackerRecordStore = TrackerRecordStore(delegate: self)
     
     // MARK: - Initializers
-    private init() {}
+    init() {
+        appDelegate = UIApplication.shared.delegate as! AppDelegate
+        context = appDelegate.persistentContainer.viewContext
+    }
     
     // MARK: - Public Methods
     /// запрашиваем все сохраненные категории
@@ -65,7 +69,6 @@ final class StoreService {
     }
     
     func saveContext() {
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
-    }
-    
+        appDelegate.saveContext()
+    }    
 }

@@ -10,17 +10,12 @@ import CoreData
 
 final class CategoryStore {
     
+    private weak var delegate: StoreService?
     private let context: NSManagedObjectContext
-    private let storeService = StoreService.storeService
     
-
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
-    
-    convenience init() {
-        let context = StoreService.storeService.persistentContainer.viewContext
-        self.init(context: context)
+    init(delegate: StoreService) {
+        self.delegate = delegate
+        self.context = delegate.context
     }
     
     func fetchCategories() -> [TrackerCategory] {
@@ -46,7 +41,7 @@ final class CategoryStore {
                                             name: tracker.name,
                                             color: Int(tracker.color),
                                             emoji: Int(tracker.emoji),
-                                            schedule: tracker.daysOfWeek as? Set<Int> 
+                                            schedule: tracker.schedule?.asSetOfInt
                                            )
                     )
                 }
@@ -63,7 +58,7 @@ final class CategoryStore {
         
         categoryCoreData.category = title
         categoryCoreData.trackers = []
-        storeService.saveContext()
+        delegate?.saveContext()
     }
     
     func storeCategoryWithTracker(category title: String, tracker: TrackerCoreData) {
@@ -77,6 +72,6 @@ final class CategoryStore {
         }
         
         categoryCoreData[0].addToTrackers(tracker)
-        storeService.saveContext()
+        delegate?.saveContext()
     }
 }
