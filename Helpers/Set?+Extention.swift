@@ -4,7 +4,6 @@
 //
 //  Created by Andrey Zhelev on 29.06.2024.
 //
-
 import Foundation
 
 extension Set<Int>? {
