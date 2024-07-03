@@ -26,6 +26,6 @@ enum Colors {
     static var grayCellsSeparator: UIColor {UIColor(named: "YP Table Cells Separator (Alpha 80)") ?? UIColor.gray}
     /// gray color for tab bar separator
     static var grayTabBarSeparator: UIColor {UIColor(named: "YP Tab Bar Separator (Alpha 30)") ?? UIColor.lightGray}
-    /// semi transparent circle for emojis
+    /// semi transparent circle ror emojis
     static var whiteEmojiCircle: UIColor {UIColor(named: "Emoji Circle (Alpha 30)") ?? UIColor.clear}
 }

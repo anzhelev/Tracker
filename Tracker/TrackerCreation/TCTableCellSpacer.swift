@@ -8,6 +8,12 @@ import UIKit
 
 final class TCTableCellSpacer: UITableViewCell {
     
+    // MARK: - Public Properties
+
+    
+    // MARK: - Private Properties
+    
+    
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -20,23 +26,27 @@ final class TCTableCellSpacer: UITableViewCell {
     }
     
     // MARK: - Public Methods
-    func configure(new cell: CellParams) {
-        
-        switch cell.rounded {
-        case .top:
-            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        case .bottom:
-            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner,]
-        case .all:
-            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner, .layerMaxXMinYCorner]
-        case .none:
-            self.layer.maskedCorners = []
+        func configure(new cell: CellParams) {
+ 
+            switch cell.rounded {
+            case .top:
+                self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            case .bottom:
+                self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner,]
+            case .all:
+                self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner, .layerMaxXMinYCorner]
+            case .none:
+                self.layer.maskedCorners = []
+            }
+            
+            switch cell.separator {
+                
+            case true:
+                separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            case false:
+                separatorInset = UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
+            }
         }
-        
-        separatorInset = cell.separator
-        ? UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        : UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
-    }
     
     // MARK: - Private Methods
     private func setUIElements() {

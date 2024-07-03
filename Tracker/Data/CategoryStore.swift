@@ -4,8 +4,9 @@
 //
 //  Created by Andrey Zhelev on 27.06.2024.
 //
-import CoreData
+
 import UIKit
+import CoreData
 
 final class CategoryStore {
     

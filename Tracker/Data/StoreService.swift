@@ -4,8 +4,9 @@
 //
 //  Created by Andrey Zhelev on 27.06.2024.
 //
-import CoreData
+
 import UIKit
+import CoreData
 
 protocol StoreServiceDelegate: AnyObject {
     func updateTrackersCollectionView()
@@ -53,7 +54,7 @@ final class StoreService: NSObject {
         controller.delegate = self
         return  controller
     }()
-    
+
     // MARK: - Initializers
     init(delegate: StoreServiceDelegate?) {
         super.init()
@@ -75,7 +76,7 @@ final class StoreService: NSObject {
         let searchText = searchBarText?.lowercased() ?? ""
         
         let searchPredicate = searchText == "" ? NSPredicate(format: "TRUEPREDICATE") :
-        NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(TrackerCoreData.name), searchText)
+            NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(TrackerCoreData.name), searchText)
         
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, searchPredicate])
         
@@ -99,12 +100,10 @@ final class StoreService: NSObject {
     
     /// добавляем новый трекер в базу
     func addTrackerToStore(tracker: Tracker, eventDate: Date?, to category: String) {
-        categoryStore.storeCategoryWithTracker(
-            category: category,
-            tracker: trackerStore.addToStore(
-                tracker: tracker,
-                eventDate: eventDate
-            )
+        categoryStore.storeCategoryWithTracker(category: category,
+                                               tracker: trackerStore.addToStore(tracker: tracker,
+                                                                                eventDate: eventDate
+                                                                               )
         )
         fetchCategoryList()
         delegate?.updateStub()
@@ -116,7 +115,7 @@ final class StoreService: NSObject {
         
         for item in newCategories {
             categoryStore.storeCategory(category: item)
-        }
+        }        
     }
     
     /// добавляем новую запись о выполненном трекере в базу
@@ -149,7 +148,6 @@ final class StoreService: NSObject {
     }
 }
 
-// MARK: - NSFetchedResultsControllerDelegate
 extension StoreService: NSFetchedResultsControllerDelegate {
     
     var filteredTrackersCount: Int {

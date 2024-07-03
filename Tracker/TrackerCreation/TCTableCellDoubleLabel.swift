@@ -52,9 +52,12 @@ final class TCTableCellDoubleLabel: UITableViewCell {
             self.layer.maskedCorners = []
         }
         
-        separatorInset = cell.separator
-        ? UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        : UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
+        switch cell.separator {
+        case true:
+            separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        case false:
+            separatorInset = UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
+        }
         
         if cell.value != nil && valueLabel.text == nil {
             self.centerYAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rowSpacing/2).isActive = true

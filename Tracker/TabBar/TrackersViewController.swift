@@ -4,6 +4,7 @@
 //
 //  Created by Andrey Zhelev on 04.05.2024.
 //
+import Foundation
 import UIKit
 
 final class TrackersViewController: UIViewController {

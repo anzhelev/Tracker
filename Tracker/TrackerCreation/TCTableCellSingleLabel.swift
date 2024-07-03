@@ -8,6 +8,9 @@ import UIKit
 
 final class TCTableCellSingleLabel: UITableViewCell {
     
+    // MARK: - Public Properties
+    
+    
     // MARK: - Private Properties
     private lazy var singleLabel: UILabel = {
         let label = UILabel()
@@ -49,10 +52,14 @@ final class TCTableCellSingleLabel: UITableViewCell {
         case .none:
             self.layer.maskedCorners = []
         }
- 
-        separatorInset = cell.separator
-        ? UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        : UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
+        
+        switch cell.separator {
+            
+        case true:
+            separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        case false:
+            separatorInset = UIEdgeInsets(top: 0, left: self.bounds.midX, bottom: 0, right: self.bounds.midX)
+        }
         
         if warningIsShown {
              singleLabel.text = cell.title
