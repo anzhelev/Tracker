@@ -118,7 +118,7 @@ final class TrackerCreationVC: UIViewController {
     }
     
     @objc private func createButtonPressed() {
-        self.delegate?.updateCategories(with: categories)
+        self.delegate?.storeService.addCategoriesToStore(newlist: categories)
         let tracker = Tracker(id: UUID(),
                               name: self.newTrackerTitle ?? "б/н",
                               color: (self.newTrackerColor ?? 0) + 1,
@@ -127,14 +127,15 @@ final class TrackerCreationVC: UIViewController {
         )
         
         if let category = self.newTrackerCategory {
-            self.delegate?.addNew(tracker: tracker, to: category)
+            let date = delegate?.selectedDate.short ?? Date().short
+            if newTrackerType == .event {
+                self.delegate?.storeService.addTrackerRecordToStore(record: TrackerRecord(id: tracker.id, date: date))
+            }
+            self.delegate?.storeService.addTrackerToStore(tracker: tracker,
+                                                          eventDate: newTrackerType == .event ? date : nil ,
+                                                          to: category
+            )
         }
-        
-        if newTrackerType == .event,
-           let date = delegate?.selectedDate {
-            delegate?.addNew(record: TrackerRecord(id: tracker.id, date: date))
-        }
-        delegate?.filterCategories()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
@@ -152,11 +153,7 @@ final class TrackerCreationVC: UIViewController {
     
     // MARK: - Private Methods
     private func getCategoriesList() {
-        var categories: Set<String> = []
-        self.delegate?.categories.forEach{
-            categories.insert($0.category)
-        }
-        self.categories = categories
+        self.categories = delegate?.storeService.categoryList ?? []
     }
     
     private func setTitle(for tracker : TrackerType) {

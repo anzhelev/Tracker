@@ -87,7 +87,7 @@ final class CategoryVC: UIViewController {
         self.view.addSubview(stubView)
         self.stubView = stubView
         
-        let image = UIImage(named: "tabTrackersImage")
+        let image = UIImage(named: "stubImageForTrackers")
         let stubImageView = UIImageView(image: image)
         stubImageView.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubImageView)
@@ -134,6 +134,7 @@ final class CategoryVC: UIViewController {
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
         categoriesTableView.backgroundColor = Colors.white
+        categoriesTableView.showsVerticalScrollIndicator = false
         categoriesTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         categoriesTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(categoriesTableView)

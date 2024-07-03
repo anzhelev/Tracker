@@ -18,41 +18,24 @@ final class CategoryStore {
         self.context = delegate.context
     }
     
-    func fetchCategories() -> [TrackerCategory] {
+    func fetchCategoryList() -> Set <String> {
         
         let request = NSFetchRequest<CategoryCoreData>(entityName: "CategoryCoreData")
-        
         guard let storedCategories = try? context.fetch(request) else {
             print("@@@ func fetchCategories: Сохраненные категории отсутствуют")
             return []
         }
         
-        let categories: [TrackerCategory] = storedCategories.map {item in
-            guard let category = item.category else {
-                fatalError("@@@ func fetchCategories: Ошибка получения названия категории")
-            }
-            
-            var trackers: [Tracker] = []
-            
-            if let storedTrackers = item.trackers {
-                storedTrackers.forEach {
-                let tracker = $0 as AnyObject
-                    trackers.append(Tracker(id: tracker.id ?? UUID(),
-                                            name: tracker.name,
-                                            color: Int(tracker.color),
-                                            emoji: Int(tracker.emoji),
-                                            schedule: tracker.schedule?.asSetOfInt
-                                           )
-                    )
-                }
-            }
-            return TrackerCategory(category: category,
-                                   trackers: trackers)
-        }
+        var categories: Set <String> = []
         
+        storedCategories.forEach {item in
+            if let category = item.category {
+                categories.insert(category)
+            }
+        }
         return categories
     }
-    
+
     func storeCategory(category title: String) {
         let categoryCoreData = CategoryCoreData(context: context)
         
@@ -70,8 +53,7 @@ final class CategoryStore {
             print("@@@ func storeCategoryWithTracker: Ошибка получения категории для сохранения нового трекера")
             return
         }
-        
-        categoryCoreData[0].addToTrackers(tracker)
+        tracker.category = categoryCoreData[0]
         delegate?.saveContext()
     }
 }
