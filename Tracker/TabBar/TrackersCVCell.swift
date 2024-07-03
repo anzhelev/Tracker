@@ -19,7 +19,6 @@ final class TrackersCVCell: UICollectionViewCell {
     private var mainView = UIView()
     private var titleLabel = UITextView()
     private var emojiView = UIImageView()
-//    private var emoji = UIImage(named: "emoji1")  //🙂
     private var dayCounLabel = UILabel()
     private var completeButton = UIButton()
     private var completeButtonBGView = UIView()

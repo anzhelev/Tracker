@@ -6,10 +6,14 @@
 //
 import UIKit
 
+protocol CategoryVCDelegate: AnyObject {
+    func updateNewTrackerCategory(newTrackerCategory: String?, categories: Set<String>)
+}
+
 final class CategoryVC: UIViewController {
     
     // MARK: - Public Properties
-    weak var delegate: NewTrackerCreationVC?
+    weak var delegate: CategoryVCDelegate?
     var categories: Set<String> = [] {
         didSet {
             updateTableView()
@@ -25,9 +29,9 @@ final class CategoryVC: UIViewController {
     private var categoryCreationButton = UIButton()
     
     // MARK: - Initializers
-    init(delegate: NewTrackerCreationVC, categories: Set<String>) {
+    init(delegate: TrackerCreationVC, categories: Set<String>, newTrackerCategory: String?) {
         self.delegate = delegate
-        selectedCategory = delegate.newTrackerCategory
+        selectedCategory = newTrackerCategory
         self.categories = categories
         
         super.init(nibName: nil, bundle: nil)
@@ -83,7 +87,7 @@ final class CategoryVC: UIViewController {
         self.view.addSubview(stubView)
         self.stubView = stubView
         
-        let image = UIImage(named: "tabTrackersImage")
+        let image = UIImage(named: "stubImageForTrackers")
         let stubImageView = UIImageView(image: image)
         stubImageView.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubImageView)
@@ -130,6 +134,7 @@ final class CategoryVC: UIViewController {
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
         categoriesTableView.backgroundColor = Colors.white
+        categoriesTableView.showsVerticalScrollIndicator = false
         categoriesTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         categoriesTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(categoriesTableView)
@@ -236,8 +241,7 @@ extension CategoryVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = categoriesTableView.cellForRow(at: indexPath)
         cell?.contentView.subviews.last?.isHidden = false
-        self.delegate?.newTrackerCategory = categories.sorted()[indexPath.row]
-        self.delegate?.categories = categories
+        self.delegate?.updateNewTrackerCategory(newTrackerCategory: categories.sorted()[indexPath.row], categories: categories)
         self.dismiss(animated: true)
     }
     

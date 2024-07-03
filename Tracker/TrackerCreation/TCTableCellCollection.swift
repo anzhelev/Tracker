@@ -1,19 +1,19 @@
 //
-//  NTCTableCellwithCollection.swift
+//  TCTableCellCollection.swift
 //  Tracker
 //
 //  Created by Andrey Zhelev on 28.05.2024.
 //
 import UIKit
 
-protocol NTCTableCellwithCollectionDelegate: AnyObject {
+protocol TCTableCellCollectionDelegate: AnyObject {
     func updateNewTracker(dataType: CellID, value: Int?)
 }
 
-final class NTCTableCellwithCollection: UITableViewCell {
+final class TCTableCellCollection: UITableViewCell {
     
     // MARK: - Public Properties
-    weak var delegate: NTCTableCellwithCollectionDelegate?
+    weak var delegate: TCTableCellCollectionDelegate?
     
     
     // MARK: - Private Properties
@@ -40,7 +40,7 @@ final class NTCTableCellwithCollection: UITableViewCell {
     }
     
     // MARK: - Public Methods
-    func configure(new cell: MainTableCellParams, with selectedItem: Int?) {
+    func configure(new cell: CellParams, with selectedItem: Int?) {
         headerTitle = cell.title
         cellHeight = cell.cellHeight
         selectedCell = selectedItem
@@ -91,7 +91,7 @@ final class NTCTableCellwithCollection: UITableViewCell {
 }
 
 // MARK: - UICollectionViewDataSource
-extension NTCTableCellwithCollection: UICollectionViewDataSource {
+extension TCTableCellCollection: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 18
@@ -129,7 +129,7 @@ extension NTCTableCellwithCollection: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension NTCTableCellwithCollection: UICollectionViewDelegateFlowLayout {
+extension TCTableCellCollection: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
@@ -150,7 +150,7 @@ extension NTCTableCellwithCollection: UICollectionViewDelegateFlowLayout {
 }
 
 // MARK: - UICollectionViewDelegate
-extension NTCTableCellwithCollection: UICollectionViewDelegate {
+extension TCTableCellCollection: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch selectedCell {
