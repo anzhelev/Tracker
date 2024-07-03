@@ -4,9 +4,8 @@
 //
 //  Created by Andrey Zhelev on 26.06.2024.
 //
-
-import UIKit
 import CoreData
+import UIKit
 
 final class TrackerStore {
     
