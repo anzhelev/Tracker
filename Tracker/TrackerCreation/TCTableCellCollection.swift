@@ -15,7 +15,6 @@ final class TCTableCellCollection: UITableViewCell {
     // MARK: - Public Properties
     weak var delegate: TCTableCellCollectionDelegate?
     
-    
     // MARK: - Private Properties
     private var collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var headerTitle: String = ""
@@ -56,13 +55,7 @@ final class TCTableCellCollection: UITableViewCell {
             collection.register(ColorCollectionCell.self, forCellWithReuseIdentifier: CellReuseID.color.rawValue)
         default:
             return
-        }
-        
-    }
-    
-    // MARK: - IBAction
-    @objc private func completeButtonAction() {
-        
+        }        
     }
     
     // MARK: - Private Methods
