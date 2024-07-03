@@ -56,13 +56,7 @@ final class TCTableCellCollection: UITableViewCell {
             collection.register(ColorCollectionCell.self, forCellWithReuseIdentifier: CellReuseID.color.rawValue)
         default:
             return
-        }
-        
-    }
-    
-    // MARK: - IBAction
-    @objc private func completeButtonAction() {
-        
+        }        
     }
     
     // MARK: - Private Methods
