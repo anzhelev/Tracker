@@ -67,6 +67,7 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     @objc private func welcomeButtonButtonPressed() {
+        UserDefaults.standard.set(true, forKey: "skipOnboarding")
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
         window.rootViewController = TabBarController()
     }
