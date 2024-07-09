@@ -22,6 +22,8 @@ final class OnboardingViewController: UIPageViewController {
                 vc.view = bgView
             }
             setlabels(on: vc, with: labels[0])
+            setButtonView(on: vc)
+            
             return vc
         }
         
@@ -32,6 +34,8 @@ final class OnboardingViewController: UIPageViewController {
                 vc.view = bgView
             }
             setlabels(on: vc, with: labels[1])
+            setButtonView(on: vc)
+            
             return vc
         }
         
@@ -58,8 +62,8 @@ final class OnboardingViewController: UIPageViewController {
             setViewControllers([first], direction: .forward, animated: true, completion: nil)
         }
         
-        setButton()
         setPageControl()
+        setButton(on: self)
     }
     
     @objc private func welcomeButtonButtonPressed() {
@@ -67,24 +71,34 @@ final class OnboardingViewController: UIPageViewController {
         window.rootViewController = TabBarController()
     }
     
-    private func setButton() {
-        
-        let welcomeButton = UIButton()
-        welcomeButton.addTarget(self, action: #selector(welcomeButtonButtonPressed), for: .touchUpInside)
-        welcomeButton.backgroundColor = Colors.black
-        welcomeButton.setTitle("Вот это технологии!", for: .normal)
-        welcomeButton.titleLabel?.font = Fonts.SFPro16Semibold
-        welcomeButton.setTitleColor(Colors.white, for: .normal)
-        welcomeButton.layer.masksToBounds = true
-        welcomeButton.layer.cornerRadius = 16
-        welcomeButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(welcomeButton)
+    private func setButtonView(on vc: UIViewController) {
+        let buttonView = UILabel()
+        buttonView.backgroundColor = Colors.black
+        buttonView.text = "Вот это технологии!"
+        buttonView.font = Fonts.SFPro16Semibold
+        buttonView.textColor = Colors.white
+        buttonView.textAlignment = .center
+        setPosition(for: buttonView, on: vc)
+    }
+    
+    private func setButton(on vc: UIViewController) {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(self.welcomeButtonButtonPressed), for: .touchUpInside)
+        button.backgroundColor = .none
+        setPosition(for: button, on: vc)
+    }
+    
+    private func setPosition(for button: UIView, on vc: UIViewController) {
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 16
+        button.translatesAutoresizingMaskIntoConstraints = false
+        vc.view.addSubview(button)
         
         NSLayoutConstraint.activate([
-            welcomeButton.heightAnchor.constraint(equalToConstant: 60),
-            welcomeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
-            welcomeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            welcomeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+            button.heightAnchor.constraint(equalToConstant: 60),
+            button.bottomAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            button.leadingAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            button.trailingAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
     }
     
