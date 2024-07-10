@@ -6,10 +6,15 @@
 //
 import UIKit
 
+protocol CategoryCreationVCDelegate: AnyObject {
+   func addNewCategory(category: String)
+}
+
+
 final class CategoryCreationVC: UIViewController {
     
     // MARK: - Public Properties
-    weak var delegate: CategoryVC?
+    weak var delegate: CategoryCreationVCDelegate?
     
     // MARK: - Private Properties
     private var doneButton = UIButton()
@@ -17,7 +22,7 @@ final class CategoryCreationVC: UIViewController {
     private var minimumTitleLength = 1
     
     // MARK: - Initializers
-    init(delegate: CategoryVC) {
+    init(delegate: CategoryCreationVCDelegate) {
         self.delegate = delegate
         
         super.init(nibName: nil, bundle: nil)
@@ -37,7 +42,7 @@ final class CategoryCreationVC: UIViewController {
     // MARK: - IBAction
     @objc private func categoryCreationButtonPressed() {
         if let newCaterory = titleTextField.text {
-            self.delegate?.categories.insert(newCaterory)
+            self.delegate?.addNewCategory(category: newCaterory)
             self.dismiss(animated: true)
         }
     }
