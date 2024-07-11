@@ -20,10 +20,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func setRootVC() -> UIViewController {
-        let vc = UserDefaults.standard.object(forKey: "skipOnboarding") as? Bool ?? false
+        let shouldSkipOnboarding = UserDefaults.standard.bool(forKey: "skipOnboarding")
+        
+        return shouldSkipOnboarding
         ? TabBarController()
         : OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-        return vc
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

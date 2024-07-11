@@ -4,7 +4,6 @@
 //
 //  Created by Andrey Zhelev on 10.07.2024.
 //
-
 import UIKit
 
 struct CategoryTableCellParams {

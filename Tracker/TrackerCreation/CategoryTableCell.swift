@@ -32,7 +32,7 @@ final class CategoryTableCell: UITableViewCell {
         case .top:
             self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         case .bottom:
-            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner,]
+            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         case .all:
             self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner, .layerMaxXMinYCorner]
         case .none:
@@ -48,7 +48,6 @@ final class CategoryTableCell: UITableViewCell {
         
     // MARK: - Private Methods
     private func setUIElements() {
-        //        self.contentView.subviews.forEach { $0.removeFromSuperview() }
         self.selectionStyle = .none
         self.backgroundColor = Colors.grayCellBackground
         self.layer.masksToBounds = true

@@ -39,7 +39,6 @@ final class StoreService: NSObject {
         controller.delegate = self
         
         setRecordsFetchedResultsController()
-        print (1)
         return  controller
     }()
     
@@ -54,7 +53,6 @@ final class StoreService: NSObject {
             cacheName: nil
         )
         controller.delegate = self
-        print(2)
         return  controller
     }()
     

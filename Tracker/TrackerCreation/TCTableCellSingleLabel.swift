@@ -43,7 +43,7 @@ final class TCTableCellSingleLabel: UITableViewCell {
         case .top:
             self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         case .bottom:
-            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner,]
+            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         case .all:
             self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner, .layerMaxXMinYCorner]
         case .none:

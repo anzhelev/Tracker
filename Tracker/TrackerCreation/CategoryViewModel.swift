@@ -4,8 +4,8 @@
 //
 //  Created by Andrey Zhelev on 10.07.2024.
 //
-
 import Foundation
+
 protocol CategoryViewModelDelegate: AnyObject {
     func updateNewTrackerCategory(newTrackerCategory: String?)
 }
@@ -49,10 +49,11 @@ final class CategoryViewModel {
             separator.toggle()
         }
         
-        return CategoryTableCellParams(title: self.categoryList[row],
-                                       corners: corners,
-                                       separator: separator,
-                                       isSelected: self.categoryList[row] == selectedCategory)
+        return CategoryTableCellParams(
+            title: self.categoryList[row],
+            corners: corners,
+            separator: separator,
+            isSelected: self.categoryList[row] == selectedCategory)
     }
     
     func updateSelectedCategory(with index: IndexPath) {
@@ -69,6 +70,7 @@ final class CategoryViewModel {
         categoryListDidUpdate?(true)
     }
 }
+
 // MARK: - CategoryCreationVCDelegate
 extension CategoryViewModel: CategoryCreationVCDelegate {
     func addNewCategory(category: String) {
