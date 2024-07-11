@@ -12,5 +12,6 @@ enum Fonts {
     static let SFPro17Regular = UIFont.systemFont(ofSize: 17, weight: .regular)
     static let SFPro17Semibold = UIFont.systemFont(ofSize: 17, weight: .semibold)
     static let SFPro19Bold = UIFont.systemFont(ofSize: 19, weight: .bold)
+    static let SFPro32Bold = UIFont.systemFont(ofSize: 32, weight: .bold)
     static let SFPro34Bold = UIFont.systemFont(ofSize: 34, weight: .bold)
 }

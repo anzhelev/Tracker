@@ -37,6 +37,8 @@ final class StoreService: NSObject {
             cacheName: nil
         )
         controller.delegate = self
+        
+        setRecordsFetchedResultsController()
         return  controller
     }()
     
@@ -60,7 +62,7 @@ final class StoreService: NSObject {
         self.delegate = delegate
         getStoredRecords()
         fetchCategoryList()
-        setRecordsFetchedResultsController()
+//        setRecordsFetchedResultsController()
     }
     
     // MARK: - Public Methods
@@ -119,6 +121,10 @@ final class StoreService: NSObject {
         }
     }
     
+    func fetchCategoryList() {
+        self.categoryList = categoryStore.fetchCategoryList()
+    }
+    
     /// добавляем новую запись о выполненном трекере в базу
     func addTrackerRecordToStore(record: TrackerRecord) {
         trackerRecordStore.storeRecord(record: record)
@@ -142,10 +148,6 @@ final class StoreService: NSObject {
         } catch {
             print("@@@ private lazy var recordsFetchedResultsController: Ошибка выполнения запроса.")
         }
-    }
-    
-    private func fetchCategoryList() {
-        self.categoryList = categoryStore.fetchCategoryList()
     }
 }
 

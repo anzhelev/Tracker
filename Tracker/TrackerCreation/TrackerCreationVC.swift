@@ -74,8 +74,6 @@ final class TrackerCreationVC: UIViewController {
         }
     }
     
-    var categories: Set<String> = []
-    
     // MARK: - Private Properties
     private var mainTable = UITableView()
     private var mainTableCells: [CellParams] = []
@@ -105,7 +103,6 @@ final class TrackerCreationVC: UIViewController {
         
         view.backgroundColor = Colors.white
         
-        getCategoriesList()
         setTitle(for: newTrackerType)
         setButtons()
         updateButtonState()
@@ -118,7 +115,6 @@ final class TrackerCreationVC: UIViewController {
     }
     
     @objc private func createButtonPressed() {
-        self.delegate?.storeService.addCategoriesToStore(newlist: categories)
         let tracker = Tracker(id: UUID(),
                               name: self.newTrackerTitle ?? "б/н",
                               color: (self.newTrackerColor ?? 0) + 1,
@@ -140,7 +136,7 @@ final class TrackerCreationVC: UIViewController {
     }
     
     private func switchToCategoryVC() {
-        let vc = CategoryVC(delegate: self, categories: self.categories, newTrackerCategory: self.newTrackerCategory)
+        let vc = CategoryVC(delegate: self, newTrackerCategory: self.newTrackerCategory)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
@@ -152,10 +148,6 @@ final class TrackerCreationVC: UIViewController {
     }
     
     // MARK: - Private Methods
-    private func getCategoriesList() {
-        self.categories = delegate?.storeService.categoryList ?? []
-    }
-    
     private func setTitle(for tracker : TrackerType) {
         let titleLabel = UILabel()
         titleLabel.text = tracker == .habit ? "Новая привычка" : "Новое нерегулярное событие"
@@ -366,10 +358,10 @@ extension TrackerCreationVC: TCTableCellTextInputDelegate {
 }
 
 // MARK: - CategoryVCDelegate
-extension TrackerCreationVC: CategoryVCDelegate {
-    func updateNewTrackerCategory(newTrackerCategory: String?, categories: Set<String>) {
+extension TrackerCreationVC: CategoryViewModelDelegate {
+    func updateNewTrackerCategory(newTrackerCategory: String?) {
+        print("обновили категорию")
         self.newTrackerCategory = newTrackerCategory
-        self.categories = categories
     }
 }
 

@@ -1,38 +1,31 @@
 //
-//  CategorySetVC.swift
+//  CategoryVC.swift
 //  Tracker
 //
-//  Created by Andrey Zhelev on 17.05.2024.
+//  Created by Andrey Zhelev on 10.07.2024.
 //
 import UIKit
 
-protocol CategoryVCDelegate: AnyObject {
-    func updateNewTrackerCategory(newTrackerCategory: String?, categories: Set<String>)
+struct CategoryTableCellParams {
+    let title: String
+    let corners: RoundedCorners
+    let separator: Bool
+    var isSelected: Bool
 }
 
 final class CategoryVC: UIViewController {
     
-    // MARK: - Public Properties
-    weak var delegate: CategoryVCDelegate?
-    var categories: Set<String> = [] {
-        didSet {
-            updateTableView()
-            updateStub()
-        }
-    }
-    
     // MARK: - Private Properties
+    private var viewModel: CategoryViewModel
     private var titleLabel = UILabel()
     private var stubView = UIView()
-    private var selectedCategory: String?
     private let categoriesTableView = UITableView()
     private var categoryCreationButton = UIButton()
     
+    
     // MARK: - Initializers
-    init(delegate: TrackerCreationVC, categories: Set<String>, newTrackerCategory: String?) {
-        self.delegate = delegate
-        selectedCategory = newTrackerCategory
-        self.categories = categories
+    init(delegate: TrackerCreationVC, newTrackerCategory: String?) {
+        self.viewModel = CategoryViewModel(delegate: delegate, selectedCategory: newTrackerCategory)
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -46,21 +39,33 @@ final class CategoryVC: UIViewController {
         super.viewDidLoad()
         
         configureUIElements()
+        bind()
     }
     
     // MARK: - IBAction
     @objc private func categoryCreationButtonPressed() {
-        let vc = CategoryCreationVC(delegate: self)
+        let vc = CategoryCreationVC(delegate: viewModel)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
     
     // MARK: - Private Methods
+    private func bind() {
+        viewModel.categoryListDidUpdate = {[weak self] _ in
+            self?.updateStub()
+            self?.updateTableView()
+        }
+        
+        viewModel.selectedCategoryDidUpdate = {[weak self] _ in
+            self?.dismissVC()
+        }
+    }
+    
     private func configureUIElements() {
         view.backgroundColor = Colors.white
         setTitle()
-        setStubImage()
         setTableView()
+        setStubImage()
         updateStub()
         setButton()
     }
@@ -84,8 +89,7 @@ final class CategoryVC: UIViewController {
         let stubView = UIView()
         stubView.backgroundColor = .none
         stubView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(stubView)
-        self.stubView = stubView
+        view.addSubview(stubView)
         
         let image = UIImage(named: "stubImageForTrackers")
         let stubImageView = UIImageView(image: image)
@@ -106,6 +110,8 @@ final class CategoryVC: UIViewController {
         label2.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(label2)
         
+        self.stubView = stubView
+        
         NSLayoutConstraint.activate([
             stubView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stubView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -125,12 +131,11 @@ final class CategoryVC: UIViewController {
     }
     
     private func updateStub() {
-        self.stubView.isHidden = !self.categories.isEmpty
-        self.categoriesTableView.isHidden = self.categories.isEmpty
+        self.stubView.isHidden = !viewModel.stubIsHidden
     }
     
     private func setTableView() {
-        categoriesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        categoriesTableView.register(CategoryTableCell.self, forCellReuseIdentifier: "cell")
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
         categoriesTableView.backgroundColor = Colors.white
@@ -145,50 +150,6 @@ final class CategoryVC: UIViewController {
             categoriesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             categoriesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
-    }
-    
-    private func configure(new cell: UITableViewCell, for row: Int) {
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-        cell.backgroundColor = Colors.grayCellBackground
-        cell.layer.masksToBounds = true
-        cell.selectionStyle = .none
-        cell.layer.cornerRadius = 16
-        cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
-        if self.categories.count == 1 {
-            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.midX, bottom: 0, right: cell.bounds.midX)
-        } else if row == 0 {
-            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        } else if row == self.categories.count - 1 {
-            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.midX, bottom: 0, right: cell.bounds.midX)
-        } else {
-            cell.layer.maskedCorners = []
-        }
-        
-        let label = UILabel()
-        label.text = categories.sorted()[row]
-        label.textColor = Colors.black
-        label.font = Fonts.SFPro17Regular
-        label.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(label)
-        
-        
-        let image = UIImage(named: "checksign")
-        let checkMarkImageView = UIImageView(image: image)
-        checkMarkImageView.tintColor = Colors.blue
-        checkMarkImageView.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(checkMarkImageView)
-        
-        if label.text != self.selectedCategory {
-            checkMarkImageView.isHidden = true
-        }
-        
-        label.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 16).isActive = true
-        label.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
-        checkMarkImageView.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
-        checkMarkImageView.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -21).isActive = true
     }
     
     private func setButton() {
@@ -215,19 +176,28 @@ final class CategoryVC: UIViewController {
     private func updateTableView() {
         categoriesTableView.reloadData()
     }
+    
+    private func dismissVC() {
+        self.dismiss(animated: true)
+    }
 }
 
 // MARK: - UITableViewDataSource
 extension CategoryVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return viewModel.categoryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        configure(new: cell, for: indexPath.row)
-        return cell
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CategoryTableCell {
+            
+            cell.configure(with: viewModel.getCellParams(for: indexPath.row))
+            
+            return cell
+        }
+        fatalError("Проблема с подготовкой ячейки")
     }
 }
 
@@ -239,14 +209,6 @@ extension CategoryVC: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = categoriesTableView.cellForRow(at: indexPath)
-        cell?.contentView.subviews.last?.isHidden = false
-        self.delegate?.updateNewTrackerCategory(newTrackerCategory: categories.sorted()[indexPath.row], categories: categories)
-        self.dismiss(animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let cell = categoriesTableView.cellForRow(at: indexPath)
-        cell?.contentView.subviews.last?.isHidden = true
+        viewModel.updateSelectedCategory(with: indexPath)
     }
 }
