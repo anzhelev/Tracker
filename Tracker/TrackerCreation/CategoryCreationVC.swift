@@ -58,7 +58,7 @@ final class CategoryCreationVC: UIViewController {
     
     private func setTitle() {
         let titleLabel = UILabel()
-        titleLabel.text = "Категория"
+        titleLabel.text = NSLocalizedString("trackerCreationVC.category", comment: "")
         titleLabel.font = Fonts.SFPro16Semibold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -79,7 +79,7 @@ final class CategoryCreationVC: UIViewController {
         view.addSubview(titleInputView)
         
         let titleTextField = UITextField()
-        titleTextField.placeholder = "Введите название категории"
+        titleTextField.placeholder = NSLocalizedString("trackerCreationVC.enterCategoryName", comment: "")
         titleTextField.clearButtonMode = .always
         titleTextField.textColor = Colors.black
         titleTextField.delegate = self
@@ -103,7 +103,7 @@ final class CategoryCreationVC: UIViewController {
         let doneButton = UIButton()
         doneButton.addTarget(self, action: #selector(categoryCreationButtonPressed), for: .touchUpInside)
         doneButton.backgroundColor = Colors.black
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(NSLocalizedString("buttons.done", comment: ""), for: .normal)
         doneButton.titleLabel?.font = Fonts.SFPro16Semibold
         doneButton.setTitleColor(Colors.white, for: .normal)
         doneButton.layer.masksToBounds = true

@@ -42,7 +42,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         view.backgroundColor = Colors.white
         
         let titleLabel = UILabel()
-        titleLabel.text = "Создание трекера"
+        titleLabel.text = NSLocalizedString("newTrackerTypeChoiceVC.title", comment: "")
         titleLabel.font = Fonts.SFPro16Semibold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +50,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         
         let newHabitCreationButton = UIButton()
         newHabitCreationButton.backgroundColor = Colors.black
-        newHabitCreationButton.setTitle("Привычка", for: .normal)
+        newHabitCreationButton.setTitle(NSLocalizedString("newTrackerTypeChoiceVC.habit", comment: ""), for: .normal)
         newHabitCreationButton.addTarget(self, action: #selector(createNewHabit), for: .touchUpInside)
         newHabitCreationButton.setTitleColor(Colors.white, for: .normal)
         newHabitCreationButton.titleLabel?.font = Fonts.SFPro16Semibold
@@ -61,7 +61,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         
         let newEventCreationButton = UIButton()
         newEventCreationButton.backgroundColor = Colors.black
-        newEventCreationButton.setTitle("Нерегулярное событие", for: .normal)
+        newEventCreationButton.setTitle(NSLocalizedString("newTrackerTypeChoiceVC.event", comment: ""), for: .normal)
         newEventCreationButton.addTarget(self, action: #selector(createNewEvent), for: .touchUpInside)
         newEventCreationButton.setTitleColor(Colors.white, for: .normal)
         newEventCreationButton.titleLabel?.font = Fonts.SFPro16Semibold

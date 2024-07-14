@@ -1,0 +1,45 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Andrey Zhelev on 14.07.2024.
+  
+*/
+
+"buttons.cancel" = "Cancel";
+"buttons.done" = "Done";
+"buttons.create" = "Create";
+
+"onboardingViewController.button" = "This is technology!";
+"onboardingViewController.view1.line1" = "Track only";
+"onboardingViewController.view1.line1" = "what you want";
+"onboardingViewController.view2.line1" = "Even if it's not";
+"onboardingViewController.view2.line2" = "liters of water and yoga";
+
+"trackersViewController.title" = "Trackers";
+"trackersViewController.searchBarPlaceholder" = "Search";
+"trackersViewController.stub.empty" = "What will we track?";
+"trackersViewController.stub.nothingFound" = "Nothing found";
+
+"statisticsViewController.title" = "Statistics";
+
+"newTrackerTypeChoiceVC.title" = "Tracker creation";
+"newTrackerTypeChoiceVC.habit" = "Habit";
+"newTrackerTypeChoiceVC.event" = "Event";
+
+"trackerCreationVC.habit.title" = "New habet";
+"trackerCreationVC.habit.schedule" = "Schedule";
+"trackerCreationVC.habit.schedule.everyDay" = "Every day";
+"trackerCreationVC.habit.schedule.daysOfWeek" = ""; // !!!!!!!!!
+
+"trackerCreationVC.event.title" = "New event";
+
+"trackerCreationVC.enterTrackerName" = "Enter tracker name";
+"trackerCreationVC.limit" = "38 characters allowed";
+"trackerCreationVC.category" = "Category";
+"trackerCreationVC.category.stub.line1" = "Habits and events can";
+"trackerCreationVC.category.stub.line2" = "be combined by meaning";
+"trackerCreationVC.addCategory" = "Add new category";
+"trackerCreationVC.enterCategoryName" = "Enter category name";
+"trackerCreationVC.emoji" = "Emoji";
+"trackerCreationVC.color" = "Color";

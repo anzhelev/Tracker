@@ -150,7 +150,9 @@ final class TrackerCreationVC: UIViewController {
     // MARK: - Private Methods
     private func setTitle(for tracker : TrackerType) {
         let titleLabel = UILabel()
-        titleLabel.text = tracker == .habit ? "Новая привычка" : "Новое нерегулярное событие"
+        titleLabel.text = tracker == .habit
+        ? NSLocalizedString("trackerCreationVC.habit.title", comment: "")
+        : NSLocalizedString("trackerCreationVC.event.title", comment: "")
         titleLabel.font = Fonts.SFPro16Semibold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -166,7 +168,7 @@ final class TrackerCreationVC: UIViewController {
         let cancelButton = UIButton()
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
         cancelButton.backgroundColor = Colors.white
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("buttons.cancel", comment: ""), for: .normal)
         cancelButton.titleLabel?.font = Fonts.SFPro16Semibold
         cancelButton.setTitleColor(Colors.red, for: .normal)
         cancelButton.clipsToBounds = true
@@ -181,7 +183,7 @@ final class TrackerCreationVC: UIViewController {
         let createButton = UIButton()
         createButton.addTarget(self, action: #selector(createButtonPressed), for: .touchUpInside)
         createButton.backgroundColor = Colors.grayDisabledButton
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(NSLocalizedString("buttons.create", comment: ""), for: .normal)
         createButton.titleLabel?.font = Fonts.SFPro16Semibold
         createButton.setTitleColor(Colors.white, for: .normal)
         createButton.layer.masksToBounds = true
@@ -220,17 +222,17 @@ final class TrackerCreationVC: UIViewController {
     
     
     private func configureMainTable(for tracker: TrackerType) {
-        self.mainTableCells.append(CellParams(id: .title, reuseID: .textInput, cellHeight: 75, rounded: .all, separator: false, title: "Введите название трекера"))
-        self.mainTableCells.append(CellParams(id: .warning, reuseID: .singleLabel, cellHeight: 0, rounded: .none, separator: false, title: "Ограничение 38 символов"))
+        self.mainTableCells.append(CellParams(id: .title, reuseID: .textInput, cellHeight: 75, rounded: .all, separator: false, title: NSLocalizedString("trackerCreationVC.enterTrackerName", comment: "")))
+        self.mainTableCells.append(CellParams(id: .warning, reuseID: .singleLabel, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.limit", comment: "")))
         self.mainTableCells.append(CellParams(id: .spacer, reuseID: .spacer, cellHeight: 24, rounded: .none, separator: false, title: ""))
         if tracker == .habit {
-            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .top, separator: true, title: "Категория"))
-            self.mainTableCells.append(CellParams(id: .schedule, reuseID: .doubleLabel, cellHeight: 75, rounded: .bottom, separator: false, title: "Расписание"))
+            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .top, separator: true, title: NSLocalizedString("trackerCreationVC.category", comment: "")))
+            self.mainTableCells.append(CellParams(id: .schedule, reuseID: .doubleLabel, cellHeight: 75, rounded: .bottom, separator: false, title: NSLocalizedString("trackerCreationVC.habit.schedule", comment: "")))
         } else {
-            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .all, separator: false, title: "Категория"))
+            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .all, separator: false, title: NSLocalizedString("trackerCreationVC.category", comment: "")))
         }
-        self.mainTableCells.append(CellParams(id: .emoji, reuseID: .collection, cellHeight: 0, rounded: .none, separator: false, title: "Emoji"))
-        self.mainTableCells.append(CellParams(id: .color, reuseID: .collection, cellHeight: 0, rounded: .none, separator: false, title: "Цвет"))
+        self.mainTableCells.append(CellParams(id: .emoji, reuseID: .collection, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.emoji", comment: "")))
+        self.mainTableCells.append(CellParams(id: .color, reuseID: .collection, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.color", comment: "")))
         
         mainTable.register(TCTableCellTextInput.self, forCellReuseIdentifier: ReuseID.textInput.rawValue)
         mainTable.register(TCTableCellSingleLabel.self, forCellReuseIdentifier: ReuseID.singleLabel.rawValue)
@@ -360,7 +362,6 @@ extension TrackerCreationVC: TCTableCellTextInputDelegate {
 // MARK: - CategoryVCDelegate
 extension TrackerCreationVC: CategoryViewModelDelegate {
     func updateNewTrackerCategory(newTrackerCategory: String?) {
-        print("обновили категорию")
         self.newTrackerCategory = newTrackerCategory
     }
 }

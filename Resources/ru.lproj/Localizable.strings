@@ -1,0 +1,45 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Andrey Zhelev on 14.07.2024.
+  
+*/
+
+"buttons.cancel" = "Отменить";
+"buttons.done" = "Готово";
+"buttons.create" = "Создать";
+
+"OnboardingViewController.button" = "Вот это технологии!";
+"OnboardingViewController.view1.line1" = "Отслеживайте только";
+"OnboardingViewController.view1.line1" = "то, что хотите";
+"OnboardingViewController.view2.line1" = "Даже если это";
+"OnboardingViewController.view2.line2" = "не литры воды и йога";
+
+"trackersViewController.title" = "Трекеры";
+"trackersViewController.searchBarPlaceholder" = "Поиск";
+"trackersViewController.stub.empty" = "Что будем отслеживать?";
+"trackersViewController.stub.nothingFound" = "Ничего не найдено";
+
+"statisticsViewController.title" = "Статистика";
+
+"newTrackerTypeChoiceVC.title" = "Создание трекера";
+"newTrackerTypeChoiceVC.habit" = "Привычка";
+"newTrackerTypeChoiceVC.event" = "Нерегулярное событие";
+
+"trackerCreationVC.habit.title" = "Новая привычка";
+"trackerCreationVC.habit.schedule" = "Расписание";
+"trackerCreationVC.habit.schedule.everyDay" = "Каждый день";
+"trackerCreationVC.habit.schedule.daysOfWeek" = "Дни недели";// !!!!!!!!!
+
+"trackerCreationVC.event.title" = "Новое нерегулярное событие";
+
+"trackerCreationVC.enterTrackerName" = "Введите название трекера";
+"trackerCreationVC.limit" = "Ограниение 38 символов";
+"trackerCreationVC.category" = "Категория";
+"trackerCreationVC.category.stub.line1" = "Привычки и события можно";
+"trackerCreationVC.category.stub.line2" = "объединить по смыслу";
+"trackerCreationVC.addCategory" = "Добавить категорию";
+"trackerCreationVC.enterCategoryName" = "Введите название категории";
+"trackerCreationVC.emoji" = "Эмоджи";
+"trackerCreationVC.color" = "Цвет";

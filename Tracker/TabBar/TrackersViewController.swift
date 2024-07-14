@@ -53,12 +53,12 @@ final class TrackersViewController: UIViewController {
         if storeService.getTrackersCount() == 0 {
             let image = UIImage(named: "stubImageForTrackers")
             stubImageView.image = image
-            stubLabel.text = "Что будем отслеживать?"
+            stubLabel.text = NSLocalizedString("trackersViewController.stub.empty", comment: "")
             stubView.isHidden = false
         } else if storeService.filteredTrackersCount == 0 {
             let image = UIImage(named: "stubImageForSearch")
             stubImageView.image = image
-            stubLabel.text = "Ничего не найдено"
+            stubLabel.text = NSLocalizedString("trackersViewController.stub.nothingFound", comment: "")
             stubView.isHidden = false
         } else {
             stubView.isHidden = true
@@ -160,7 +160,7 @@ final class TrackersViewController: UIViewController {
     
     private func setTitleLabel() {
         let titleLabel = UILabel()
-        titleLabel.text = "Трекеры"
+        titleLabel.text = NSLocalizedString("trackersViewController.title", comment: "")
         titleLabel.font = Fonts.SFPro34Bold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -206,7 +206,7 @@ final class TrackersViewController: UIViewController {
         let searchBar = UISearchBar()
         searchBar.delegate = self
         searchBar.searchTextField.delegate = self
-        searchBar.placeholder = "Поиск"
+        searchBar.placeholder = NSLocalizedString("trackersViewController.searchBarPlaceholder", comment: "")
         searchBar.showsCancelButton = true
         searchBar.searchTextField.borderStyle = .none
         searchBar.layer.cornerRadius = 8
@@ -216,7 +216,7 @@ final class TrackersViewController: UIViewController {
         searchBar.searchBarStyle = .minimal
         searchBar.enablesReturnKeyAutomatically = false
         searchBar.searchTextField.clearButtonMode = .never
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отменить"
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = NSLocalizedString("buttons.cancel", comment: "")
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchBar)
         self.searchBar = searchBar
@@ -242,7 +242,7 @@ final class TrackersViewController: UIViewController {
         stubView.addSubview(stubImageView)
         self.stubImageView = stubImageView
         
-        stubLabel.text = "Что будем отслеживать?"
+        stubLabel.text = ""
         stubLabel.font = Fonts.SFPro12Semibold
         stubLabel.textColor = Colors.black
         stubLabel.translatesAutoresizingMaskIntoConstraints = false

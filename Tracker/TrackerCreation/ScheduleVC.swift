@@ -58,7 +58,7 @@ final class ScheduleVC: UIViewController {
         if schedule.count > 0 {
             newSchedule = schedule
             if schedule.count == 7 {
-                newScheduleLabelText = "Каждый день"
+                newScheduleLabelText = NSLocalizedString("trackerCreationVC.habit.schedule.everyDay", comment: "")
             } else {
                 var selectedIndexes: Set<Int> = []
                 for index in 0...6 {
@@ -89,7 +89,7 @@ final class ScheduleVC: UIViewController {
     
     private func setTitle() {
         let titleLabel = UILabel()
-        titleLabel.text = "Расписание"
+        titleLabel.text = NSLocalizedString("trackerCreationVC.habit.schedule", comment: "")
         titleLabel.font = Fonts.SFPro16Semibold
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -124,7 +124,7 @@ final class ScheduleVC: UIViewController {
         let confirmButton = UIButton()
         confirmButton.addTarget(self, action: #selector(confirmButtonPressed), for: .touchUpInside)
         confirmButton.backgroundColor = Colors.grayDisabledButton
-        confirmButton.setTitle("Готово", for: .normal)
+        confirmButton.setTitle(NSLocalizedString("buttons.done", comment: ""), for: .normal)
         confirmButton.titleLabel?.font = Fonts.SFPro16Semibold
         confirmButton.setTitleColor(Colors.white, for: .normal)
         confirmButton.layer.masksToBounds = true

@@ -9,8 +9,10 @@ import UIKit
 final class OnboardingViewController: UIPageViewController {
     
     private let labels = [
-        ["Отслеживайте только", "то, что хотите"],
-        ["Даже если это", "не литры воды и йога"]
+        [NSLocalizedString("onboardingViewController.view1.line1", comment: ""),
+         NSLocalizedString("onboardingViewController.view1.line2", comment: "")],
+        [NSLocalizedString("onboardingViewController.view2.line1", comment: ""),
+         NSLocalizedString("onboardingViewController.view2.line2", comment: "")]
     ]
     
     private lazy var pages: [UIViewController] = {
@@ -75,7 +77,7 @@ final class OnboardingViewController: UIPageViewController {
     private func setButtonView(on vc: UIViewController) {
         let buttonView = UILabel()
         buttonView.backgroundColor = Colors.black
-        buttonView.text = "Вот это технологии!"
+        buttonView.text = NSLocalizedString("onboardingViewController.button", comment: "")
         buttonView.font = Fonts.SFPro16Semibold
         buttonView.textColor = Colors.white
         buttonView.textAlignment = .center
