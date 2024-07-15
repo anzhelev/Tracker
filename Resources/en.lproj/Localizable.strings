@@ -12,14 +12,16 @@
 
 "onboardingViewController.button" = "This is technology!";
 "onboardingViewController.view1.line1" = "Track only";
-"onboardingViewController.view1.line1" = "what you want";
+"onboardingViewController.view1.line2" = "what you want";
 "onboardingViewController.view2.line1" = "Even if it's not";
 "onboardingViewController.view2.line2" = "liters of water and yoga";
 
 "trackersViewController.title" = "Trackers";
+"trackersViewController.dateFormat" = "MM/dd/yy";
 "trackersViewController.searchBarPlaceholder" = "Search";
 "trackersViewController.stub.empty" = "What will we track?";
 "trackersViewController.stub.nothingFound" = "Nothing found";
+"trackersViewController.cell.unique" = "Unique event";
 
 "statisticsViewController.title" = "Statistics";
 
@@ -27,7 +29,7 @@
 "newTrackerTypeChoiceVC.habit" = "Habit";
 "newTrackerTypeChoiceVC.event" = "Event";
 
-"trackerCreationVC.habit.title" = "New habet";
+"trackerCreationVC.habit.title" = "New habit";
 "trackerCreationVC.habit.schedule" = "Schedule";
 "trackerCreationVC.habit.schedule.everyDay" = "Every day";
 "trackerCreationVC.habit.schedule.daysOfWeek" = ""; // !!!!!!!!!

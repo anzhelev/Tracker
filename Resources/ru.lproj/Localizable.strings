@@ -17,9 +17,11 @@
 "OnboardingViewController.view2.line2" = "не литры воды и йога";
 
 "trackersViewController.title" = "Трекеры";
+"trackersViewController.dateFormat" = "dd.MM.yy";
 "trackersViewController.searchBarPlaceholder" = "Поиск";
 "trackersViewController.stub.empty" = "Что будем отслеживать?";
 "trackersViewController.stub.nothingFound" = "Ничего не найдено";
+"trackersViewController.cell.unique" = "Уникальное";
 
 "statisticsViewController.title" = "Статистика";
 

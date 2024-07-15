@@ -49,7 +49,13 @@ final class TrackersCVCell: UICollectionViewCell {
         
         mainView.backgroundColor = UIColor(named: "Color\(tracker.color ?? 1)")
         titleLabel.text = tracker.name
-        dayCounLabel.text = self.isEvent ? "Уникальное" : setStringFor(daysCount)
+        dayCounLabel.text = self.isEvent
+        ? NSLocalizedString("trackersViewController.cell.unique", comment: "")
+        : String.localizedStringWithFormat(
+            NSLocalizedString("numberOfDays", comment: ""),
+            daysCount
+        )
+        
         setCompleteButtomImage(with: UIColor(named: "Color\(tracker.color ?? 1)"))
         emojiView.image = UIImage(named: "emoji\(tracker.emoji ?? 1)")
     }
@@ -155,9 +161,9 @@ final class TrackersCVCell: UICollectionViewCell {
     }
     
     private func setCompleteButtomImage(with color: UIColor?) {
-                guard let image = isCompleted ? UIImage(named: "doneSignForCell") : UIImage(named: "plusButtonForCell") else {
-                    return
-                }
+        guard let image = isCompleted ? UIImage(named: "doneSignForCell") : UIImage(named: "plusButtonForCell") else {
+            return
+        }
         switch isCompleted {
             
         case true:
@@ -171,20 +177,6 @@ final class TrackersCVCell: UICollectionViewCell {
             let buttonImage = image.withRenderingMode(.alwaysTemplate)
             completeButton.setImage(buttonImage, for: .normal)
             completeButton.tintColor = color
-        }
-    }
-    
-    private func setStringFor(_ count: Int) -> String {
-        let days = count % 10
-        switch days {
-        case 0, 5, 6, 7, 8, 9:
-            return "\(count) дней"
-        case 1:
-            return "\(count) день"
-        case 2, 3, 4:
-            return "\(count) дня"
-        default:
-            return ""
         }
     }
 }

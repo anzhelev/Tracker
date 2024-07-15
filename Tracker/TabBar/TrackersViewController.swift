@@ -38,7 +38,7 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         storeService.getFiltredCategories(selectedDate: selectedDate, selectedWeekDay: selectedWeekDay, searchBarText: searchBarText)
-        dateFormatter.dateFormat = "dd.MM.yy"
+        dateFormatter.dateFormat = NSLocalizedString("trackersViewController.dateFormat", comment: "")
         configureUIElements()
     }
     
@@ -125,7 +125,6 @@ final class TrackersViewController: UIViewController {
         datePicker.minimumDate = minDate
         datePicker.maximumDate = maxDate
         datePicker.tintColor = Colors.blue
-        datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.layer.masksToBounds = true
         datePicker.layer.cornerRadius = 8
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
@@ -181,6 +180,13 @@ final class TrackersViewController: UIViewController {
         searchBarBackground.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchBarBackground)
         
+        let cancelButtonLabel = UILabel()
+        cancelButtonLabel.font = Fonts.SFPro17Regular
+        cancelButtonLabel.textColor = .clear
+        cancelButtonLabel.text = NSLocalizedString("buttons.cancel", comment: "")
+        cancelButtonLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cancelButtonLabel)
+        
         let searchBarWideBackground = UIView()
         searchBarWideBackground.backgroundColor = Colors.grayDatePicker
         searchBarWideBackground.layer.masksToBounds = true
@@ -193,7 +199,11 @@ final class TrackersViewController: UIViewController {
             searchBarBackground.heightAnchor.constraint(equalToConstant: 36),
             searchBarBackground.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             searchBarBackground.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
-            searchBarBackground.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -110),
+            searchBarBackground.trailingAnchor.constraint(equalTo: cancelButtonLabel.leadingAnchor, constant: -16),
+            
+            cancelButtonLabel.heightAnchor.constraint(equalTo: searchBarBackground.heightAnchor),
+            cancelButtonLabel.topAnchor.constraint(equalTo: searchBarBackground.topAnchor),
+            cancelButtonLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             searchBarWideBackground.heightAnchor.constraint(equalTo: searchBarBackground.heightAnchor),
             searchBarWideBackground.leadingAnchor.constraint(equalTo: searchBarBackground.leadingAnchor),
