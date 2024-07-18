@@ -9,12 +9,14 @@ import UIKit
 final class TrackersViewController: UIViewController {
     
     // MARK: - Public Properties
-    var selectedDate = Date().short
-    var selectedWeekDay: Int = Calendar.current.component(.weekday, from: Date())
     lazy var storeService = StoreService(delegate: self)
     
     // MARK: - Private Properties
     private var plusButton = UIButton()
+    private var filtersButton = UIButton()
+    private (set) var selectedDate = Date().short
+    private (set) var selectedWeekDay: Int = Calendar.current.component(.weekday, from: Date())
+    private (set) var selectedFilter: Filters = .all
     private let dateFormatter = DateFormatter()
     private var datePicker = UIDatePicker()
     private var dateLabel = UILabel()
@@ -36,16 +38,27 @@ final class TrackersViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        storeService.getFiltredCategories(selectedDate: selectedDate, selectedWeekDay: selectedWeekDay, searchBarText: searchBarText)
+        storeService.getFiltredCategories(
+            selectedDate: selectedDate,
+            selectedWeekDay: selectedWeekDay,
+            searchBarText: searchBarText,
+            selectedFilter: selectedFilter
+        )
         dateFormatter.dateFormat = NSLocalizedString("trackersViewController.dateFormat", comment: "")
         configureUIElements()
     }
     
     // MARK: - Public Methods
     func filterCategories() {
-        storeService.getFiltredCategories(selectedDate: selectedDate, selectedWeekDay: selectedWeekDay, searchBarText: searchBarText)
+        storeService.getFiltredCategories(
+            selectedDate: selectedDate,
+            selectedWeekDay: selectedWeekDay,
+            searchBarText: searchBarText,
+            selectedFilter: selectedFilter
+        )
         updateTrackersCollectionView()
         updateStub()
+        updateFilterButtonState()
     }
     
     func updateStub() {
@@ -78,7 +91,18 @@ final class TrackersViewController: UIViewController {
         selectedDate = datePicker.date.short
         selectedWeekDay = Calendar.current.component(.weekday, from: datePicker.date)
         dateLabel.text = getFormattedString(from: selectedDate)
+        
+        if selectedFilter == .today && selectedDate != Date().short {
+            selectedFilter = .all
+        }
+        
         filterCategories()
+    }
+    
+    @objc func filtersButtonAction() {
+        let vc = FiltersVC(delegate: self, selectedFilter: selectedFilter)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
     }
     
     // MARK: - Private Methods
@@ -93,6 +117,8 @@ final class TrackersViewController: UIViewController {
         setTrackersCollectionView()
         setStubImage()
         updateStub()
+        setFiltersButton()
+        updateFilterButtonState()
     }
     
     private func setPlusButton() {
@@ -235,6 +261,7 @@ final class TrackersViewController: UIViewController {
         trackersCollectionView.delegate = self
         trackersCollectionView.register(TrackersCVCell.self, forCellWithReuseIdentifier: "cell")
         trackersCollectionView.register(TrackersCVHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        trackersCollectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "footer")
         
         trackersCollectionView.backgroundColor = Colors.white
         trackersCollectionView.showsVerticalScrollIndicator = false
@@ -246,6 +273,27 @@ final class TrackersViewController: UIViewController {
             trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             trackersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
+    }
+    
+    private func setFiltersButton() {
+        let filtersButton = UIButton()
+        filtersButton.addTarget(self, action: #selector(filtersButtonAction), for: .touchUpInside)
+        filtersButton.backgroundColor = Colors.blue
+        filtersButton.setTitle(NSLocalizedString("filtersVC.title", comment: ""), for: .normal)
+        filtersButton.titleLabel?.font = Fonts.SFPro16Semibold
+        filtersButton.setTitleColor(Colors.white, for: .normal)
+        filtersButton.layer.masksToBounds = true
+        filtersButton.layer.cornerRadius = 16
+        filtersButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(filtersButton)
+        self.filtersButton = filtersButton
+        
+        NSLayoutConstraint.activate([
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.widthAnchor.constraint(equalToConstant: 114),
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filtersButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
         ])
     }
     
@@ -297,11 +345,22 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? TrackersCVHeader {
-            headerView.configure(with: storeService.getSectionName(for: indexPath.section))
+        
+        switch kind {
             
-            return headerView
+        case UICollectionView.elementKindSectionHeader:
+            if let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? TrackersCVHeader {
+                headerView.configure(with: storeService.getSectionName(for: indexPath.section))
+                return headerView
+            }
+            
+        default:
+            
+           let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath)
+            footer.frame = CGRect(x: 0, y: 0, width: trackersCollectionView.frame.size.width, height: 100)
+            return footer
         }
+        
         fatalError("Проблема с подготовкой хедера")
     }
 }
@@ -317,6 +376,13 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: 46)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        
+        let height = section == storeService.numberOfSections - 1 ? 55.0 : 0.0
+        
+        return CGSize(width: collectionView.bounds.width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -344,6 +410,7 @@ extension TrackersViewController: UISearchBarDelegate {
 
 // MARK: - UITextFieldDelegate
 extension TrackersViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
@@ -366,7 +433,39 @@ extension TrackersViewController: TrackersCVCellDelegate {
 
 // MARK: - StoreServiceDelegate
 extension TrackersViewController: StoreServiceDelegate {
+    
     func updateTrackersCollectionView() {
         trackersCollectionView.reloadData()
+    }
+}
+
+// MARK: - TrackersViewController
+extension TrackersViewController: FiltersVCDelegate {
+    
+    func updateSelectedFilter(with newFilter: Filters) {
+        selectedFilter = newFilter
+        if newFilter == .today {
+            datePicker.date = Date()
+            dateChanged()
+        } else {
+            filterCategories()
+        }
+    }
+    
+    func updateFilterButtonState() {
+        
+        switch selectedFilter {
+            
+        case .today:
+            filtersButton.backgroundColor = selectedDate == Date().short
+            ? Colors.black
+            : Colors.blue
+        case .completed, .uncompleted:
+            filtersButton.backgroundColor = Colors.black
+        default:
+            filtersButton.backgroundColor = Colors.blue
+        }
+        
+        filtersButton.isHidden = storeService.getFetchedTrackersCount() == 0
     }
 }

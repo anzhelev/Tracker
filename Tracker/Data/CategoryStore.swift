@@ -7,12 +7,21 @@
 import CoreData
 import UIKit
 
+protocol CategoryStoreDelegate: AnyObject {
+    
+    var context: NSManagedObjectContext {get set}
+    func fetchCategoryList()
+    func addTrackerToStore(tracker: Tracker, eventDate: Date?, to category: String)
+    func addCategoriesToStore(newlist: Set<String>)
+    func saveContext()
+}
+
 final class CategoryStore {
     
-    private weak var delegate: StoreService?
+    private weak var delegate: CategoryStoreDelegate?
     private let context: NSManagedObjectContext
     
-    init(delegate: StoreService) {
+    init(delegate: CategoryStoreDelegate) {
         self.delegate = delegate
         self.context = delegate.context
     }

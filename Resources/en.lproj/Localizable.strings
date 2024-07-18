@@ -23,6 +23,14 @@
 "trackersViewController.stub.nothingFound" = "Nothing found";
 "trackersViewController.cell.unique" = "Unique event";
 
+"filtersVC.title" = "Filters";
+"filtersVC.cell.all" = "All trackers";
+"filtersVC.cell.today" = "Trackers for today";
+"filtersVC.cell.completed" = "Completed";
+"filtersVC.cell.uncompleted" = "Uncompleted";
+
+"storeService.pinnedCategoryName" = "Pinned";
+
 "statisticsViewController.title" = "Statistics";
 
 "newTrackerTypeChoiceVC.title" = "Tracker creation";

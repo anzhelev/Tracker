@@ -8,8 +8,11 @@ import CoreData
 import UIKit
 
 protocol StoreServiceDelegate: AnyObject {
+    var selectedDate: Date { get }
+    var selectedFilter: Filters  { get }
     func updateTrackersCollectionView()
     func updateStub()
+    func updateFilterButtonState()
 }
 
 final class StoreService: NSObject {
@@ -19,12 +22,17 @@ final class StoreService: NSObject {
     weak var delegate: StoreServiceDelegate?
     
     // MARK: - Private Properties
+    private (set) var pinnedTrackers: [UUID] = []
+    private (set) var filteredTrackers: [TrackerCategory] = []
     private (set) var categoryList: Set<String> = []
     private (set) var completedTrackers: [TrackerRecord] = []
+    private (set) var filteredTrackersCount = 0
+    
     
     private lazy var trackerStore: TrackerStore = TrackerStore(delegate: self)
     private lazy var categoryStore: CategoryStore = CategoryStore(delegate: self)
     private lazy var trackerRecordStore: TrackerRecordStore = TrackerRecordStore(delegate: self)
+    private lazy var pinnedTrackersStore: PinnedTrackersStore = PinnedTrackersStore(delegate: self)
     
     private lazy var trackerFetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
@@ -62,11 +70,10 @@ final class StoreService: NSObject {
         self.delegate = delegate
         getStoredRecords()
         fetchCategoryList()
-//        setRecordsFetchedResultsController()
     }
     
     // MARK: - Public Methods
-    func getFiltredCategories(selectedDate: Date, selectedWeekDay: Int, searchBarText: String?) {
+    func getFiltredCategories(selectedDate: Date, selectedWeekDay: Int, searchBarText: String?, selectedFilter: Filters) {
         
         let datePredicate = NSPredicate(format: "(%K CONTAINS %@) OR (%K == %@)",
                                         #keyPath(TrackerCoreData.schedule),
@@ -88,18 +95,160 @@ final class StoreService: NSObject {
         } catch {
             print("@@@ func getFiltredCategories: Ошибка выполнения запроса.")
         }
+        filterTrackers(with: selectedFilter, selectedDate: selectedDate)
     }
     
-    /// запрашиваем все сохраненные записи о выполненных трекерах
-    func getStoredRecords() {
-        self.completedTrackers = trackerRecordStore.fetchRecords()
+    func saveContext() {
+        if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+            appDelegate.saveContext()
+        }
     }
+    
+    func isPinned(trackerID: UUID) -> Bool {
+        return self.pinnedTrackers.contains(trackerID)
+    }
+    
+    // MARK: - Private Methods
+    private func setRecordsFetchedResultsController() {
+        do {
+            try recordsFetchedResultsController.performFetch()
+        } catch {
+            print("@@@ private lazy var recordsFetchedResultsController: Ошибка выполнения запроса.")
+        }
+    }
+    
+    private func filterTrackers(with filter: Filters, selectedDate: Date) {
+        filteredTrackersCount = 0
+        var pinnedTrackers: [Tracker] = []
+        var categoryNames: Set<String> = []
+        var newCategories: [(String, [Tracker])] = []
+        
+        guard let fetchedTrackers = trackerFetchedResultsController.fetchedObjects else {
+            return
+        }
+        
+        let filteredTrackers = fetchedTrackers.filter {tracker in
+            if completedTrackers.contains(
+                where: {record in
+                    record.id == tracker.id && record.date == selectedDate
+                }
+            )
+                ? filter != .uncompleted
+                : filter != .completed
+            {
+                filteredTrackersCount += 1
+                if isPinned(trackerID: tracker.id ?? UUID()) {
+                    pinnedTrackers.append(Tracker(id: tracker.id ?? UUID(),
+                                                  name: tracker.name ?? "",
+                                                  color: Int(tracker.color),
+                                                  emoji: Int(tracker.emoji),
+                                                  schedule: tracker.schedule.asSetOfInt
+                                                 )
+                    )
+                } else {
+                    categoryNames.insert(tracker.category?.category ?? "")
+                    return true
+                }
+            }
+            return false
+        }
+        
+        if pinnedTrackers.count > 0 {
+            newCategories.append((NSLocalizedString("storeService.pinnedCategoryName", comment: ""), pinnedTrackers))
+        }
+        
+        categoryNames.sorted().forEach {item in
+            newCategories.append((item, []))
+        }
+        
+        filteredTrackers.forEach {item in
+            if let index = newCategories.firstIndex(where: {(categoryName, _) in
+                item.category?.category ?? "" == categoryName
+            }) {
+                newCategories[index].1.append(Tracker(id: item.id ?? UUID(),
+                                                      name: item.name ?? "",
+                                                      color: Int(item.color),
+                                                      emoji: Int(item.emoji),
+                                                      schedule: item.schedule.asSetOfInt)
+                )
+            }
+        }
+        
+        self.filteredTrackers = []
+        newCategories.forEach {(categoryName, trackers) in
+            self.filteredTrackers.append(
+                TrackerCategory(category: categoryName,
+                                trackers: trackers
+                               )
+            )
+        }
+    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension StoreService: NSFetchedResultsControllerDelegate {
+    
+    var numberOfSections: Int {
+        filteredTrackers.count
+    }
+    
+    func getFetchedTrackersCount() -> Int {
+        trackerFetchedResultsController.fetchedObjects?.count ?? 0
+    }
+    
+    func numberOfRowsInSection(_ section: Int) -> Int {
+        filteredTrackers[section].trackers.count
+    }
+    
+    func object(at indexPath: IndexPath) -> Tracker {
+        filteredTrackers[indexPath.section].trackers[indexPath.item]
+    }
+    
+    func getSectionName(for section: Int) -> String {
+        filteredTrackers[section].category
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<any NSFetchRequestResult>) {
+        switch controller {
+            
+        case trackerFetchedResultsController:
+            print("@@@ trackerFetchedResultsController: Уведомление об изменении в контенте.")
+            filterTrackers(with: delegate?.selectedFilter ?? .all, selectedDate: delegate?.selectedDate ?? Date().short)
+            delegate?.updateTrackersCollectionView()
+            delegate?.updateStub()
+            delegate?.updateFilterButtonState()
+            
+        case recordsFetchedResultsController:
+            print("@@@ recordsFetchedResultsController: Уведомление об изменении в контенте.")
+            getStoredRecords()
+            if delegate?.selectedFilter == .completed
+                || delegate?.selectedFilter == .uncompleted {
+                filterTrackers(with: delegate?.selectedFilter ?? .all, selectedDate: delegate?.selectedDate ?? Date().short)
+                delegate?.updateTrackersCollectionView()
+                delegate?.updateStub()
+            }
+            
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - TrackerStoreDelegate
+extension StoreService: TrackerStoreDelegate {
     
     func getTrackersCount() -> Int {
         trackerStore.allTrackersCount()
     }
+}
+
+// MARK: - CategoryStoreDelegate
+extension StoreService: CategoryStoreDelegate {
     
-    /// добавляем новый трекер в базу
+    func fetchCategoryList() {
+        self.categoryList = categoryStore.fetchCategoryList()
+    }
+    
     func addTrackerToStore(tracker: Tracker, eventDate: Date?, to category: String) {
         categoryStore.storeCategoryWithTracker(
             category: category,
@@ -112,7 +261,6 @@ final class StoreService: NSObject {
         delegate?.updateStub()
     }
     
-    /// добавляем в базу категории без трекеров
     func addCategoriesToStore(newlist: Set<String>) {
         let newCategories = newlist.subtracting(self.categoryList)
         
@@ -120,80 +268,36 @@ final class StoreService: NSObject {
             categoryStore.storeCategory(category: item)
         }
     }
+}
+
+// MARK: - TrackerRecordStoreDelegate
+extension StoreService: TrackerRecordStoreDelegate {
     
-    func fetchCategoryList() {
-        self.categoryList = categoryStore.fetchCategoryList()
+    func getStoredRecords() {
+        self.completedTrackers = trackerRecordStore.fetchRecords()
     }
     
-    /// добавляем новую запись о выполненном трекере в базу
     func addTrackerRecordToStore(record: TrackerRecord) {
         trackerRecordStore.storeRecord(record: record)
     }
     
-    /// удаляем запись из базы
     func deleteRecordFromStore(record: TrackerRecord) {
         trackerRecordStore.deleteRecord(record: record)
     }
-    
-    func saveContext() {
-        if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
-            appDelegate.saveContext()
-        }
-    }
-    
-    // MARK: - Private Methods
-    private func setRecordsFetchedResultsController() {
-        do {
-            try recordsFetchedResultsController.performFetch()
-        } catch {
-            print("@@@ private lazy var recordsFetchedResultsController: Ошибка выполнения запроса.")
-        }
-    }
 }
 
-// MARK: - NSFetchedResultsControllerDelegate
-extension StoreService: NSFetchedResultsControllerDelegate {
+// MARK: - PinnedTrackersStoreDelegate
+extension StoreService: PinnedTrackersStoreDelegate {
     
-    var filteredTrackersCount: Int {
-        trackerFetchedResultsController.fetchedObjects?.count ?? 0
+    func fetchPinnedTrackers() {
+        pinnedTrackers = pinnedTrackersStore.fetchPinnedTrackers()
     }
     
-    var numberOfSections: Int {
-        trackerFetchedResultsController.sections?.count ?? 0
+    func addPinnedTrackerToStore(uuid: UUID) {
+        pinnedTrackersStore.storeTrackerID(trackerID: uuid)
     }
     
-    func numberOfRowsInSection(_ section: Int) -> Int {
-        trackerFetchedResultsController.sections?[section].numberOfObjects ?? 0
-    }
-    
-    func object(at indexPath: IndexPath) -> Tracker {
-        let trackerCoreData = trackerFetchedResultsController.object(at: indexPath)
-        return Tracker(id: trackerCoreData.id ?? UUID(),
-                       name: trackerCoreData.name ?? "",
-                       color: Int(trackerCoreData.color),
-                       emoji: Int(trackerCoreData.emoji),
-                       schedule: trackerCoreData.schedule.asSetOfInt
-        )
-    }
-    
-    func getSectionName(for section: Int) -> String {
-        trackerFetchedResultsController.sections?[section].name ?? ""
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<any NSFetchRequestResult>) {
-        switch controller {
-            
-        case trackerFetchedResultsController:
-            print("@@@ trackerFetchedResultsController: Уведомление об изменении в контенте.")
-            delegate?.updateTrackersCollectionView()
-            delegate?.updateStub()
-            
-        case recordsFetchedResultsController:
-            print("@@@ recordsFetchedResultsController: Уведомление об изменении в контенте.")
-            getStoredRecords()
-            
-        default:
-            break
-        }
+    func deletePinnedTrackerFromStore(uuid: UUID) {
+        pinnedTrackersStore.deleteFromStore(trackerID: uuid)
     }
 }

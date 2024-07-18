@@ -10,11 +10,11 @@
 "buttons.done" = "Готово";
 "buttons.create" = "Создать";
 
-"OnboardingViewController.button" = "Вот это технологии!";
-"OnboardingViewController.view1.line1" = "Отслеживайте только";
-"OnboardingViewController.view1.line1" = "то, что хотите";
-"OnboardingViewController.view2.line1" = "Даже если это";
-"OnboardingViewController.view2.line2" = "не литры воды и йога";
+"onboardingViewController.button" = "Вот это технологии!";
+"onboardingViewController.view1.line1" = "Отслеживайте только";
+"onboardingViewController.view1.line2" = "то, что хотите";
+"onboardingViewController.view2.line1" = "Даже если это";
+"onboardingViewController.view2.line2" = "не литры воды и йога";
 
 "trackersViewController.title" = "Трекеры";
 "trackersViewController.dateFormat" = "dd.MM.yy";
@@ -22,6 +22,14 @@
 "trackersViewController.stub.empty" = "Что будем отслеживать?";
 "trackersViewController.stub.nothingFound" = "Ничего не найдено";
 "trackersViewController.cell.unique" = "Уникальное";
+
+"filtersVC.title" = "Фильтры";
+"filtersVC.cell.all" = "Все трекеры";
+"filtersVC.cell.today" = "Трекеры на сегодня";
+"filtersVC.cell.completed" = "Завершенные";
+"filtersVC.cell.uncompleted" = "Незавершенные";
+
+"storeService.pinnedCategoryName" = "Закрепленные";
 
 "statisticsViewController.title" = "Статистика";
 
