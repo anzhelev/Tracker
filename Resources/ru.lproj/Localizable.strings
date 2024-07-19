@@ -22,6 +22,10 @@
 "trackersViewController.stub.empty" = "Что будем отслеживать?";
 "trackersViewController.stub.nothingFound" = "Ничего не найдено";
 "trackersViewController.cell.unique" = "Уникальное";
+"trackersViewController.contextMenu.pin" = "Закрепить";
+"trackersViewController.contextMenu.unpin" = "Открепить";
+"trackersViewController.contextMenu.edit" = "Редактировать";
+"trackersViewController.contextMenu.delete" = "Удалить";
 
 "filtersVC.title" = "Фильтры";
 "filtersVC.cell.all" = "Все трекеры";

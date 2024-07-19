@@ -22,6 +22,10 @@
 "trackersViewController.stub.empty" = "What will we track?";
 "trackersViewController.stub.nothingFound" = "Nothing found";
 "trackersViewController.cell.unique" = "Unique event";
+"trackersViewController.contextMenu.pin" = "Pin tracker";
+"trackersViewController.contextMenu.unpin" = "Unpin tracker";
+"trackersViewController.contextMenu.edit" = "Edit tracker";
+"trackersViewController.contextMenu.delete" = "Delete tracker";
 
 "filtersVC.title" = "Filters";
 "filtersVC.cell.all" = "All trackers";

@@ -34,6 +34,7 @@ final class TrackersViewController: UIViewController {
     private let trackersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let minimumInteritemSpacing: CGFloat = 10.0
     private let cellsInRow = 2
+    private var cellWidth: CGFloat = 0
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -336,8 +337,16 @@ extension TrackersViewController: UICollectionViewDataSource {
             }.count
             
             let isEvent = tracker.schedule == nil
+            let isPinned = storeService.isPinned(trackerID: tracker.id)
             
-            cell.configure(for: tracker, with: indexPath, isEvent: isEvent, selectedDate: selectedDate, isCompleted: isTrackerCompletedToday, daysCount: count)
+            cell.configure(for: tracker,
+                           with: indexPath,
+                           isEvent: isEvent,
+                           selectedDate: selectedDate,
+                           isCompleted: isTrackerCompletedToday,
+                           isPinned: isPinned,
+                           daysCount: count
+            )
             
             return cell
         }
@@ -356,7 +365,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             
         default:
             
-           let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath)
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath)
             footer.frame = CGRect(x: 0, y: 0, width: trackersCollectionView.frame.size.width, height: 100)
             return footer
         }
@@ -369,9 +378,10 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellsInRow = CGFloat(self.cellsInRow)
+        let cellsInRow = CGFloat(cellsInRow)
         let cellHeight: CGFloat = 148
-        return CGSize(width: (collectionView.bounds.width - (cellsInRow - 1) * minimumInteritemSpacing) / cellsInRow, height: cellHeight)
+        cellWidth = (collectionView.bounds.width - (cellsInRow - 1) * minimumInteritemSpacing) / cellsInRow
+        return CGSize(width: cellWidth, height: cellHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -391,6 +401,111 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         10
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension TrackersViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let tracker: Tracker = storeService.filteredTrackers[indexPath.section].trackers[indexPath.row]
+        let isPinned = storeService.isPinned(trackerID: tracker.id)
+        
+        return UIContextMenuConfiguration(previewProvider: { [weak self] in
+            self?.getPreview(for: tracker, which: isPinned)
+        },
+                                          actionProvider: { actions in
+            return UIMenu(children: [
+                UIAction(title: isPinned
+                         ? NSLocalizedString("trackersViewController.contextMenu.unpin", comment: "")
+                         : NSLocalizedString("trackersViewController.contextMenu.pin", comment: "")
+                        ) { [weak self] _ in
+                            self?.updatePinnedStatus(for: tracker.id, with: !isPinned)
+                        },
+                
+                UIAction(title: NSLocalizedString("trackersViewController.contextMenu.edit", comment: "")) { [weak self] _ in
+                    self?.editTracker(indexPath: indexPath)
+                },
+                
+                UIAction(title: NSLocalizedString("trackersViewController.contextMenu.delete", comment: ""), attributes: .destructive) { [weak self] _ in
+                    self?.deleteTracker(indexPath: indexPath)
+                },
+                
+            ])
+        })
+    }
+    
+    private func updatePinnedStatus(for trackerID: UUID, with newStatus: Bool) {
+        
+    }
+    
+    private func editTracker(indexPath: IndexPath) {
+        
+    }
+    
+    private func deleteTracker(indexPath: IndexPath) {
+        
+    }
+    
+    private func getPreview(for tracker: Tracker, which isPinned: Bool) -> UIViewController {
+        let previewVC = UIViewController()
+        previewVC.preferredContentSize = CGSize(width: cellWidth, height: 90)
+        previewVC.view.backgroundColor = UIColor(named: "Color\(tracker.color ?? 1)")
+        
+        let emojiBGView = UIView()
+        emojiBGView.backgroundColor = Colors.whiteEmojiCircle
+        emojiBGView.layer.masksToBounds = true
+        emojiBGView.layer.cornerRadius = 12
+        emojiBGView.translatesAutoresizingMaskIntoConstraints = false
+        previewVC.view.addSubview(emojiBGView)
+        
+        let emojiView = UIImageView()
+        emojiView.image = UIImage(named: "emoji\(tracker.emoji ?? 1)")
+        emojiView.translatesAutoresizingMaskIntoConstraints = false
+        previewVC.view.addSubview(emojiView)
+        
+        let titleLabel = UITextView()
+        titleLabel.textAlignment = .left
+        titleLabel.font = Fonts.SFPro12Semibold
+        titleLabel.textColor = Colors.white
+        titleLabel.text = tracker.name
+        titleLabel.backgroundColor = .clear
+        titleLabel.isUserInteractionEnabled = false
+        titleLabel.isSelectable = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        previewVC.view.addSubview(titleLabel)
+        
+        NSLayoutConstraint.activate([
+            emojiBGView.heightAnchor.constraint(equalToConstant: 24),
+            emojiBGView.widthAnchor.constraint(equalToConstant: 24),
+            emojiBGView.topAnchor.constraint(equalTo: previewVC.view.topAnchor, constant: 12),
+            emojiBGView.leadingAnchor.constraint(equalTo: previewVC.view.leadingAnchor, constant: 12),
+            
+            emojiView.heightAnchor.constraint(equalToConstant: 16),
+            emojiView.widthAnchor.constraint(equalToConstant: 16),
+            emojiView.centerXAnchor.constraint(equalTo: emojiBGView.centerXAnchor),
+            emojiView.centerYAnchor.constraint(equalTo: emojiBGView.centerYAnchor),
+            
+            titleLabel.topAnchor.constraint(equalTo: emojiBGView.bottomAnchor, constant: 8),
+            titleLabel.bottomAnchor.constraint(equalTo: previewVC.view.bottomAnchor, constant: 12),
+            titleLabel.leadingAnchor.constraint(equalTo: previewVC.view.leadingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: previewVC.view.trailingAnchor, constant: -12)
+        ])
+        
+        if isPinned {
+            let pinView = UIImageView()
+            pinView.image = UIImage(named: "pin")
+            pinView.translatesAutoresizingMaskIntoConstraints = false
+            previewVC.view.addSubview(pinView)
+            
+            pinView.heightAnchor.constraint(equalToConstant: 12).isActive = true
+            pinView.widthAnchor.constraint(equalToConstant: 8).isActive = true
+            pinView.centerYAnchor.constraint(equalTo: emojiBGView.centerYAnchor).isActive = true
+            pinView.trailingAnchor.constraint(equalTo: previewVC.view.trailingAnchor, constant: -12).isActive = true
+        }
+        
+        return previewVC
     }
 }
 

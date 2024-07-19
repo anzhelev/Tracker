@@ -19,6 +19,7 @@ final class TrackersCVCell: UICollectionViewCell {
     private var mainView = UIView()
     private var titleLabel = UITextView()
     private var emojiView = UIImageView()
+    private var pinView = UIImageView()
     private var dayCounLabel = UILabel()
     private var completeButton = UIButton()
     private var completeButtonBGView = UIView()
@@ -31,7 +32,6 @@ final class TrackersCVCell: UICollectionViewCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         configureUIElements()
     }
     
@@ -40,7 +40,7 @@ final class TrackersCVCell: UICollectionViewCell {
     }
     
     // MARK: - Public Methods
-    func configure(for tracker: Tracker, with index: IndexPath, isEvent: Bool, selectedDate: Date, isCompleted: Bool, daysCount: Int) {
+    func configure(for tracker: Tracker, with index: IndexPath, isEvent: Bool, selectedDate: Date, isCompleted: Bool, isPinned: Bool, daysCount: Int) {
         trackerID = tracker.id
         trackerIndexPath = index
         self.isEvent = isEvent
@@ -58,6 +58,7 @@ final class TrackersCVCell: UICollectionViewCell {
         
         setCompleteButtomImage(with: UIColor(named: "Color\(tracker.color ?? 1)"))
         emojiView.image = UIImage(named: "emoji\(tracker.emoji ?? 1)")
+        pinView.image = isPinned ? UIImage(named: "pin") : nil
     }
     
     // MARK: - IBAction
@@ -96,6 +97,9 @@ final class TrackersCVCell: UICollectionViewCell {
         
         emojiView.translatesAutoresizingMaskIntoConstraints = false
         emojiCircleView.addSubview(emojiView)
+        
+        pinView.translatesAutoresizingMaskIntoConstraints = false
+        mainView.addSubview(pinView)
         
         titleLabel.textAlignment = .left
         titleLabel.font = Fonts.SFPro12Semibold
@@ -137,6 +141,11 @@ final class TrackersCVCell: UICollectionViewCell {
             emojiView.widthAnchor.constraint(equalToConstant: 16),
             emojiView.centerXAnchor.constraint(equalTo: emojiCircleView.centerXAnchor),
             emojiView.centerYAnchor.constraint(equalTo: emojiCircleView.centerYAnchor),
+            
+            pinView.heightAnchor.constraint(equalToConstant: 12),
+            pinView.widthAnchor.constraint(equalToConstant: 8),
+            pinView.centerYAnchor.constraint(equalTo: emojiCircleView.centerYAnchor),
+            pinView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -12),
             
             titleLabel.topAnchor.constraint(equalTo: emojiCircleView.bottomAnchor, constant: 8),
             titleLabel.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: 12),
