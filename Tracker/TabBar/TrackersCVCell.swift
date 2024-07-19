@@ -83,6 +83,8 @@ final class TrackersCVCell: UICollectionViewCell {
     
     // MARK: - Private Methods
     private func configureUIElements() {
+        self.layer.cornerRadius = 16
+        
         mainView.layer.masksToBounds = true
         mainView.layer.cornerRadius = 16
         mainView.translatesAutoresizingMaskIntoConstraints = false

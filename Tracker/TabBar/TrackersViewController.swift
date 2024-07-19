@@ -437,7 +437,9 @@ extension TrackersViewController: UICollectionViewDelegate {
     }
     
     private func updatePinnedStatus(for trackerID: UUID, with newStatus: Bool) {
-        
+        newStatus ? storeService.addPinnedTrackerToStore(uuid: trackerID) : storeService.deletePinnedTrackerFromStore(uuid: trackerID)
+        storeService.fetchPinnedTrackers()
+        filterCategories()
     }
     
     private func editTracker(indexPath: IndexPath) {

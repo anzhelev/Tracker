@@ -69,6 +69,7 @@ final class StoreService: NSObject {
         super.init()
         self.delegate = delegate
         getStoredRecords()
+        fetchPinnedTrackers()
         fetchCategoryList()
     }
     
