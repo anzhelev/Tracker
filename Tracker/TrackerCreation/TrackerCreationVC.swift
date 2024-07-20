@@ -36,6 +36,12 @@ enum RoundedCorners: String {
     case none
 }
 
+struct EditModeParams {
+    let tracker: Tracker
+    let category: String
+    let daysCount: Int
+}
+
 struct CellParams {
     let id: CellID
     let reuseID: ReuseID
@@ -75,20 +81,34 @@ final class TrackerCreationVC: UIViewController {
     }
     
     // MARK: - Private Properties
+    private var editMode = false
     private var mainTable = UITableView()
     private var mainTableCells: [CellParams] = []
     private var cancelButton = UIButton()
     private var createButton = UIButton()
     private var minimumTitleLength = 1
     private var maximumTitleLength = 38
+    private var editedTrackerID: UUID?
+    private var editedTrackerDaysCount = 0
     private var newTrackerEmoji: Int?
     private var newTrackerColor: Int?
     private var warningIsShown: Bool = false
     
     // MARK: - Initializers
-    init(newTrackerType: TrackerType, delegate: TrackersViewController) {
+    init(newTrackerType: TrackerType, delegate: TrackersViewController, editModeParams: EditModeParams?) {
         self.newTrackerType = newTrackerType
         self.delegate = delegate
+        
+        if let editModeParams {
+            self.editMode = true
+            self.editedTrackerID = editModeParams.tracker.id
+            self.newTrackerTitle = editModeParams.tracker.name
+            self.newTrackerCategory = editModeParams.category
+            self.editedTrackerDaysCount = editModeParams.daysCount
+            self.newTrackerSchedule = editModeParams.tracker.schedule
+            self.newTrackerEmoji = (editModeParams.tracker.emoji ?? 1) - 1
+            self.newTrackerColor = (editModeParams.tracker.color ?? 1) - 1
+        }
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -104,6 +124,10 @@ final class TrackerCreationVC: UIViewController {
         view.backgroundColor = Colors.white
         
         setTitle(for: newTrackerType)
+        if editMode {
+            setDaysCountLabel()
+        }
+        
         setButtons()
         updateButtonState()
         configureMainTable(for: newTrackerType)
@@ -115,23 +139,36 @@ final class TrackerCreationVC: UIViewController {
     }
     
     @objc private func createButtonPressed() {
-        let tracker = Tracker(id: UUID(),
+        let tracker = Tracker(id: self.editedTrackerID ?? UUID(),
                               name: self.newTrackerTitle ?? "б/н",
                               color: (self.newTrackerColor ?? 0) + 1,
                               emoji: (self.newTrackerEmoji ?? 0) + 1,
                               schedule: self.newTrackerSchedule
         )
         
-        if let category = self.newTrackerCategory {
-            let date = delegate?.selectedDate.short ?? Date().short
+        guard let newTrackerCategory else {
+            return
+        }
+        
+        let date = delegate?.selectedDate.short ?? Date().short
+        
+        if !editMode {
             if newTrackerType == .event {
                 self.delegate?.storeService.addTrackerRecordToStore(record: TrackerRecord(id: tracker.id, date: date))
             }
-            self.delegate?.storeService.addTrackerToStore(tracker: tracker,
-                                                          eventDate: newTrackerType == .event ? date : nil ,
-                                                          to: category
+            self.delegate?.storeService.addTrackerToStore(
+                tracker: tracker,
+                eventDate: newTrackerType == .event ? date : nil ,
+                to: newTrackerCategory
+            )
+            
+        } else {
+            delegate?.storeService.updateTracker(tracker: tracker,
+                                                 eventDate: newTrackerType == .event ? date : nil,
+                                                 newCategory: newTrackerCategory
             )
         }
+        
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
@@ -150,10 +187,16 @@ final class TrackerCreationVC: UIViewController {
     // MARK: - Private Methods
     private func setTitle(for tracker : TrackerType) {
         let titleLabel = UILabel()
-        titleLabel.text = tracker == .habit
-        ? NSLocalizedString("trackerCreationVC.habit.title", comment: "")
-        : NSLocalizedString("trackerCreationVC.event.title", comment: "")
-        titleLabel.font = Fonts.SFPro16Semibold
+        if !editMode {
+            titleLabel.text = tracker == .habit
+            ? NSLocalizedString("trackerCreationVC.habit.title", comment: "")
+            : NSLocalizedString("trackerCreationVC.event.title", comment: "")
+        } else {
+            titleLabel.text = tracker == .habit
+            ? NSLocalizedString("trackerCreationVC.habitEditing.title", comment: "")
+            : NSLocalizedString("trackerCreationVC.eventEditing.title", comment: "")
+        }
+        titleLabel.font = Fonts.SFPro16Medium
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -164,12 +207,30 @@ final class TrackerCreationVC: UIViewController {
         ])
     }
     
+    private func setDaysCountLabel() {
+        let daysCountLabel = UILabel()
+        
+        daysCountLabel.text = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfDays", comment: ""),
+            editedTrackerDaysCount
+        )
+        daysCountLabel.font = Fonts.SFPro32Bold
+        daysCountLabel.textColor = Colors.black
+        daysCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(daysCountLabel)
+        
+        NSLayoutConstraint.activate([
+            daysCountLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            daysCountLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 87)
+        ])
+    }
+    
     private func setButtons() {
         let cancelButton = UIButton()
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
         cancelButton.backgroundColor = Colors.white
         cancelButton.setTitle(NSLocalizedString("buttons.cancel", comment: ""), for: .normal)
-        cancelButton.titleLabel?.font = Fonts.SFPro16Semibold
+        cancelButton.titleLabel?.font = Fonts.SFPro16Medium
         cancelButton.setTitleColor(Colors.red, for: .normal)
         cancelButton.clipsToBounds = true
         cancelButton.layer.borderWidth = 1
@@ -183,8 +244,12 @@ final class TrackerCreationVC: UIViewController {
         let createButton = UIButton()
         createButton.addTarget(self, action: #selector(createButtonPressed), for: .touchUpInside)
         createButton.backgroundColor = Colors.grayDisabledButton
-        createButton.setTitle(NSLocalizedString("buttons.create", comment: ""), for: .normal)
-        createButton.titleLabel?.font = Fonts.SFPro16Semibold
+        createButton.setTitle(editMode
+                              ? NSLocalizedString("buttons.save", comment: "")
+                              : NSLocalizedString("buttons.create", comment: ""),
+                              for: .normal
+        )
+        createButton.titleLabel?.font = Fonts.SFPro16Medium
         createButton.setTitleColor(Colors.white, for: .normal)
         createButton.layer.masksToBounds = true
         createButton.layer.cornerRadius = 16
@@ -222,14 +287,14 @@ final class TrackerCreationVC: UIViewController {
     
     
     private func configureMainTable(for tracker: TrackerType) {
-        self.mainTableCells.append(CellParams(id: .title, reuseID: .textInput, cellHeight: 75, rounded: .all, separator: false, title: NSLocalizedString("trackerCreationVC.enterTrackerName", comment: "")))
+        self.mainTableCells.append(CellParams(id: .title, reuseID: .textInput, cellHeight: 75, rounded: .all, separator: false, title: NSLocalizedString("trackerCreationVC.enterTrackerName", comment: ""), value: editMode ? newTrackerTitle : nil))
         self.mainTableCells.append(CellParams(id: .warning, reuseID: .singleLabel, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.limit", comment: "")))
         self.mainTableCells.append(CellParams(id: .spacer, reuseID: .spacer, cellHeight: 24, rounded: .none, separator: false, title: ""))
         if tracker == .habit {
-            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .top, separator: true, title: NSLocalizedString("trackerCreationVC.category", comment: "")))
-            self.mainTableCells.append(CellParams(id: .schedule, reuseID: .doubleLabel, cellHeight: 75, rounded: .bottom, separator: false, title: NSLocalizedString("trackerCreationVC.habit.schedule", comment: "")))
+            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .top, separator: true, title: NSLocalizedString("trackerCreationVC.category", comment: ""), value: editMode ? newTrackerCategory : nil))
+            self.mainTableCells.append(CellParams(id: .schedule, reuseID: .doubleLabel, cellHeight: 75, rounded: .bottom, separator: false, title: NSLocalizedString("trackerCreationVC.habit.schedule", comment: ""), value: editMode ? getTrackerScheduleLabelText() : nil))
         } else {
-            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .all, separator: false, title: NSLocalizedString("trackerCreationVC.category", comment: "")))
+            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .all, separator: false, title: NSLocalizedString("trackerCreationVC.category", comment: ""), value: editMode ? newTrackerCategory : nil))
         }
         self.mainTableCells.append(CellParams(id: .emoji, reuseID: .collection, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.emoji", comment: "")))
         self.mainTableCells.append(CellParams(id: .color, reuseID: .collection, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.color", comment: "")))
@@ -251,11 +316,42 @@ final class TrackerCreationVC: UIViewController {
         view.addSubview(mainTable)
         
         NSLayoutConstraint.activate([
-            mainTable.topAnchor.constraint(equalTo: view.topAnchor, constant: 63),
+            mainTable.topAnchor.constraint(equalTo: view.topAnchor, constant: editMode ? 140 : 63),
             mainTable.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -16),
             mainTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             mainTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
+    }
+    
+    private func getTrackerScheduleLabelText() -> String? {
+        
+        let fmt = DateFormatter()
+        guard let shortDays = fmt.shortWeekdaySymbols else {
+            return nil
+        }
+        
+        var firstDay = fmt.calendar.firstWeekday
+        var daysOrder: [Int] = []
+        var days: [String] = []
+        
+        for _ in 0...6 {
+            daysOrder.append(firstDay)
+            if firstDay == 7 {
+                firstDay = 1
+            } else {
+                firstDay += 1
+            }
+        }
+        
+        if let newTrackerSchedule {
+            daysOrder.forEach{
+                if newTrackerSchedule.sorted().contains($0) {
+                    days.append(shortDays[$0 - 1])
+                }
+            }
+        }
+        
+        return days.joined(separator: ", ")
     }
 }
 

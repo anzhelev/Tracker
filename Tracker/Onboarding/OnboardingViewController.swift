@@ -78,7 +78,7 @@ final class OnboardingViewController: UIPageViewController {
         let buttonView = UILabel()
         buttonView.backgroundColor = Colors.black
         buttonView.text = NSLocalizedString("onboardingViewController.button", comment: "")
-        buttonView.font = Fonts.SFPro16Semibold
+        buttonView.font = Fonts.SFPro16Medium
         buttonView.textColor = Colors.white
         buttonView.textAlignment = .center
         setPosition(for: buttonView, on: vc)

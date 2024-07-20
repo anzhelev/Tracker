@@ -7,6 +7,7 @@
 */
 
 "buttons.cancel" = "Cancel";
+"buttons.save" = "Save";
 "buttons.done" = "Done";
 "buttons.create" = "Create";
 
@@ -41,12 +42,16 @@
 "newTrackerTypeChoiceVC.habit" = "Habit";
 "newTrackerTypeChoiceVC.event" = "Event";
 
+"trackerCreationVC.event.title" = "New event";
+"trackerCreationVC.eventEditing.title" = "Event edit";
+
 "trackerCreationVC.habit.title" = "New habit";
+"trackerCreationVC.habitEditing.title" = "Habit edit";
 "trackerCreationVC.habit.schedule" = "Schedule";
 "trackerCreationVC.habit.schedule.everyDay" = "Every day";
 "trackerCreationVC.habit.schedule.daysOfWeek" = ""; // !!!!!!!!!
 
-"trackerCreationVC.event.title" = "New event";
+
 
 "trackerCreationVC.enterTrackerName" = "Enter tracker name";
 "trackerCreationVC.limit" = "38 characters allowed";

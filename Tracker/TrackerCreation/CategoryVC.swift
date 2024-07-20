@@ -73,7 +73,7 @@ final class CategoryVC: UIViewController {
     private func setTitle() {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("trackerCreationVC.category", comment: "")
-        titleLabel.font = Fonts.SFPro16Semibold
+        titleLabel.font = Fonts.SFPro16Medium
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -157,7 +157,7 @@ final class CategoryVC: UIViewController {
         categoryCreationButton.addTarget(self, action: #selector(categoryCreationButtonPressed), for: .touchUpInside)
         categoryCreationButton.backgroundColor = Colors.black
         categoryCreationButton.setTitle(NSLocalizedString("trackerCreationVC.addCategory", comment: ""), for: .normal)
-        categoryCreationButton.titleLabel?.font = Fonts.SFPro16Semibold
+        categoryCreationButton.titleLabel?.font = Fonts.SFPro16Medium
         categoryCreationButton.setTitleColor(Colors.white, for: .normal)
         categoryCreationButton.layer.masksToBounds = true
         categoryCreationButton.layer.cornerRadius = 16

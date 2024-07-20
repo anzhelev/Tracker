@@ -36,12 +36,12 @@ final class StoreService: NSObject {
     
     private lazy var trackerFetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(TrackerCoreData.category.category), ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(TrackerCoreData.category.categoryName), ascending: true)]
         
         let controller = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: context,
-            sectionNameKeyPath: #keyPath(TrackerCoreData.category.category),
+            sectionNameKeyPath: #keyPath(TrackerCoreData.category.categoryName),
             cacheName: nil
         )
         controller.delegate = self
@@ -131,15 +131,15 @@ final class StoreService: NSObject {
         let filteredTrackers = fetchedTrackers.filter {tracker in
             if completedTrackers.contains(
                 where: {record in
-                    record.id == tracker.id && record.date == selectedDate
+                    record.id == tracker.uuid && record.date == selectedDate
                 }
             )
                 ? filter != .uncompleted
                 : filter != .completed
             {
                 filteredTrackersCount += 1
-                if isPinned(trackerID: tracker.id ?? UUID()) {
-                    pinnedTrackers.append(Tracker(id: tracker.id ?? UUID(),
+                if isPinned(trackerID: tracker.uuid ?? UUID()) {
+                    pinnedTrackers.append(Tracker(id: tracker.uuid ?? UUID(),
                                                   name: tracker.name ?? "",
                                                   color: Int(tracker.color),
                                                   emoji: Int(tracker.emoji),
@@ -147,7 +147,7 @@ final class StoreService: NSObject {
                                                  )
                     )
                 } else {
-                    categoryNames.insert(tracker.category?.category ?? "")
+                    categoryNames.insert(tracker.category?.categoryName ?? "")
                     return true
                 }
             }
@@ -164,9 +164,9 @@ final class StoreService: NSObject {
         
         filteredTrackers.forEach {item in
             if let index = newCategories.firstIndex(where: {(categoryName, _) in
-                item.category?.category ?? "" == categoryName
+                item.category?.categoryName ?? "" == categoryName
             }) {
-                newCategories[index].1.append(Tracker(id: item.id ?? UUID(),
+                newCategories[index].1.append(Tracker(id: item.uuid ?? UUID(),
                                                       name: item.name ?? "",
                                                       color: Int(item.color),
                                                       emoji: Int(item.emoji),
@@ -207,6 +207,12 @@ extension StoreService: NSFetchedResultsControllerDelegate {
     
     func getSectionName(for section: Int) -> String {
         filteredTrackers[section].category
+    }
+    
+    func getTrackerCategory(for trackerID: UUID) -> String {
+        return trackerFetchedResultsController.fetchedObjects?.filter{tracker in
+            tracker.uuid == trackerID
+        }.first?.category?.categoryName ?? ""
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<any NSFetchRequestResult>) {
@@ -268,6 +274,11 @@ extension StoreService: CategoryStoreDelegate {
         for item in newCategories {
             categoryStore.storeCategory(category: item)
         }
+    }
+    
+    func updateTracker(tracker: Tracker, eventDate: Date?, newCategory: String) {
+        trackerStore.delete(tracker: tracker)
+        addTrackerToStore(tracker: tracker, eventDate: eventDate, to: newCategory)
     }
 }
 

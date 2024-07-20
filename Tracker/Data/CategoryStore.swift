@@ -8,7 +8,6 @@ import CoreData
 import UIKit
 
 protocol CategoryStoreDelegate: AnyObject {
-    
     var context: NSManagedObjectContext {get set}
     func fetchCategoryList()
     func addTrackerToStore(tracker: Tracker, eventDate: Date?, to category: String)
@@ -37,7 +36,7 @@ final class CategoryStore {
         var categories: Set <String> = []
         
         storedCategories.forEach {item in
-            if let category = item.category {
+            if let category = item.categoryName {
                 categories.insert(category)
             }
         }
@@ -47,7 +46,7 @@ final class CategoryStore {
     func storeCategory(category title: String) {
         let categoryCoreData = CategoryCoreData(context: context)
         
-        categoryCoreData.category = title
+        categoryCoreData.categoryName = title
         categoryCoreData.trackers = []
         delegate?.saveContext()
     }
@@ -55,7 +54,7 @@ final class CategoryStore {
     func storeCategoryWithTracker(category title: String, tracker: TrackerCoreData) {
         
         let request = NSFetchRequest<CategoryCoreData>(entityName: "CategoryCoreData")
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(CategoryCoreData.category), title)
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(CategoryCoreData.categoryName), title)
         
         guard let categoryCoreData = try? context.fetch(request) else {
             print("@@@ func storeCategoryWithTracker: Ошибка получения категории для сохранения нового трекера")
@@ -63,5 +62,5 @@ final class CategoryStore {
         }
         tracker.category = categoryCoreData[0]
         delegate?.saveContext()
-    }
+    } 
 }

@@ -23,11 +23,23 @@ final class TrackerStore {
         self.delegate = delegate
         self.context = delegate.context
     }
+
+    func delete(tracker: Tracker) {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(TrackerCoreData.uuid), tracker.id as CVarArg)
+        if let result = try? context.fetch(request) as [TrackerCoreData],
+           let fetchedTracker = result.first {
+            context.delete(fetchedTracker)
+        }
+        
+        delegate?.saveContext()
+    }
     
     func addToStore(tracker: Tracker, eventDate: Date?) -> TrackerCoreData {
         let trackerCoreData = TrackerCoreData(context: context)
 
-        trackerCoreData.id = tracker.id
+        trackerCoreData.uuid = tracker.id
         trackerCoreData.eventDate = eventDate
         trackerCoreData.name = tracker.name
         trackerCoreData.color = Int16(tracker.color ?? 0)

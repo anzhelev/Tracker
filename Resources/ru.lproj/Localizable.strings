@@ -7,6 +7,7 @@
 */
 
 "buttons.cancel" = "Отменить";
+"buttons.save" = "Сохранить";
 "buttons.done" = "Готово";
 "buttons.create" = "Создать";
 
@@ -41,12 +42,14 @@
 "newTrackerTypeChoiceVC.habit" = "Привычка";
 "newTrackerTypeChoiceVC.event" = "Нерегулярное событие";
 
+"trackerCreationVC.event.title" = "Новое нерегулярное событие";
+"trackerCreationVC.eventEditing.title" = "Редактирование события";
+
 "trackerCreationVC.habit.title" = "Новая привычка";
+"trackerCreationVC.habitEditing.title" = "Редактирование привычки";
 "trackerCreationVC.habit.schedule" = "Расписание";
 "trackerCreationVC.habit.schedule.everyDay" = "Каждый день";
 "trackerCreationVC.habit.schedule.daysOfWeek" = "Дни недели";// !!!!!!!!!
-
-"trackerCreationVC.event.title" = "Новое нерегулярное событие";
 
 "trackerCreationVC.enterTrackerName" = "Введите название трекера";
 "trackerCreationVC.limit" = "Ограниение 38 символов";

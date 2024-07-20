@@ -282,7 +282,7 @@ final class TrackersViewController: UIViewController {
         filtersButton.addTarget(self, action: #selector(filtersButtonAction), for: .touchUpInside)
         filtersButton.backgroundColor = Colors.blue
         filtersButton.setTitle(NSLocalizedString("filtersVC.title", comment: ""), for: .normal)
-        filtersButton.titleLabel?.font = Fonts.SFPro16Semibold
+        filtersButton.titleLabel?.font = Fonts.SFPro16Medium
         filtersButton.setTitleColor(Colors.white, for: .normal)
         filtersButton.layer.masksToBounds = true
         filtersButton.layer.cornerRadius = 16
@@ -444,6 +444,26 @@ extension TrackersViewController: UICollectionViewDelegate {
     
     private func editTracker(indexPath: IndexPath) {
         
+        let tracker = storeService.object(at: indexPath)
+        let count = storeService.completedTrackers.filter {record in
+            record.id == tracker.id
+        }.count
+        let category = storeService.getTrackerCategory(for: tracker.id)
+        
+        let isEvent = tracker.schedule == nil
+        
+        let params = EditModeParams(tracker: tracker,
+                                    category: category,
+                                    daysCount: count
+        )
+        
+        let vc = TrackerCreationVC(newTrackerType: isEvent ? .event : .habit,
+                                   delegate: self,
+                                   editModeParams: params
+        )
+        
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
     }
     
     private func deleteTracker(indexPath: IndexPath) {
