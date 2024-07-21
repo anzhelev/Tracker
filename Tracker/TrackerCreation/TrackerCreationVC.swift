@@ -420,6 +420,7 @@ extension TrackerCreationVC: UITableViewDelegate {
             return mainTableCells[indexPath.row].cellHeight
         }
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch mainTableCells[indexPath.row].id {
         case .schedule:

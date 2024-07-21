@@ -7,6 +7,7 @@
 import UIKit
 
 enum Fonts {
+    static let SFPro12Medium = UIFont.systemFont(ofSize: 12, weight: .medium)
     static let SFPro12Semibold = UIFont.systemFont(ofSize: 12, weight: .semibold)
     static let SFPro16Medium = UIFont.systemFont(ofSize: 16, weight: .medium)
     static let SFPro17Regular = UIFont.systemFont(ofSize: 17, weight: .regular)

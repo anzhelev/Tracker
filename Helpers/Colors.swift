@@ -8,7 +8,7 @@ import UIKit
 
 /// Custom colors
 enum Colors {
-/// launch screen background, switch tint color
+    /// launch screen background, switch tint color
     static var blue: UIColor {UIColor(named: "YP Blue") ?? UIColor.blue}
     /// main font color
     static var black: UIColor {UIColor(named: "YP Black") ?? UIColor.black}
@@ -28,4 +28,10 @@ enum Colors {
     static var grayTabBarSeparator: UIColor {UIColor(named: "YP Tab Bar Separator (Alpha 30)") ?? UIColor.lightGray}
     /// semi transparent circle for emojis
     static var whiteEmojiCircle: UIColor {UIColor(named: "Emoji Circle (Alpha 30)") ?? UIColor.clear}
+    /// gradient color for StatisticsVC
+    static var gradientRed: UIColor {UIColor(named: "Gradient1") ?? UIColor.red}
+    /// gradient color for StatisticsVC
+    static var gradientGreen: UIColor {UIColor(named: "Gradient2") ?? UIColor.green}
+    /// gradient color for StatisticsVC
+    static var gradientBlue: UIColor {UIColor(named: "Gradient3") ?? UIColor.blue}
 }

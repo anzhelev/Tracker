@@ -29,6 +29,13 @@
 "trackersViewController.contextMenu.delete" = "Удалить";
 "trackersViewController.contextMenu.delete.alert" = "Уверены, что хотите удалить трекер?";
 
+"statisticsViewController.title" = "Статистика";
+"statisticsViewController.stub" = "Пока нечего анализировать";
+"statisticsViewController.cell0" = "Лучший период";
+"statisticsViewController.cell1" = "Идеальные дни";
+"statisticsViewController.cell2" = "Трекеров завершено";
+"statisticsViewController.cell3" = "Среднее значение";
+
 "filtersVC.title" = "Фильтры";
 "filtersVC.cell.all" = "Все трекеры";
 "filtersVC.cell.today" = "Трекеры на сегодня";
