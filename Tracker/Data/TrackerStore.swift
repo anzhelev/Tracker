@@ -11,6 +11,7 @@ protocol TrackerStoreDelegate: AnyObject {
     
     var context: NSManagedObjectContext {get set}
     func getTrackersCount() -> Int
+    func deleteFromStore(tracker id: UUID)
     func saveContext()
 }
 
@@ -23,11 +24,11 @@ final class TrackerStore {
         self.delegate = delegate
         self.context = delegate.context
     }
-
-    func delete(tracker: Tracker) {
+    
+    func delete(tracker id: UUID) {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(TrackerCoreData.uuid), tracker.id as CVarArg)
+                                        #keyPath(TrackerCoreData.uuid), id as CVarArg)
         if let result = try? context.fetch(request) as [TrackerCoreData],
            let fetchedTracker = result.first {
             context.delete(fetchedTracker)
@@ -38,7 +39,7 @@ final class TrackerStore {
     
     func addToStore(tracker: Tracker, eventDate: Date?) -> TrackerCoreData {
         let trackerCoreData = TrackerCoreData(context: context)
-
+        
         trackerCoreData.uuid = tracker.id
         trackerCoreData.eventDate = eventDate
         trackerCoreData.name = tracker.name

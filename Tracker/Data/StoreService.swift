@@ -219,14 +219,12 @@ extension StoreService: NSFetchedResultsControllerDelegate {
         switch controller {
             
         case trackerFetchedResultsController:
-            print("@@@ trackerFetchedResultsController: Уведомление об изменении в контенте.")
             filterTrackers(with: delegate?.selectedFilter ?? .all, selectedDate: delegate?.selectedDate ?? Date().short)
             delegate?.updateTrackersCollectionView()
             delegate?.updateStub()
             delegate?.updateFilterButtonState()
             
         case recordsFetchedResultsController:
-            print("@@@ recordsFetchedResultsController: Уведомление об изменении в контенте.")
             getStoredRecords()
             if delegate?.selectedFilter == .completed
                 || delegate?.selectedFilter == .uncompleted {
@@ -243,6 +241,10 @@ extension StoreService: NSFetchedResultsControllerDelegate {
 
 // MARK: - TrackerStoreDelegate
 extension StoreService: TrackerStoreDelegate {
+    
+    func deleteFromStore(tracker id: UUID) {
+        trackerStore.delete(tracker: id)
+    }
     
     func getTrackersCount() -> Int {
         trackerStore.allTrackersCount()
@@ -277,7 +279,7 @@ extension StoreService: CategoryStoreDelegate {
     }
     
     func updateTracker(tracker: Tracker, eventDate: Date?, newCategory: String) {
-        trackerStore.delete(tracker: tracker)
+        deleteFromStore(tracker: tracker.id)
         addTrackerToStore(tracker: tracker, eventDate: eventDate, to: newCategory)
     }
 }

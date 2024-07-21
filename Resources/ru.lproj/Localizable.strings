@@ -27,6 +27,7 @@
 "trackersViewController.contextMenu.unpin" = "Открепить";
 "trackersViewController.contextMenu.edit" = "Редактировать";
 "trackersViewController.contextMenu.delete" = "Удалить";
+"trackersViewController.contextMenu.delete.alert" = "Уверены, что хотите удалить трекер?";
 
 "filtersVC.title" = "Фильтры";
 "filtersVC.cell.all" = "Все трекеры";

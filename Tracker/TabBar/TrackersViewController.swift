@@ -467,7 +467,27 @@ extension TrackersViewController: UICollectionViewDelegate {
     }
     
     private func deleteTracker(indexPath: IndexPath) {
+        let tracker = storeService.object(at: indexPath)
+        self.present(getDeleteAlertView(for: tracker.id), animated: true)
+    }
+    
+    private func getDeleteAlertView(for trackerID: UUID) -> UIAlertController {
+        let alert = UIAlertController(title: nil,
+                                      message: NSLocalizedString("trackersViewController.contextMenu.delete.alert", comment: ""),
+                                      preferredStyle: .actionSheet
+        )
         
+        alert.addAction(UIAlertAction(title: NSLocalizedString("trackersViewController.contextMenu.delete", comment: ""),
+                                      style: .destructive) {_ in
+            self.storeService.deleteFromStore(tracker: trackerID)
+        })
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("buttons.cancel", comment: ""),
+                                      style: .cancel) {_ in
+            alert.dismiss(animated: true)
+        })
+        
+        return alert
     }
     
     private func getPreview(for tracker: Tracker, which isPinned: Bool) -> UIViewController {
