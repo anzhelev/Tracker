@@ -6,24 +6,16 @@
 //
 import UIKit
 
-struct StatisticsCells {
-    var value: Int
-    var description: String
-}
-
 final class StatisticsViewController: UIViewController {
     
     // MARK: - Private Properties
-    private var statistics: [StatisticsCells] {
-        var statistics: [StatisticsCells] = []
+    private var statistics = [0, 0, 0, 0]
+    private var cellLabels: [String] {
+        var labels: [String] = []
         for cell in 0...3 {
-            statistics.append(
-                StatisticsCells(value: 1,
-                                description: NSLocalizedString("statisticsViewController.cell\(cell)", comment: "")
-                               )
-            )
+            labels.append( NSLocalizedString("statisticsViewController.cell\(cell)", comment: ""))
         }
-        return statistics
+        return labels
     }
     
     private var mainTable = UITableView()
@@ -32,17 +24,20 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUIElements()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        updateStatistics()
     }
     
     // MARK: - Private Methods
     private func configureUIElements() {
         view.backgroundColor = Colors.white
         setTitleLabel()
-        self.statistics[2].value == 0
-        ? setStubImage()
-        : setTableView()
+        setStubImage()
+        setTableView()
     }
     
     private func setTitleLabel() {
@@ -92,7 +87,7 @@ final class StatisticsViewController: UIViewController {
             stubLabel.centerXAnchor.constraint(equalTo: stubView.centerXAnchor)
         ])
     }
- 
+    
     private func setTableView() {
         mainTable.register(StatisticsTableCell.self, forCellReuseIdentifier: "cell")
         mainTable.delegate = self
@@ -109,6 +104,25 @@ final class StatisticsViewController: UIViewController {
             mainTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
     }
+    
+    private func updateStatistics() {
+        var newData = [0, 0, 0, 0]
+        newData[0] = UserDefaults.standard.integer(forKey: "statisticsBestPeriod")
+        newData[1] = UserDefaults.standard.integer(forKey: "statisticsPerfectDays")
+        newData[2] = UserDefaults.standard.integer(forKey: "statisticsCompletedTrackers")
+        newData[3] = UserDefaults.standard.integer(forKey: "statisticsAverageCount")
+        
+        self.statistics = newData
+        mainTable.reloadData()
+        updateStub()
+    }
+    
+    private func updateStub() {
+        stubView.isHidden = self.statistics[2] > 0
+        ? true
+        : false
+        mainTable.isHidden = !stubView.isHidden
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -122,7 +136,7 @@ extension StatisticsViewController: UITableViewDataSource {
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? StatisticsTableCell {
             
-            cell.configure(with: String(statistics[indexPath.row].value), description: statistics[indexPath.row].description)
+            cell.configure(with: String(statistics[indexPath.row]), description: cellLabels[indexPath.row])
             
             return cell
         }

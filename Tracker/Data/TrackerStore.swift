@@ -55,4 +55,12 @@ final class TrackerStore {
         let count = (try? context.count(for: fetchRequest)) ?? 0
         return count
     }
+    
+    func fetchAllTrackers() -> [TrackerCoreData] {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        if let trackers = try? context.fetch(request) as [TrackerCoreData] {
+            return trackers
+        }
+       return []
+    }
 }

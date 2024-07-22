@@ -7,7 +7,13 @@
 import CoreData
 import UIKit
 
-protocol StoreServiceDelegate: AnyObject {
+struct TrackerStatisticsData {
+    let id: UUID
+    let schedule: Set<Int>?
+    let eventDate: Date?
+}
+
+protocol TrackersVCDelegate: AnyObject {
     var selectedDate: Date { get }
     var selectedFilter: Filters  { get }
     func updateTrackersCollectionView()
@@ -18,16 +24,19 @@ protocol StoreServiceDelegate: AnyObject {
 final class StoreService: NSObject {
     
     // MARK: - Public Properties
+    weak var trackersVCdelegate: TrackersVCDelegate?
     var context: NSManagedObjectContext = AppDelegate.context
-    weak var delegate: StoreServiceDelegate?
     
     // MARK: - Private Properties
     private (set) var pinnedTrackers: [UUID] = []
     private (set) var filteredTrackers: [TrackerCategory] = []
     private (set) var categoryList: Set<String> = []
-    private (set) var completedTrackers: [TrackerRecord] = []
+    private (set) var completedTrackers: [TrackerRecord] = [] {
+        didSet {
+            updateStatistics()
+        }
+    }
     private (set) var filteredTrackersCount = 0
-    
     
     private lazy var trackerStore: TrackerStore = TrackerStore(delegate: self)
     private lazy var categoryStore: CategoryStore = CategoryStore(delegate: self)
@@ -65,9 +74,9 @@ final class StoreService: NSObject {
     }()
     
     // MARK: - Initializers
-    init(delegate: StoreServiceDelegate?) {
+    init(trackersVCdelegate: TrackersVCDelegate? = nil) {
         super.init()
-        self.delegate = delegate
+        self.trackersVCdelegate = trackersVCdelegate
         getStoredRecords()
         fetchPinnedTrackers()
         fetchCategoryList()
@@ -107,6 +116,59 @@ final class StoreService: NSObject {
     
     func isPinned(trackerID: UUID) -> Bool {
         return self.pinnedTrackers.contains(trackerID)
+    }
+    
+    func updateStatistics() {
+        let allTrackers = getTrackersForStatistics()
+        var setOfDates: Set<Date> = []
+        var totalDaysWithTrackers = 0
+        var bestPeriod = 0
+        var currentPeriod = 0
+        var perfectDays = 0
+        
+        for record in completedTrackers {
+            setOfDates.insert(record.date)
+        }
+        
+        var date = setOfDates.sorted().first ?? Date().short
+        let totalDaysCount = (Calendar.current.dateComponents([.day], from: date, to: Date().short).day ?? 0) + 1
+        
+        for _ in 1...totalDaysCount {
+            let weekDay = Calendar.current.component(.weekday, from: date)
+            
+            let totalTrackersInDay = allTrackers.filter {tracker in
+                if let schedule = tracker.schedule {
+                    return schedule.contains(weekDay)
+                }
+                if let eventDate = tracker.eventDate {
+                    return eventDate == date
+                }
+                return false
+            }.count
+            
+            let completedTrackersInDay = completedTrackers.filter {record in
+                record.date == date
+            }.count
+            
+            if totalTrackersInDay > 0 {
+                totalDaysWithTrackers += 1
+                if totalTrackersInDay == completedTrackersInDay {
+                    perfectDays += 1
+                    currentPeriod += 1
+                    bestPeriod = max(bestPeriod, currentPeriod)
+                } else {
+                    currentPeriod = 0
+                }
+            }
+            date = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
+        }
+        
+        let average = totalDaysWithTrackers > 0 ? completedTrackers.count / totalDaysWithTrackers : 0
+        
+        UserDefaults.standard.set(bestPeriod, forKey: "statisticsBestPeriod")
+        UserDefaults.standard.set(perfectDays, forKey: "statisticsPerfectDays")
+        UserDefaults.standard.set(self.completedTrackers.count, forKey: "statisticsCompletedTrackers")
+        UserDefaults.standard.set(average, forKey: "statisticsAverageCount")
     }
     
     // MARK: - Private Methods
@@ -219,18 +281,18 @@ extension StoreService: NSFetchedResultsControllerDelegate {
         switch controller {
             
         case trackerFetchedResultsController:
-            filterTrackers(with: delegate?.selectedFilter ?? .all, selectedDate: delegate?.selectedDate ?? Date().short)
-            delegate?.updateTrackersCollectionView()
-            delegate?.updateStub()
-            delegate?.updateFilterButtonState()
+            filterTrackers(with: trackersVCdelegate?.selectedFilter ?? .all, selectedDate: trackersVCdelegate?.selectedDate ?? Date().short)
+            trackersVCdelegate?.updateTrackersCollectionView()
+            trackersVCdelegate?.updateStub()
+            trackersVCdelegate?.updateFilterButtonState()
             
         case recordsFetchedResultsController:
             getStoredRecords()
-            if delegate?.selectedFilter == .completed
-                || delegate?.selectedFilter == .uncompleted {
-                filterTrackers(with: delegate?.selectedFilter ?? .all, selectedDate: delegate?.selectedDate ?? Date().short)
-                delegate?.updateTrackersCollectionView()
-                delegate?.updateStub()
+            if trackersVCdelegate?.selectedFilter == .completed
+                || trackersVCdelegate?.selectedFilter == .uncompleted {
+                filterTrackers(with: trackersVCdelegate?.selectedFilter ?? .all, selectedDate: trackersVCdelegate?.selectedDate ?? Date().short)
+                trackersVCdelegate?.updateTrackersCollectionView()
+                trackersVCdelegate?.updateStub()
             }
             
         default:
@@ -244,10 +306,19 @@ extension StoreService: TrackerStoreDelegate {
     
     func deleteFromStore(tracker id: UUID) {
         trackerStore.delete(tracker: id)
+        updateStatistics()
     }
     
     func getTrackersCount() -> Int {
         trackerStore.allTrackersCount()
+    }
+    
+    func getTrackersForStatistics() -> [TrackerStatisticsData] {
+        return trackerStore.fetchAllTrackers().map {tracker in
+            TrackerStatisticsData(id: tracker.uuid ?? UUID(),
+                                  schedule: tracker.schedule.asSetOfInt,
+                                  eventDate: tracker.eventDate)
+        }
     }
 }
 
@@ -267,7 +338,8 @@ extension StoreService: CategoryStoreDelegate {
             )
         )
         fetchCategoryList()
-        delegate?.updateStub()
+        trackersVCdelegate?.updateStub()
+        updateStatistics()
     }
     
     func addCategoriesToStore(newlist: Set<String>) {

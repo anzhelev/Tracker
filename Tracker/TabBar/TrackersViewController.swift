@@ -6,10 +6,10 @@
 //
 import UIKit
 
-final class TrackersViewController: UIViewController {
+final class TrackersViewController: UIViewController, TrackersVCDelegate {
     
     // MARK: - Public Properties
-    lazy var storeService = StoreService(delegate: self)
+    lazy var storeService = StoreService(trackersVCdelegate: self)
     
     // MARK: - Private Properties
     private var plusButton = UIButton()
@@ -76,6 +76,10 @@ final class TrackersViewController: UIViewController {
         } else {
             stubView.isHidden = true
         }
+    }
+    
+    func updateTrackersCollectionView() {
+        trackersCollectionView.reloadData()
     }
     
     // MARK: - IBAction
@@ -585,14 +589,6 @@ extension TrackersViewController: TrackersCVCellDelegate {
             storeService.deleteRecordFromStore(record: TrackerRecord(id: trackerID, date: selectedDate))
         }
         trackersCollectionView.reloadItems(at: [indexPath])
-    }
-}
-
-// MARK: - StoreServiceDelegate
-extension TrackersViewController: StoreServiceDelegate {
-    
-    func updateTrackersCollectionView() {
-        trackersCollectionView.reloadData()
     }
 }
 

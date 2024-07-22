@@ -29,7 +29,7 @@ final class CategoryViewModel {
     init (delegate: CategoryViewModelDelegate, selectedCategory: String?) {
         self.delegate = delegate
         self.selectedCategory = selectedCategory
-        self.storeService = StoreService(delegate: nil)
+        self.storeService = StoreService()
         updateCategoryList()
     }
     
