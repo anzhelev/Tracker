@@ -44,7 +44,13 @@ final class CategoryVC: UIViewController {
     
     // MARK: - IBAction
     @objc private func categoryCreationButtonPressed() {
-        let vc = CategoryCreationVC(delegate: viewModel)
+        let vc = CategoryCreationVC(delegate: viewModel, editMode: false, categoryName: nil)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
+    }
+    
+    private func categoryEditButtonPressed(categoryName: String) {
+        let vc = CategoryCreationVC(delegate: viewModel, editMode: true, categoryName: categoryName)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
@@ -210,5 +216,63 @@ extension CategoryVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.updateSelectedCategory(with: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        return UIContextMenuConfiguration(actionProvider: { actions in
+            return UIMenu(children: [
+                
+                UIAction(title: NSLocalizedString("trackersViewController.contextMenu.edit", comment: "")) { [weak self] _ in
+                    if let categoryName = self?.viewModel.categoryList[indexPath.row] {
+                        self?.categoryEditButtonPressed(categoryName: categoryName)
+                    }
+                },
+                
+                UIAction(title: NSLocalizedString("trackersViewController.contextMenu.delete", comment: ""), attributes: .destructive) { [weak self] _ in
+                    if let categoryName = self?.viewModel.categoryList[indexPath.row] {
+                        self?.present(self?.getDeleteAlertView(for: categoryName) ?? UIViewController(), animated: true)
+                    }
+                },
+            ])
+        })
+    }
+    
+    private func getDeleteAlertView(for categoryName: String) -> UIAlertController {
+        let trackersCount = viewModel.getTrackersCountFor(categoryName: categoryName)
+        
+        if trackersCount > 0 {
+            let alert = UIAlertController(title: nil,
+                                          message: String(
+                                            format: NSLocalizedString("categoryCreationVC.contextMenu.canNotDelete.alert", comment: ""),
+                                            String.localizedStringWithFormat(NSLocalizedString("numberOfTrackers", comment: ""), trackersCount)
+                                          ),
+                                          preferredStyle: .actionSheet
+            )
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("buttons.ok", comment: ""),
+                                          style: .default) {_ in
+                alert.dismiss(animated: true)
+            })
+            
+            return alert
+        }
+        
+        let alert = UIAlertController(title: nil,
+                                      message: NSLocalizedString("categoryCreationVC.contextMenu.delete.alert", comment: ""),
+                                      preferredStyle: .actionSheet
+        )
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("trackersViewController.contextMenu.delete", comment: ""),
+                                      style: .destructive) {_ in
+            self.viewModel.deleteCategory(categoryName: categoryName)
+        })
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("buttons.cancel", comment: ""),
+                                      style: .cancel) {_ in
+            alert.dismiss(animated: true)
+        })
+        
+        return alert
     }
 }

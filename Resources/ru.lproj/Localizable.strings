@@ -6,6 +6,7 @@
   
 */
 
+"buttons.ok" = "Ок";
 "buttons.cancel" = "Отменить";
 "buttons.save" = "Сохранить";
 "buttons.done" = "Готово";
@@ -57,8 +58,6 @@
 "trackerCreationVC.habitEditing.title" = "Редактирование привычки";
 "trackerCreationVC.habit.schedule" = "Расписание";
 "trackerCreationVC.habit.schedule.everyDay" = "Каждый день";
-"trackerCreationVC.habit.schedule.daysOfWeek" = "Дни недели";// !!!!!!!!!
-
 "trackerCreationVC.enterTrackerName" = "Введите название трекера";
 "trackerCreationVC.limit" = "Ограниение 38 символов";
 "trackerCreationVC.category" = "Категория";
@@ -68,3 +67,7 @@
 "trackerCreationVC.enterCategoryName" = "Введите название категории";
 "trackerCreationVC.emoji" = "Эмоджи";
 "trackerCreationVC.color" = "Цвет";
+
+"categoryCreationVC.title" = "Редактирование категории";
+"categoryCreationVC.contextMenu.delete.alert" = "Вы уверены, что хотите удалить категорию?";
+"categoryCreationVC.contextMenu.canNotDelete.alert" = "В данной категории %@, поэтому она не может быть удалена";

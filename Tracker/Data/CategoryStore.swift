@@ -42,7 +42,7 @@ final class CategoryStore {
         }
         return categories
     }
-
+    
     func storeCategory(category title: String) {
         let categoryCoreData = CategoryCoreData(context: context)
         
@@ -62,5 +62,27 @@ final class CategoryStore {
         }
         tracker.category = categoryCoreData[0]
         delegate?.saveContext()
-    } 
+    }
+    
+    func deleteCategory(categoryName: String) {
+        let request = NSFetchRequest<CategoryCoreData>(entityName: "CategoryCoreData")
+        request.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(CategoryCoreData.categoryName), categoryName as CVarArg)
+        if let result = try? context.fetch(request) as [CategoryCoreData],
+           let fetchedCategory = result.first {
+            context.delete(fetchedCategory)
+        }
+        delegate?.saveContext()
+    }
+    
+    func editCategoryName(oldName: String, newName: String) {
+        let request = NSFetchRequest<CategoryCoreData>(entityName: "CategoryCoreData")
+        request.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(CategoryCoreData.categoryName), oldName as CVarArg)
+        if let result = try? context.fetch(request) as [CategoryCoreData],
+           let fetchedCategory = result.first {
+            fetchedCategory.categoryName = newName
+        }
+        delegate?.saveContext()
+    }
 }

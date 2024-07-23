@@ -7,9 +7,9 @@
 import UIKit
 
 protocol CategoryCreationVCDelegate: AnyObject {
-   func addNewCategory(category: String)
+    func addNewCategory(category: String)
+    func editCategory(oldName: String, newName: String)
 }
-
 
 final class CategoryCreationVC: UIViewController {
     
@@ -17,13 +17,17 @@ final class CategoryCreationVC: UIViewController {
     weak var delegate: CategoryCreationVCDelegate?
     
     // MARK: - Private Properties
+    private var editMode = false
     private var doneButton = UIButton()
     private var titleTextField = UITextField()
     private var minimumTitleLength = 1
+    private var oldCategoryName: String
     
     // MARK: - Initializers
-    init(delegate: CategoryCreationVCDelegate) {
+    init(delegate: CategoryCreationVCDelegate, editMode: Bool, categoryName: String?) {
         self.delegate = delegate
+        self.editMode = editMode
+        self.oldCategoryName = categoryName ?? ""
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -42,7 +46,9 @@ final class CategoryCreationVC: UIViewController {
     // MARK: - IBAction
     @objc private func categoryCreationButtonPressed() {
         if let newCaterory = titleTextField.text {
-            self.delegate?.addNewCategory(category: newCaterory)
+            editMode
+            ? self.delegate?.editCategory(oldName: oldCategoryName, newName: newCaterory)
+            : self.delegate?.addNewCategory(category: newCaterory)
             self.dismiss(animated: true)
         }
     }
@@ -58,7 +64,10 @@ final class CategoryCreationVC: UIViewController {
     
     private func setTitle() {
         let titleLabel = UILabel()
-        titleLabel.text = NSLocalizedString("trackerCreationVC.category", comment: "")
+        titleLabel.text = editMode
+        ? NSLocalizedString("trackerCreationVC.category", comment: "")
+        : NSLocalizedString("categoryCreationVC.title", comment: "")
+        
         titleLabel.font = Fonts.SFPro16Medium
         titleLabel.textColor = Colors.black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -79,6 +88,9 @@ final class CategoryCreationVC: UIViewController {
         view.addSubview(titleInputView)
         
         let titleTextField = UITextField()
+        if editMode {
+            titleTextField.text = oldCategoryName
+        }
         titleTextField.placeholder = NSLocalizedString("trackerCreationVC.enterCategoryName", comment: "")
         titleTextField.clearButtonMode = .always
         titleTextField.textColor = Colors.black

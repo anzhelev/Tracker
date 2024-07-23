@@ -24,5 +24,27 @@
 			<string>%d дня</string>
 		</dict>
 	</dict>
+	<key>numberOfTrackers</key>
+  <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@trackers@</string>
+      <key>trackers</key>
+      <dict>
+          <key>NSStringFormatSpecTypeKey</key>
+          <string>NSStringPluralRuleType</string>
+          <key>NSStringFormatValueTypeKey</key>
+          <string>d</string>
+          <key>zero</key>
+          <string>0 трекеров</string>
+          <key>one</key>
+          <string>1 трекер</string>
+          <key>few</key>
+          <string>%d трекера</string>
+          <key>many</key>
+          <string>%d трекеров</string>
+          <key>other</key>
+          <string>%d трекера</string>
+      </dict>
+  </dict>
 </dict>
 </plist>

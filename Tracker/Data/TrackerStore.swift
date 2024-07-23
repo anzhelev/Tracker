@@ -61,6 +61,15 @@ final class TrackerStore {
         if let trackers = try? context.fetch(request) as [TrackerCoreData] {
             return trackers
         }
-       return []
+        return []
+    }
+    
+    func fetchTrackersCountForCategory(categoryName: String) -> Int {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(TrackerCoreData.category.categoryName), categoryName as CVarArg)
+        request.resultType = .countResultType
+        let count = (try? context.count(for: request)) ?? 0
+        return count
     }
 }

@@ -313,6 +313,10 @@ extension StoreService: TrackerStoreDelegate {
         trackerStore.allTrackersCount()
     }
     
+    func getTrackersCountForCategory(categoryName: String) -> Int {
+        trackerStore.fetchTrackersCountForCategory(categoryName: categoryName)
+    }
+    
     func getTrackersForStatistics() -> [TrackerStatisticsData] {
         return trackerStore.fetchAllTrackers().map {tracker in
             TrackerStatisticsData(id: tracker.uuid ?? UUID(),
@@ -348,6 +352,14 @@ extension StoreService: CategoryStoreDelegate {
         for item in newCategories {
             categoryStore.storeCategory(category: item)
         }
+    }
+    
+    func updateCategoryNameInStore(oldName: String, newName: String) {
+        categoryStore.editCategoryName(oldName: oldName, newName: newName)
+    }
+    
+    func deleteCategoryFromStore(categoryName: String) {
+        categoryStore.deleteCategory(categoryName: categoryName)
     }
     
     func updateTracker(tracker: Tracker, eventDate: Date?, newCategory: String) {
