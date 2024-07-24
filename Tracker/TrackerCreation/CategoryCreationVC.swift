@@ -65,8 +65,8 @@ final class CategoryCreationVC: UIViewController {
     private func setTitle() {
         let titleLabel = UILabel()
         titleLabel.text = editMode
-        ? NSLocalizedString("trackerCreationVC.category", comment: "")
-        : NSLocalizedString("categoryCreationVC.title", comment: "")
+        ? NSLocalizedString("categoryCreationVC.title", comment: "")
+        : NSLocalizedString("trackerCreationVC.category", comment: "")
         
         titleLabel.font = Fonts.SFPro16Medium
         titleLabel.textColor = Colors.black

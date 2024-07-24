@@ -70,4 +70,4 @@
 
 "categoryCreationVC.title" = "Category edit";
 "categoryCreationVC.contextMenu.delete.alert" = "Are you sure you want to delete this category?";
-"categoryCreationVC.contextMenu.canNotDelete.alert" = "There are %@ in this category, so it cannot be deleted";
+"categoryCreationVC.contextMenu.canNotDelete.alert" = "There %@ in this category, so it cannot be deleted";

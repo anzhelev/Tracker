@@ -93,6 +93,7 @@ final class StatisticsViewController: UIViewController {
         mainTable.delegate = self
         mainTable.dataSource = self
         mainTable.backgroundColor = Colors.white
+        mainTable.isScrollEnabled = false
         mainTable.showsVerticalScrollIndicator = false
         mainTable.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainTable)

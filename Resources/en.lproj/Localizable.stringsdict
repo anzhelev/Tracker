@@ -31,11 +31,11 @@
       <key>NSStringFormatValueTypeKey</key>
       <string>d</string>
       <key>zero</key>
-      <string>0 trackers</string>
+      <string>are no trackers</string>
       <key>one</key>
-      <string>1 tracker</string>
+      <string>is 1 tracker</string>
       <key>other</key>
-      <string>%d trackers</string>
+      <string>are %d trackers</string>
 		</dict>
 	</dict>
 </dict>
