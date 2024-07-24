@@ -56,7 +56,7 @@ final class CategoryTableCell: UITableViewCell {
         
         let label = UILabel()
         label.text = ""
-        label.textColor = Colors.black
+        label.textColor = Colors.generalTextcolor
         label.font = Fonts.SFPro17Regular
         label.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(label)

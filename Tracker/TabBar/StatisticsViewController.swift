@@ -34,7 +34,7 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Private Methods
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         setTitleLabel()
         setStubImage()
         setTableView()
@@ -44,7 +44,7 @@ final class StatisticsViewController: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("statisticsViewController.title", comment: "")
         titleLabel.font = Fonts.SFPro34Bold
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
@@ -69,7 +69,7 @@ final class StatisticsViewController: UIViewController {
         let stubLabel = UILabel()
         stubLabel.text = NSLocalizedString("statisticsViewController.stub", comment: "")
         stubLabel.font = Fonts.SFPro12Semibold
-        stubLabel.textColor = Colors.black
+        stubLabel.textColor = Colors.generalTextcolor
         stubLabel.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubLabel)
         
@@ -92,7 +92,7 @@ final class StatisticsViewController: UIViewController {
         mainTable.register(StatisticsTableCell.self, forCellReuseIdentifier: "cell")
         mainTable.delegate = self
         mainTable.dataSource = self
-        mainTable.backgroundColor = Colors.white
+        mainTable.backgroundColor = Colors.generalBackground
         mainTable.isScrollEnabled = false
         mainTable.showsVerticalScrollIndicator = false
         mainTable.translatesAutoresizingMaskIntoConstraints = false

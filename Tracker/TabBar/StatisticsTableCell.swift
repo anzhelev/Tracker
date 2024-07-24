@@ -39,6 +39,8 @@ final class StatisticsTableCell: UITableViewCell {
     // MARK: - Private Methods
     private func setUIElements() {
         self.selectionStyle = .none
+        self.backgroundColor = Colors.generalBackground
+        bordersView.backgroundColor = Colors.generalBackground
         bordersView.layer.borderWidth = 1
         bordersView.layer.masksToBounds = true
         bordersView.layer.cornerRadius = 16
@@ -46,14 +48,14 @@ final class StatisticsTableCell: UITableViewCell {
         self.contentView.addSubview(bordersView)
         
         let titleLabel = UILabel()
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.font = Fonts.SFPro34Bold
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         bordersView.addSubview(titleLabel)
         self.titleLabel = titleLabel
         
         let descriptionLabel = UILabel()
-        descriptionLabel.textColor = Colors.black
+        descriptionLabel.textColor = Colors.generalTextcolor
         descriptionLabel.font = Fonts.SFPro12Medium
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         bordersView.addSubview(descriptionLabel)

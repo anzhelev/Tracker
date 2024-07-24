@@ -39,20 +39,20 @@ final class NewTrackerTypeChoiceVC: UIViewController {
     
     // MARK: - Private Methods
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("newTrackerTypeChoiceVC.title", comment: "")
         titleLabel.font = Fonts.SFPro16Medium
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalBackground
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
         let newHabitCreationButton = UIButton()
-        newHabitCreationButton.backgroundColor = Colors.black
+        newHabitCreationButton.backgroundColor = Colors.generalTextcolor
         newHabitCreationButton.setTitle(NSLocalizedString("newTrackerTypeChoiceVC.habit", comment: ""), for: .normal)
         newHabitCreationButton.addTarget(self, action: #selector(createNewHabit), for: .touchUpInside)
-        newHabitCreationButton.setTitleColor(Colors.white, for: .normal)
+        newHabitCreationButton.setTitleColor(Colors.generalBackground, for: .normal)
         newHabitCreationButton.titleLabel?.font = Fonts.SFPro16Medium
         newHabitCreationButton.layer.masksToBounds = true
         newHabitCreationButton.layer.cornerRadius = 16
@@ -60,10 +60,10 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         view.addSubview(newHabitCreationButton)
         
         let newEventCreationButton = UIButton()
-        newEventCreationButton.backgroundColor = Colors.black
+        newEventCreationButton.backgroundColor = Colors.generalTextcolor
         newEventCreationButton.setTitle(NSLocalizedString("newTrackerTypeChoiceVC.event", comment: ""), for: .normal)
         newEventCreationButton.addTarget(self, action: #selector(createNewEvent), for: .touchUpInside)
-        newEventCreationButton.setTitleColor(Colors.white, for: .normal)
+        newEventCreationButton.setTitleColor(Colors.generalBackground, for: .normal)
         newEventCreationButton.titleLabel?.font = Fonts.SFPro16Medium
         newEventCreationButton.layer.masksToBounds = true
         newEventCreationButton.layer.cornerRadius = 16

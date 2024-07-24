@@ -13,6 +13,29 @@ struct TrackerStatisticsData {
     let eventDate: Date?
 }
 
+protocol StoreServiceProtocol {
+    var filteredTrackersCount: Int {get }
+    var numberOfSections: Int {get}
+    var completedTrackers: [TrackerRecord] {get }
+    var filteredTrackers: [TrackerCategory] {get }
+    func getFiltredCategories(selectedDate: Date, selectedWeekDay: Int, searchBarText: String?, selectedFilter: Filters)
+    func getTrackersCount() -> Int
+    func numberOfRowsInSection(_ section: Int) -> Int
+    func object(at indexPath: IndexPath) -> Tracker
+    func isPinned(trackerID: UUID) -> Bool
+    func getSectionName(for section: Int) -> String
+    func addPinnedTrackerToStore(uuid: UUID)
+    func deletePinnedTrackerFromStore(uuid: UUID)
+    func fetchPinnedTrackers()
+    func getTrackerCategory(for trackerID: UUID) -> String
+    func deleteFromStore(tracker id: UUID)
+    func addTrackerRecordToStore(record: TrackerRecord)
+    func deleteRecordFromStore(record: TrackerRecord)
+    func getFetchedTrackersCount() -> Int
+    func addTrackerToStore(tracker: Tracker, eventDate: Date?, to category: String)
+    func updateTracker(tracker: Tracker, eventDate: Date?, newCategory: String)
+}
+
 protocol TrackersVCDelegate: AnyObject {
     var selectedDate: Date { get }
     var selectedFilter: Filters  { get }
@@ -21,10 +44,13 @@ protocol TrackersVCDelegate: AnyObject {
     func updateFilterButtonState()
 }
 
-final class StoreService: NSObject {
-    
+final class StoreService: NSObject, StoreServiceProtocol {
+
     // MARK: - Public Properties
     weak var trackersVCdelegate: TrackersVCDelegate?
+    var numberOfSections: Int {
+        filteredTrackers.count
+    }
     var context: NSManagedObjectContext = AppDelegate.context
     
     // MARK: - Private Properties
@@ -77,6 +103,7 @@ final class StoreService: NSObject {
     init(trackersVCdelegate: TrackersVCDelegate? = nil) {
         super.init()
         self.trackersVCdelegate = trackersVCdelegate
+//        resetAllCoreData()
         getStoredRecords()
         fetchPinnedTrackers()
         fetchCategoryList()
@@ -171,6 +198,22 @@ final class StoreService: NSObject {
         UserDefaults.standard.set(average, forKey: "statisticsAverageCount")
     }
     
+    
+    func resetAllCoreData() {
+
+        let entityNames = AppDelegate.persistentContainer.managedObjectModel.entities.map({ $0.name!})
+         entityNames.forEach { [weak self] entityName in
+            let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+
+            do {
+                try self?.context.execute(deleteRequest)
+                try self?.context.save()
+            } catch {
+            }
+        }
+    }
+    
     // MARK: - Private Methods
     private func setRecordsFetchedResultsController() {
         do {
@@ -250,10 +293,6 @@ final class StoreService: NSObject {
 
 // MARK: - NSFetchedResultsControllerDelegate
 extension StoreService: NSFetchedResultsControllerDelegate {
-    
-    var numberOfSections: Int {
-        filteredTrackers.count
-    }
     
     func getFetchedTrackersCount() -> Int {
         trackerFetchedResultsController.fetchedObjects?.count ?? 0

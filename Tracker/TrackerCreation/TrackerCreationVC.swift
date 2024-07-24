@@ -121,7 +121,7 @@ final class TrackerCreationVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         
         setTitle(for: newTrackerType)
         if editMode {
@@ -197,7 +197,7 @@ final class TrackerCreationVC: UIViewController {
             : NSLocalizedString("trackerCreationVC.eventEditing.title", comment: "")
         }
         titleLabel.font = Fonts.SFPro16Medium
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
@@ -215,7 +215,7 @@ final class TrackerCreationVC: UIViewController {
             editedTrackerDaysCount
         )
         daysCountLabel.font = Fonts.SFPro32Bold
-        daysCountLabel.textColor = Colors.black
+        daysCountLabel.textColor = Colors.generalTextcolor
         daysCountLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(daysCountLabel)
         
@@ -228,7 +228,7 @@ final class TrackerCreationVC: UIViewController {
     private func setButtons() {
         let cancelButton = UIButton()
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
-        cancelButton.backgroundColor = Colors.white
+        cancelButton.backgroundColor = Colors.generalBackground
         cancelButton.setTitle(NSLocalizedString("buttons.cancel", comment: ""), for: .normal)
         cancelButton.titleLabel?.font = Fonts.SFPro16Medium
         cancelButton.setTitleColor(Colors.red, for: .normal)
@@ -250,7 +250,7 @@ final class TrackerCreationVC: UIViewController {
                               for: .normal
         )
         createButton.titleLabel?.font = Fonts.SFPro16Medium
-        createButton.setTitleColor(Colors.white, for: .normal)
+        createButton.setTitleColor(Colors.generalBackground, for: .normal)
         createButton.layer.masksToBounds = true
         createButton.layer.cornerRadius = 16
         createButton.translatesAutoresizingMaskIntoConstraints = false
@@ -282,7 +282,7 @@ final class TrackerCreationVC: UIViewController {
         } else {
             createButton.isEnabled = false
         }
-        createButton.backgroundColor = createButton.isEnabled ? Colors.black : Colors.grayDisabledButton
+        createButton.backgroundColor = createButton.isEnabled ? Colors.generalTextcolor : Colors.grayDisabledButton
     }
     
     
@@ -310,6 +310,7 @@ final class TrackerCreationVC: UIViewController {
         
         mainTable.backgroundColor = .none
         mainTable.separatorStyle = .singleLine
+        mainTable.separatorColor = Colors.grayCellsSeparator
         mainTable.showsVerticalScrollIndicator = false
         mainTable.contentInset.top = 24
         mainTable.translatesAutoresizingMaskIntoConstraints = false

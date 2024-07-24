@@ -114,7 +114,7 @@ final class TrackersCVCell: UICollectionViewCell {
         
         dayCounLabel.backgroundColor = .clear
         dayCounLabel.textAlignment = .left
-        dayCounLabel.textColor = Colors.black
+        dayCounLabel.textColor = Colors.generalTextcolor
         dayCounLabel.font = Fonts.SFPro12Semibold
         dayCounLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(dayCounLabel)

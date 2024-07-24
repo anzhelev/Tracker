@@ -41,7 +41,7 @@ final class TCTableCellSpacer: UITableViewCell {
     // MARK: - Private Methods
     private func setUIElements() {
         self.selectionStyle = .none
-        self.backgroundColor = Colors.white
+        self.backgroundColor = Colors.generalBackground
     }
     
 }

@@ -60,7 +60,7 @@ final class TCTableCellCollection: UITableViewCell {
     
     // MARK: - Private Methods
     private func setUIElements() {
-        backgroundColor = Colors.white
+        backgroundColor = Colors.generalBackground
     }
     
     private func setCollection() {
@@ -68,7 +68,7 @@ final class TCTableCellCollection: UITableViewCell {
         collection.delegate = self
         collection.register(CollectionCellHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         
-        collection.backgroundColor = Colors.white
+        collection.backgroundColor = Colors.generalBackground
         collection.showsVerticalScrollIndicator = false
         collection.isScrollEnabled = false
         collection.translatesAutoresizingMaskIntoConstraints = false

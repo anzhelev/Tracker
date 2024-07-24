@@ -76,7 +76,8 @@ final class TCTableCellTextInput: UITableViewCell {
         titleTextField = UITextField()
         titleTextField.delegate = self
         titleTextField.clearButtonMode = .always
-        titleTextField.textColor = Colors.black
+        titleTextField.tintColor = Colors.generalTextcolor
+        titleTextField.textColor = Colors.generalTextcolor
         
         titleTextField.font = Fonts.SFPro17Regular
         titleTextField.enablesReturnKeyAutomatically = false

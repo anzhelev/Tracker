@@ -75,7 +75,7 @@ final class TCTableCellDoubleLabel: UITableViewCell {
     
     private func setTitleLabel() {
         titleLabel.font = Fonts.SFPro17Regular
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(titleLabel)

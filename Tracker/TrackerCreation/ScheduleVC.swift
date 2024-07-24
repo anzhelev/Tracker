@@ -81,7 +81,7 @@ final class ScheduleVC: UIViewController {
     
     // MARK: - Private Properties
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         setWeekdaySymbols()
         setTitle()
         setTableView()
@@ -118,7 +118,7 @@ final class ScheduleVC: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("trackerCreationVC.habit.schedule", comment: "")
         titleLabel.font = Fonts.SFPro16Medium
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         self.titleLabel = titleLabel
@@ -133,7 +133,8 @@ final class ScheduleVC: UIViewController {
         weekDaysTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         weekDaysTableView.delegate = self
         weekDaysTableView.dataSource = self
-        weekDaysTableView.backgroundColor = Colors.white
+        weekDaysTableView.backgroundColor = Colors.generalBackground
+        weekDaysTableView.separatorColor = Colors.grayCellsSeparator
         weekDaysTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         weekDaysTableView.isScrollEnabled = false
         weekDaysTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -153,7 +154,7 @@ final class ScheduleVC: UIViewController {
         confirmButton.backgroundColor = Colors.grayDisabledButton
         confirmButton.setTitle(NSLocalizedString("buttons.done", comment: ""), for: .normal)
         confirmButton.titleLabel?.font = Fonts.SFPro16Medium
-        confirmButton.setTitleColor(Colors.white, for: .normal)
+        confirmButton.setTitleColor(Colors.generalBackground, for: .normal)
         confirmButton.layer.masksToBounds = true
         confirmButton.layer.cornerRadius = 16
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
@@ -185,7 +186,7 @@ final class ScheduleVC: UIViewController {
         
         let label = UILabel()
         label.text = daysOfWeek[row]
-        label.textColor = Colors.black
+        label.textColor = Colors.generalTextcolor
         label.font = Fonts.SFPro17Regular
         label.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(label)
@@ -206,7 +207,7 @@ final class ScheduleVC: UIViewController {
     
     private func updateButtonState() {
         confirmButton.isEnabled = !schedule.isEmpty
-        confirmButton.backgroundColor = confirmButton.isEnabled ? Colors.black : Colors.grayDisabledButton
+        confirmButton.backgroundColor = confirmButton.isEnabled ? Colors.generalTextcolor : Colors.grayDisabledButton
     }
 }
 

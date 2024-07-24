@@ -55,7 +55,7 @@ final class CategoryCreationVC: UIViewController {
     
     // MARK: - Private Methods
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         setTitle()
         setCategoryNameInputField()
         setButton()
@@ -69,7 +69,7 @@ final class CategoryCreationVC: UIViewController {
         : NSLocalizedString("trackerCreationVC.category", comment: "")
         
         titleLabel.font = Fonts.SFPro16Medium
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
@@ -93,7 +93,7 @@ final class CategoryCreationVC: UIViewController {
         }
         titleTextField.placeholder = NSLocalizedString("trackerCreationVC.enterCategoryName", comment: "")
         titleTextField.clearButtonMode = .always
-        titleTextField.textColor = Colors.black
+        titleTextField.textColor = Colors.generalTextcolor
         titleTextField.delegate = self
         titleTextField.font = Fonts.SFPro17Regular
         titleTextField.enablesReturnKeyAutomatically = false
@@ -114,10 +114,10 @@ final class CategoryCreationVC: UIViewController {
     private func setButton() {
         let doneButton = UIButton()
         doneButton.addTarget(self, action: #selector(categoryCreationButtonPressed), for: .touchUpInside)
-        doneButton.backgroundColor = Colors.black
+        doneButton.backgroundColor = Colors.generalTextcolor
         doneButton.setTitle(NSLocalizedString("buttons.done", comment: ""), for: .normal)
         doneButton.titleLabel?.font = Fonts.SFPro16Medium
-        doneButton.setTitleColor(Colors.white, for: .normal)
+        doneButton.setTitleColor(Colors.generalBackground, for: .normal)
         doneButton.layer.masksToBounds = true
         doneButton.layer.cornerRadius = 16
         doneButton.translatesAutoresizingMaskIntoConstraints = false
@@ -134,7 +134,7 @@ final class CategoryCreationVC: UIViewController {
     
     @objc private func updateButtonState() {
         doneButton.isEnabled = titleTextField.text?.count ?? 0 >= minimumTitleLength
-        doneButton.backgroundColor = doneButton.isEnabled ? Colors.black : Colors.grayDisabledButton
+        doneButton.backgroundColor = doneButton.isEnabled ? Colors.generalTextcolor : Colors.grayDisabledButton
     }
 }
 

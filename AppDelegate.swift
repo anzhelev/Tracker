@@ -57,4 +57,14 @@ extension AppDelegate {
     static var context: NSManagedObjectContext {
         return (UIApplication.shared.delegate as! Self).persistentContainer.viewContext
     }
+    
+    static var persistentContainer: NSPersistentContainer {
+        let container = NSPersistentContainer(name: "Tracker")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }
 }

@@ -10,6 +10,7 @@ final class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = Colors.generalBackground
         setUpperLine()
         setupBars()
     }

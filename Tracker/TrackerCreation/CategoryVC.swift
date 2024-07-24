@@ -68,7 +68,7 @@ final class CategoryVC: UIViewController {
     }
     
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         setTitle()
         setTableView()
         setStubImage()
@@ -80,7 +80,7 @@ final class CategoryVC: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("trackerCreationVC.category", comment: "")
         titleLabel.font = Fonts.SFPro16Medium
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         self.titleLabel = titleLabel
@@ -105,14 +105,14 @@ final class CategoryVC: UIViewController {
         let label1 = UILabel()
         label1.text = NSLocalizedString("trackerCreationVC.category.stub.line1", comment: "")
         label1.font = Fonts.SFPro12Semibold
-        label1.textColor = Colors.black
+        label1.textColor = Colors.generalTextcolor
         label1.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(label1)
         
         let label2 = UILabel()
         label2.text = NSLocalizedString("trackerCreationVC.category.stub.line2", comment: "")
         label2.font = Fonts.SFPro12Semibold
-        label2.textColor = Colors.black
+        label2.textColor = Colors.generalTextcolor
         label2.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(label2)
         
@@ -144,8 +144,9 @@ final class CategoryVC: UIViewController {
         categoriesTableView.register(CategoryTableCell.self, forCellReuseIdentifier: "cell")
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
-        categoriesTableView.backgroundColor = Colors.white
+        categoriesTableView.backgroundColor = Colors.generalBackground
         categoriesTableView.showsVerticalScrollIndicator = false
+        categoriesTableView.separatorColor = Colors.grayCellsSeparator
         categoriesTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         categoriesTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(categoriesTableView)
@@ -161,10 +162,10 @@ final class CategoryVC: UIViewController {
     private func setButton() {
         let categoryCreationButton = UIButton()
         categoryCreationButton.addTarget(self, action: #selector(categoryCreationButtonPressed), for: .touchUpInside)
-        categoryCreationButton.backgroundColor = Colors.black
+        categoryCreationButton.backgroundColor = Colors.generalTextcolor
         categoryCreationButton.setTitle(NSLocalizedString("trackerCreationVC.addCategory", comment: ""), for: .normal)
         categoryCreationButton.titleLabel?.font = Fonts.SFPro16Medium
-        categoryCreationButton.setTitleColor(Colors.white, for: .normal)
+        categoryCreationButton.setTitleColor(Colors.generalBackground, for: .normal)
         categoryCreationButton.layer.masksToBounds = true
         categoryCreationButton.layer.cornerRadius = 16
         categoryCreationButton.translatesAutoresizingMaskIntoConstraints = false

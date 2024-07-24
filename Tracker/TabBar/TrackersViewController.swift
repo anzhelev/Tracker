@@ -9,7 +9,7 @@ import UIKit
 final class TrackersViewController: UIViewController, TrackersVCDelegate {
     
     // MARK: - Public Properties
-    lazy var storeService = StoreService(trackersVCdelegate: self)
+    lazy var storeService: StoreServiceProtocol = StoreService(trackersVCdelegate: self)
     
     // MARK: - Private Properties
     private var plusButton = UIButton()
@@ -113,7 +113,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
     // MARK: - Private Methods
     /// настраиваем внешний вид экрана и графические элементы
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         setPlusButton()
         setDatePicker()
         setTitleLabel()
@@ -132,7 +132,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         }
         let plusButton = UIButton.systemButton(with: plusButtonImage, target: self, action: #selector(self.plusButtonAction))
         plusButton.translatesAutoresizingMaskIntoConstraints = false
-        plusButton.tintColor = Colors.black
+        plusButton.tintColor = Colors.generalTextcolor
         view.addSubview(plusButton)
         plusButton.accessibilityIdentifier = "plusButton"
         self.plusButton = plusButton
@@ -190,7 +190,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("trackersViewController.title", comment: "")
         titleLabel.font = Fonts.SFPro34Bold
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         self.titleLabel = titleLabel
@@ -207,8 +207,9 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         searchBar.searchTextField.delegate = self
         searchBar.placeholder = NSLocalizedString("trackersViewController.searchBarPlaceholder", comment: "")
         searchBar.searchTextField.layer.cornerRadius = 8
-        searchBar.searchTextField.backgroundColor = Colors.grayDatePicker
-        searchBar.searchTextField.textColor = .ypBlack
+        searchBar.searchTextField.backgroundColor = Colors.searchBarBG
+        searchBar.searchTextField.tintColor = Colors.generalTextcolor
+        searchBar.searchTextField.textColor = Colors.generalTextcolor
         searchBar.showsCancelButton = true
         searchBar.searchTextField.borderStyle = .none
         searchBar.searchBarStyle = .minimal
@@ -242,7 +243,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         
         stubLabel.text = ""
         stubLabel.font = Fonts.SFPro12Semibold
-        stubLabel.textColor = Colors.black
+        stubLabel.textColor = Colors.generalTextcolor
         stubLabel.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubLabel)
         
@@ -268,7 +269,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         trackersCollectionView.register(TrackersCVHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         trackersCollectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "footer")
         
-        trackersCollectionView.backgroundColor = Colors.white
+        trackersCollectionView.backgroundColor = Colors.generalBackground
         trackersCollectionView.showsVerticalScrollIndicator = false
         trackersCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(trackersCollectionView)
@@ -611,10 +612,10 @@ extension TrackersViewController: FiltersVCDelegate {
             
         case .today:
             filtersButton.backgroundColor = selectedDate == Date().short
-            ? Colors.black
+            ? Colors.red
             : Colors.blue
         case .completed, .uncompleted:
-            filtersButton.backgroundColor = Colors.black
+            filtersButton.backgroundColor = Colors.red
         default:
             filtersButton.backgroundColor = Colors.blue
         }

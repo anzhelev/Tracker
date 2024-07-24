@@ -22,7 +22,6 @@ struct FiltersTableCellParams {
 
 protocol FiltersVCDelegate: AnyObject {
     func updateSelectedFilter(with: Filters)
-//    func updateFilterButtonState()
 }
 
 final class FiltersVC: UIViewController {
@@ -56,7 +55,7 @@ final class FiltersVC: UIViewController {
     // MARK: - Private Methods
 
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         setTitle()
         setTableView()
     }
@@ -65,7 +64,7 @@ final class FiltersVC: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("filtersVC.title", comment: "")
         titleLabel.font = Fonts.SFPro16Medium
-        titleLabel.textColor = Colors.black
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         self.titleLabel = titleLabel
@@ -80,8 +79,9 @@ final class FiltersVC: UIViewController {
         filtersTableView.register(FiltersTableCell.self, forCellReuseIdentifier: "cell")
         filtersTableView.delegate = self
         filtersTableView.dataSource = self
-        filtersTableView.backgroundColor = Colors.white
+        filtersTableView.backgroundColor = Colors.generalBackground
         filtersTableView.showsVerticalScrollIndicator = false
+        filtersTableView.separatorColor = Colors.grayCellsSeparator
         filtersTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         filtersTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(filtersTableView)

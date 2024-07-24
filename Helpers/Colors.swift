@@ -23,7 +23,7 @@ enum Colors {
     /// gray color for buttons in inactive state, font color for selected categories, schedule, shevron
     static var grayDisabledButton: UIColor {UIColor(named: "YP Disabled Button") ?? UIColor.gray}
     /// gray color for sells separator
-    static var grayCellsSeparator: UIColor {UIColor(named: "YP Table Cells Separator (Alpha 80)") ?? UIColor.gray}
+    static var grayCellsSeparator: UIColor {UIColor(named: "YP Table Cells Separator") ?? UIColor.gray}
     /// gray color for tab bar separator
     static var grayTabBarSeparator: UIColor {UIColor(named: "YP Tab Bar Separator (Alpha 30)") ?? UIColor.lightGray}
     /// semi transparent circle for emojis
@@ -34,4 +34,12 @@ enum Colors {
     static var gradientGreen: UIColor {UIColor(named: "Gradient2") ?? UIColor.green}
     /// gradient color for StatisticsVC
     static var gradientBlue: UIColor {UIColor(named: "Gradient3") ?? UIColor.blue}
+    
+    static var generalBackground: UIColor {UIColor(named: "TR Background") ?? UIColor.systemBackground}
+    
+    static var generalTextcolor: UIColor {UIColor(named: "TR TextColor") ?? UIColor.systemBackground}
+    
+    static var searchBarBG: UIColor {UIColor(named: "YP SearchBarBG") ?? UIColor.systemBackground}
+    
+    
 }
