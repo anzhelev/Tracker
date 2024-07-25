@@ -8,7 +8,7 @@ import Foundation
 import YandexMobileMetrica
 
 enum Events: String {
-    case open = "screen opened"
+    case open = "screen is shown"
     case close = "screen closed"
     case click = "button pressed"
 }
