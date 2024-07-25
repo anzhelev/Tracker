@@ -7,6 +7,7 @@
 import UIKit
 
 protocol TrackersCVCellDelegate: AnyObject {
+    func reportButtonClick()
     func updateTrackerStatus(trackerID: UUID, indexPath: IndexPath, completeStatus: Bool)
 }
 
@@ -79,6 +80,7 @@ final class TrackersCVCell: UICollectionViewCell {
             return
         }
         delegate?.updateTrackerStatus(trackerID: trackerID, indexPath: trackerIndexPath, completeStatus: isCompleted)
+        delegate?.reportButtonClick()
     }
     
     // MARK: - Private Methods

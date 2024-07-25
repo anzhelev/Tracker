@@ -12,6 +12,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
     lazy var storeService: StoreServiceProtocol = StoreService(trackersVCdelegate: self)
     
     // MARK: - Private Properties
+    private let analyticsService = AnalyticsService()
     private var plusButton = UIButton()
     private var filtersButton = UIButton()
     private (set) var selectedDate = Date().short
@@ -43,7 +44,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         if let storeService {
             self.storeService = storeService
         }
-
+        
         if let selectedDate {
             self.selectedDate = selectedDate.short
         }
@@ -63,6 +64,16 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         )
         dateFormatter.dateFormat = NSLocalizedString("trackersViewController.dateFormat", comment: "")
         configureUIElements()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        analyticsService.report(event: .open, screen: .main)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.report(event: .close, screen: .main)
     }
     
     // MARK: - Public Methods
@@ -105,6 +116,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         newTrackerCreationVC.delegate = self
         let newTrackerNavigation = UINavigationController(rootViewController: newTrackerCreationVC)
         present(newTrackerNavigation, animated: true)
+        analyticsService.report(event: .click, screen: .main, item: .addTrack)
     }
     
     /// действие при выборе новой даты
@@ -124,6 +136,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         let vc = FiltersVC(delegate: self, selectedFilter: selectedFilter)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
+        analyticsService.report(event: .click, screen: .main, item: .filter)
     }
     
     // MARK: - Private Methods
@@ -448,10 +461,12 @@ extension TrackersViewController: UICollectionViewDelegate {
                 
                 UIAction(title: NSLocalizedString("trackersViewController.contextMenu.edit", comment: "")) { [weak self] _ in
                     self?.editTracker(indexPath: indexPath)
+                    self?.analyticsService.report(event: .click, screen: .main, item: .edit)
                 },
                 
                 UIAction(title: NSLocalizedString("trackersViewController.contextMenu.delete", comment: ""), attributes: .destructive) { [weak self] _ in
                     self?.deleteTracker(indexPath: indexPath)
+                    self?.analyticsService.report(event: .click, screen: .main, item: .delete)
                 },
                 
             ])
@@ -598,6 +613,10 @@ extension TrackersViewController: UITextFieldDelegate {
 
 // MARK: - TrackersCVCellDelegate
 extension TrackersViewController: TrackersCVCellDelegate {
+    
+    func reportButtonClick() {
+        analyticsService.report(event: .click, screen: .main, item: .addTrack)
+    }
     
     func updateTrackerStatus(trackerID: UUID, indexPath: IndexPath, completeStatus: Bool) {
         switch completeStatus {
