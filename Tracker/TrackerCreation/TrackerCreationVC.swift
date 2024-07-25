@@ -326,6 +326,10 @@ final class TrackerCreationVC: UIViewController {
     
     private func getTrackerScheduleLabelText() -> String? {
         
+        if newTrackerSchedule?.count == 7 {
+            return NSLocalizedString("trackerCreationVC.habit.schedule.everyDay", comment: "")
+        }
+        
         let fmt = DateFormatter()
         guard let shortDays = fmt.shortWeekdaySymbols else {
             return nil

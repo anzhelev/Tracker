@@ -36,6 +36,22 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
     private let cellsInRow = 2
     private var cellWidth: CGFloat = 0
     
+    // MARK: - Initializers
+    init(storeService: StoreServiceProtocol? = nil, selectedDate: Date? = nil) {
+        super.init(nibName: nil, bundle: nil)
+        
+        if let storeService {
+            self.storeService = storeService
+        }
+
+        if let selectedDate {
+            self.selectedDate = selectedDate.short
+        }
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,6 +165,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
+        datePicker.date = selectedDate
         let minDate = Calendar.current.date(byAdding: .year, value: -10, to: Date())
         let maxDate = Calendar.current.date(byAdding: .year, value: 10, to: Date())
         datePicker.minimumDate = minDate
@@ -163,7 +180,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         let dateLabel = UILabel()
         dateLabel.textColor = .black
         dateLabel.font = Fonts.SFPro17Regular
-        dateLabel.text = getFormattedString(from: Date())
+        dateLabel.text = getFormattedString(from: selectedDate)
         dateLabel.textAlignment = .center
         dateLabel.backgroundColor = Colors.grayDatePicker
         dateLabel.textColor = .black

@@ -34,12 +34,10 @@ enum Colors {
     static var gradientGreen: UIColor {UIColor(named: "Gradient2") ?? UIColor.green}
     /// gradient color for StatisticsVC
     static var gradientBlue: UIColor {UIColor(named: "Gradient3") ?? UIColor.blue}
-    
+    /// background with dark theme support
     static var generalBackground: UIColor {UIColor(named: "TR Background") ?? UIColor.systemBackground}
-    
+    /// text with dark theme support
     static var generalTextcolor: UIColor {UIColor(named: "TR TextColor") ?? UIColor.systemBackground}
-    
-    static var searchBarBG: UIColor {UIColor(named: "YP SearchBarBG") ?? UIColor.systemBackground}
-    
-    
+    /// searchBar background with dark theme support
+    static var searchBarBG: UIColor {UIColor(named: "YP SearchBarBG") ?? UIColor.systemBackground}  
 }

@@ -4,14 +4,12 @@
 //
 //  Created by Andrey Zhelev on 24.07.2024.
 //
-
-import XCTest
 import SnapshotTesting
+import XCTest
 @testable import Tracker
 
-
-
 final class StoreServiceSpy: StoreServiceProtocol {
+    var trackersVCdelegate: TrackersVCDelegate?
     var filteredTrackersCount: Int = 1
     var numberOfSections: Int = 1
     var completedTrackers: [TrackerRecord] = []
@@ -58,22 +56,37 @@ final class StoreServiceSpy: StoreServiceProtocol {
     func getFetchedTrackersCount() -> Int {
         2
     }
-    func addTrackerToStore(tracker: Tracker, eventDate: Date?, to category: String) {}
-    func updateTracker(tracker: Tracker, eventDate: Date?, newCategory: String) {}
-    
+    func addTrackerToStore(tracker: Tracker, eventDate: Date?, to category: String) { }
+    func updateTracker(tracker: Tracker, eventDate: Date?, newCategory: String) { }
 }
 
-
 final class TrackerTests: XCTestCase {
-
-    func testTrackersViewController() throws {
+    
+    func testTrackersViewControllerLightTheme() throws {
         
-//        isRecording = true
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        let date = formatter.date(from: "2024/01/01 22:31")
         
-        let vc = TrackersViewController()
-        vc.storeService = StoreServiceSpy()
-        vc.updateTrackersCollectionView()
+        let vc = TrackersViewController(storeService: StoreServiceSpy(), selectedDate: date)
+        
+        /// перезапись скриншота
+//        assertSnapshot(of: vc, as: .image(traits: .init(userInterfaceStyle: .light)), record: true)
         
         assertSnapshots(of: vc, as: [.image(traits: .init(userInterfaceStyle: .light))])
+    }
+    
+    func testTrackersViewControllerDarkTheme() throws {
+                
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        let date = formatter.date(from: "2024/01/01 22:31")
+        
+        let vc = TrackersViewController(storeService: StoreServiceSpy(), selectedDate: date) //"ru_RU"
+        
+        /// перезапись скриншота
+//        assertSnapshot(of: vc, as: .image(traits: .init(userInterfaceStyle: .dark)), record: true)
+        
+        assertSnapshots(of: vc, as: [.image(traits: .init(userInterfaceStyle: .dark))])
     }
 }
