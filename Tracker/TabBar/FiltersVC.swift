@@ -152,7 +152,6 @@ extension FiltersVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.updateSelectedFilter(with: filters[indexPath.row])
-//        delegate?.updateFilterButtonState(isFilterSet: indexPath.row != 0)
         dismissVC()
     }
 }

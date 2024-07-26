@@ -120,8 +120,6 @@ final class StatisticsViewController: UIViewController {
     
     private func updateStub() {
         stubView.isHidden = self.statistics[2] > 0
-        ? true
-        : false
         mainTable.isHidden = !stubView.isHidden
     }
 }

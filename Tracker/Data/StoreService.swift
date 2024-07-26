@@ -5,7 +5,6 @@
 //  Created by Andrey Zhelev on 27.06.2024.
 //
 import CoreData
-import UIKit
 
 struct TrackerStatisticsData {
     let id: UUID
@@ -15,7 +14,7 @@ struct TrackerStatisticsData {
 
 protocol StoreServiceProtocol {
     var filteredTrackersCount: Int {get }
-    var numberOfSections: Int {get}
+    var numberOfSections: Int {get }
     var completedTrackers: [TrackerRecord] {get }
     var filteredTrackers: [TrackerCategory] {get }
     func getFiltredCategories(selectedDate: Date, selectedWeekDay: Int, searchBarText: String?, selectedFilter: Filters)
@@ -37,15 +36,15 @@ protocol StoreServiceProtocol {
 }
 
 protocol TrackersVCDelegate: AnyObject {
-    var selectedDate: Date { get }
-    var selectedFilter: Filters  { get }
+    var selectedDate: Date {get }
+    var selectedFilter: Filters  {get }
     func updateTrackersCollectionView()
     func updateStub()
     func updateFilterButtonState()
 }
 
 final class StoreService: NSObject, StoreServiceProtocol {
-
+    
     // MARK: - Public Properties
     weak var trackersVCdelegate: TrackersVCDelegate?
     var numberOfSections: Int {
@@ -63,7 +62,6 @@ final class StoreService: NSObject, StoreServiceProtocol {
         }
     }
     private (set) var filteredTrackersCount = 0
-    
     private lazy var trackerStore: TrackerStore = TrackerStore(delegate: self)
     private lazy var categoryStore: CategoryStore = CategoryStore(delegate: self)
     private lazy var trackerRecordStore: TrackerRecordStore = TrackerRecordStore(delegate: self)
@@ -103,7 +101,6 @@ final class StoreService: NSObject, StoreServiceProtocol {
     init(trackersVCdelegate: TrackersVCDelegate? = nil) {
         super.init()
         self.trackersVCdelegate = trackersVCdelegate
-//        resetAllCoreData()
         getStoredRecords()
         fetchPinnedTrackers()
         fetchCategoryList()
@@ -136,7 +133,7 @@ final class StoreService: NSObject, StoreServiceProtocol {
     }
     
     func saveContext() {
-        if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+        if let appDelegate = AppDelegate.appDelegate {
             appDelegate.saveContext()
         }
     }
@@ -190,28 +187,14 @@ final class StoreService: NSObject, StoreServiceProtocol {
             date = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date
         }
         
-        let average = totalDaysWithTrackers > 0 ? completedTrackers.count / totalDaysWithTrackers : 0
+        let average = totalDaysWithTrackers > 0
+        ? (Double(completedTrackers.count) / Double(totalDaysWithTrackers)).rounded(.toNearestOrEven)
+        : 0
         
         UserDefaults.standard.set(bestPeriod, forKey: "statisticsBestPeriod")
         UserDefaults.standard.set(perfectDays, forKey: "statisticsPerfectDays")
         UserDefaults.standard.set(self.completedTrackers.count, forKey: "statisticsCompletedTrackers")
-        UserDefaults.standard.set(average, forKey: "statisticsAverageCount")
-    }
-    
-    
-    func resetAllCoreData() {
-
-        let entityNames = AppDelegate.persistentContainer.managedObjectModel.entities.map({ $0.name!})
-         entityNames.forEach { [weak self] entityName in
-            let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-            let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
-
-            do {
-                try self?.context.execute(deleteRequest)
-                try self?.context.save()
-            } catch {
-            }
-        }
+        UserDefaults.standard.set(Int(average), forKey: "statisticsAverageCount")
     }
     
     // MARK: - Private Methods

@@ -49,6 +49,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
             self.selectedDate = selectedDate.short
         }
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -68,11 +69,13 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         analyticsService.report(event: .open, screen: .main)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
         analyticsService.report(event: .close, screen: .main)
     }
     

@@ -11,7 +11,9 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
         AnalyticsService.activate()
+        
         return true
     }
     
@@ -54,17 +56,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate {
+    static var appDelegate = UIApplication.shared.delegate as? AppDelegate
+
     static var context: NSManagedObjectContext {
         return (UIApplication.shared.delegate as! Self).persistentContainer.viewContext
-    }
-    
-    static var persistentContainer: NSPersistentContainer {
-        let container = NSPersistentContainer(name: "Tracker")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
     }
 }

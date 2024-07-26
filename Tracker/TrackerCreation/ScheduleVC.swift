@@ -208,6 +208,11 @@ final class ScheduleVC: UIViewController {
     private func updateButtonState() {
         confirmButton.isEnabled = !schedule.isEmpty
         confirmButton.backgroundColor = confirmButton.isEnabled ? Colors.generalTextcolor : Colors.grayDisabledButton
+        confirmButton.setTitleColor(confirmButton.isEnabled
+                                    ? Colors.generalBackground
+                                    : Colors.white,
+                                    for: .normal
+        )
     }
 }
 

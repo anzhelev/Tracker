@@ -95,7 +95,7 @@ final class TrackerCreationVC: UIViewController {
     private var warningIsShown: Bool = false
     
     // MARK: - Initializers
-    init(newTrackerType: TrackerType, delegate: TrackersViewController, editModeParams: EditModeParams?) {
+    init(newTrackerType: TrackerType, delegate: TrackersViewController, editModeParams: EditModeParams? = nil) {
         self.newTrackerType = newTrackerType
         self.delegate = delegate
         
@@ -282,7 +282,13 @@ final class TrackerCreationVC: UIViewController {
         } else {
             createButton.isEnabled = false
         }
+        
         createButton.backgroundColor = createButton.isEnabled ? Colors.generalTextcolor : Colors.grayDisabledButton
+        createButton.setTitleColor(createButton.isEnabled
+                                   ? Colors.generalBackground
+                                   : Colors.white,
+                                   for: .normal
+        )
     }
     
     
