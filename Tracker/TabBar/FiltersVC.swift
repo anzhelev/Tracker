@@ -17,7 +17,7 @@ struct FiltersTableCellParams {
     let title: String
     let corners: RoundedCorners
     let separator: Bool
-    var isSelected: Bool
+    let isSelected: Bool
 }
 
 protocol FiltersVCDelegate: AnyObject {
@@ -63,7 +63,7 @@ final class FiltersVC: UIViewController {
     private func setTitle() {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("filtersVC.title", comment: "")
-        titleLabel.font = Fonts.SFPro16Medium
+        titleLabel.font = Fonts.sfPro16Medium
         titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -139,7 +139,9 @@ extension FiltersVC: UITableViewDataSource {
             
             return cell
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ FiltersVC: Ошибка подготовки ячейки для таблицы фильтров.")
+        return UITableViewCell()
     }
 }
 

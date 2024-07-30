@@ -68,7 +68,7 @@ final class CategoryCreationVC: UIViewController {
         ? NSLocalizedString("categoryCreationVC.title", comment: "")
         : NSLocalizedString("trackerCreationVC.category", comment: "")
         
-        titleLabel.font = Fonts.SFPro16Medium
+        titleLabel.font = Fonts.sfPro16Medium
         titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -95,7 +95,7 @@ final class CategoryCreationVC: UIViewController {
         titleTextField.clearButtonMode = .always
         titleTextField.textColor = Colors.generalTextcolor
         titleTextField.delegate = self
-        titleTextField.font = Fonts.SFPro17Regular
+        titleTextField.font = Fonts.sfPro17Regular
         titleTextField.enablesReturnKeyAutomatically = false
         titleTextField.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -116,7 +116,7 @@ final class CategoryCreationVC: UIViewController {
         doneButton.addTarget(self, action: #selector(categoryCreationButtonPressed), for: .touchUpInside)
         doneButton.backgroundColor = Colors.generalTextcolor
         doneButton.setTitle(NSLocalizedString("buttons.done", comment: ""), for: .normal)
-        doneButton.titleLabel?.font = Fonts.SFPro16Medium
+        doneButton.titleLabel?.font = Fonts.sfPro16Medium
         doneButton.setTitleColor(Colors.generalBackground, for: .normal)
         doneButton.layer.masksToBounds = true
         doneButton.layer.cornerRadius = 16

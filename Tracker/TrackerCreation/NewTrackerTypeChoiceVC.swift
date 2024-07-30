@@ -43,8 +43,8 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("newTrackerTypeChoiceVC.title", comment: "")
-        titleLabel.font = Fonts.SFPro16Medium
-        titleLabel.textColor = Colors.generalBackground
+        titleLabel.font = Fonts.sfPro16Medium
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
@@ -53,7 +53,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         newHabitCreationButton.setTitle(NSLocalizedString("newTrackerTypeChoiceVC.habit", comment: ""), for: .normal)
         newHabitCreationButton.addTarget(self, action: #selector(createNewHabit), for: .touchUpInside)
         newHabitCreationButton.setTitleColor(Colors.generalBackground, for: .normal)
-        newHabitCreationButton.titleLabel?.font = Fonts.SFPro16Medium
+        newHabitCreationButton.titleLabel?.font = Fonts.sfPro16Medium
         newHabitCreationButton.layer.masksToBounds = true
         newHabitCreationButton.layer.cornerRadius = 16
         newHabitCreationButton.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +64,7 @@ final class NewTrackerTypeChoiceVC: UIViewController {
         newEventCreationButton.setTitle(NSLocalizedString("newTrackerTypeChoiceVC.event", comment: ""), for: .normal)
         newEventCreationButton.addTarget(self, action: #selector(createNewEvent), for: .touchUpInside)
         newEventCreationButton.setTitleColor(Colors.generalBackground, for: .normal)
-        newEventCreationButton.titleLabel?.font = Fonts.SFPro16Medium
+        newEventCreationButton.titleLabel?.font = Fonts.sfPro16Medium
         newEventCreationButton.layer.masksToBounds = true
         newEventCreationButton.layer.cornerRadius = 16
         newEventCreationButton.translatesAutoresizingMaskIntoConstraints = false

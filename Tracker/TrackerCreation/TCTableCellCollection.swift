@@ -55,7 +55,7 @@ final class TCTableCellCollection: UITableViewCell {
             collection.register(ColorCollectionCell.self, forCellWithReuseIdentifier: CellReuseID.color.rawValue)
         default:
             return
-        }        
+        }
     }
     
     // MARK: - Private Methods
@@ -109,7 +109,9 @@ extension TCTableCellCollection: UICollectionViewDataSource {
         default:
             break
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ TCTableCellCollection: Ошибка подготовки ячейки для коллекции.")
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -117,7 +119,9 @@ extension TCTableCellCollection: UICollectionViewDataSource {
             headerView.configure(with: headerTitle)
             return headerView
         }
-        fatalError("Проблема с подготовкой хедера")
+        
+        debugPrint("@@@ TCTableCellCollection: Ошибка подготовки supplementary view.")
+        return UICollectionReusableView()
     }
 }
 

@@ -31,6 +31,14 @@
 		D44F14742C517D78001F10F9 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = D44F14732C517D78001F10F9 /* SnapshotTesting */; };
 		D453C5982C4D44A7007E81A9 /* StatisticsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D453C5972C4D44A7007E81A9 /* StatisticsTableCell.swift */; };
 		D45415112C2EC8C5005BF17D /* Date+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45415102C2EC8C5005BF17D /* Date+Extention.swift */; };
+		D45B00D22C5E595A002B3796 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B00D12C5E595A002B3796 /* TrackerType.swift */; };
+		D45B00D42C5E59CF002B3796 /* CellID.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B00D32C5E59CF002B3796 /* CellID.swift */; };
+		D45B00D62C5E59F9002B3796 /* ReuseID.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B00D52C5E59F9002B3796 /* ReuseID.swift */; };
+		D45B00D82C5E5A28002B3796 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B00D72C5E5A28002B3796 /* RoundedCorners.swift */; };
+		D45B00DA2C5E5A4C002B3796 /* EditModeParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B00D92C5E5A4C002B3796 /* EditModeParams.swift */; };
+		D45B00DC2C5E5A71002B3796 /* CellParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B00DB2C5E5A71002B3796 /* CellParams.swift */; };
+		D45B00DE2C5E5D4A002B3796 /* StoreServiceSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B00DD2C5E5D4A002B3796 /* StoreServiceSpy.swift */; };
+		D45B00E02C5E5EC2002B3796 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B00DF2C5E5EC2002B3796 /* Mocks.swift */; };
 		D45C6D962BE58007001E067B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45C6D952BE58007001E067B /* AppDelegate.swift */; };
 		D45C6D982BE58007001E067B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45C6D972BE58007001E067B /* SceneDelegate.swift */; };
 		D45C6DA02BE58007001E067B /* Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D45C6D9E2BE58007001E067B /* Tracker.xcdatamodeld */; };
@@ -101,6 +109,14 @@
 		D4424F612C45C6E000F27E4D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D453C5972C4D44A7007E81A9 /* StatisticsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTableCell.swift; sourceTree = "<group>"; };
 		D45415102C2EC8C5005BF17D /* Date+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extention.swift"; sourceTree = "<group>"; };
+		D45B00D12C5E595A002B3796 /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
+		D45B00D32C5E59CF002B3796 /* CellID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellID.swift; sourceTree = "<group>"; };
+		D45B00D52C5E59F9002B3796 /* ReuseID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseID.swift; sourceTree = "<group>"; };
+		D45B00D72C5E5A28002B3796 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
+		D45B00D92C5E5A4C002B3796 /* EditModeParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditModeParams.swift; sourceTree = "<group>"; };
+		D45B00DB2C5E5A71002B3796 /* CellParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellParams.swift; sourceTree = "<group>"; };
+		D45B00DD2C5E5D4A002B3796 /* StoreServiceSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreServiceSpy.swift; sourceTree = "<group>"; };
+		D45B00DF2C5E5EC2002B3796 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		D45C6D922BE58007001E067B /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D45C6D952BE58007001E067B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D45C6D972BE58007001E067B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -179,6 +195,7 @@
 		D41FD3E92BF0ABBC00CD6A33 /* TrackerCreation */ = {
 			isa = PBXGroup;
 			children = (
+				D45B00D02C5E58F1002B3796 /* Data Structure */,
 				D468CE692BEFE52B00679649 /* NewTrackerTypeChoiceVC.swift */,
 				D40BA5392C074AD3000449C4 /* TrackerCreationVC.swift */,
 				D40BA53B2C075FB5000449C4 /* TCTableCellTextInput.swift */,
@@ -229,6 +246,8 @@
 		D43A8E672C50FAFE0037011F /* TrackerTests */ = {
 			isa = PBXGroup;
 			children = (
+				D45B00DF2C5E5EC2002B3796 /* Mocks.swift */,
+				D45B00DD2C5E5D4A002B3796 /* StoreServiceSpy.swift */,
 				D43A8E682C50FAFE0037011F /* TrackerTests.swift */,
 			);
 			path = TrackerTests;
@@ -256,6 +275,19 @@
 				D434F1BF2C4D9A0500EE4509 /* UIImage+Gradient.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		D45B00D02C5E58F1002B3796 /* Data Structure */ = {
+			isa = PBXGroup;
+			children = (
+				D45B00D12C5E595A002B3796 /* TrackerType.swift */,
+				D45B00D32C5E59CF002B3796 /* CellID.swift */,
+				D45B00D52C5E59F9002B3796 /* ReuseID.swift */,
+				D45B00D72C5E5A28002B3796 /* RoundedCorners.swift */,
+				D45B00D92C5E5A4C002B3796 /* EditModeParams.swift */,
+				D45B00DB2C5E5A71002B3796 /* CellParams.swift */,
+			);
+			path = "Data Structure";
 			sourceTree = "<group>";
 		};
 		D45C6D892BE58007001E067B = {
@@ -501,7 +533,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D45B00DE2C5E5D4A002B3796 /* StoreServiceSpy.swift in Sources */,
 				D43A8E692C50FAFE0037011F /* TrackerTests.swift in Sources */,
+				D45B00E02C5E5EC2002B3796 /* Mocks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,7 +543,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D45B00D42C5E59CF002B3796 /* CellID.swift in Sources */,
 				D42480CA2BF7E106001402D7 /* ScheduleVC.swift in Sources */,
+				D45B00D82C5E5A28002B3796 /* RoundedCorners.swift in Sources */,
 				D45C6DA02BE58007001E067B /* Tracker.xcdatamodeld in Sources */,
 				D47937702C3C55C0001E4B31 /* OnboardingViewController.swift in Sources */,
 				D40A8EAA2C3EB1B3003BC9AF /* CategoryTableCell.swift in Sources */,
@@ -522,6 +558,7 @@
 				D4A782592BFEB79B004D7371 /* TrackersCVHeader.swift in Sources */,
 				D4E75A1E2BE666F000BB04FF /* TrackersViewController.swift in Sources */,
 				D43EA1662BE59687003E0FD9 /* Colors.swift in Sources */,
+				D45B00DC2C5E5A71002B3796 /* CellParams.swift in Sources */,
 				D49BE91B2C062C3500FC0173 /* CollectionCellHeader.swift in Sources */,
 				D49BE9152C05522500FC0173 /* TCTableCellCollection.swift in Sources */,
 				D453C5982C4D44A7007E81A9 /* StatisticsTableCell.swift in Sources */,
@@ -531,6 +568,7 @@
 				D4A782572BFEB69C004D7371 /* TrackersCVCell.swift in Sources */,
 				D40BA53A2C074AD3000449C4 /* TrackerCreationVC.swift in Sources */,
 				D49493B12C308077008315FB /* Srting?+Extention.swift in Sources */,
+				D45B00D22C5E595A002B3796 /* TrackerType.swift in Sources */,
 				D4ADAC3F2C2D91BC00CE3320 /* CategoryStore.swift in Sources */,
 				D4E75A1C2BE6664400BB04FF /* TabBarController.swift in Sources */,
 				D4D520992C47D6BC00CA8A15 /* FiltersTableCell.swift in Sources */,
@@ -547,7 +585,9 @@
 				D41FD3ED2BF0C3D400CD6A33 /* Fonts.swift in Sources */,
 				D40BA53E2C076BFC000449C4 /* TCTableCellSingleLabel.swift in Sources */,
 				D468CE6A2BEFE52B00679649 /* NewTrackerTypeChoiceVC.swift in Sources */,
+				D45B00D62C5E59F9002B3796 /* ReuseID.swift in Sources */,
 				D4D520972C47D65600CA8A15 /* FiltersVC.swift in Sources */,
+				D45B00DA2C5E5A4C002B3796 /* EditModeParams.swift in Sources */,
 				D434F1C02C4D9A0500EE4509 /* UIImage+Gradient.swift in Sources */,
 				D4E75A202BE6671400BB04FF /* StatisticsViewController.swift in Sources */,
 				D4ADAC3D2C2D7C5E00CE3320 /* StoreService.swift in Sources */,

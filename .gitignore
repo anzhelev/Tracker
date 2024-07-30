@@ -100,3 +100,6 @@ iOSInjectionProject/
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,xcode
 Pods
+Tracker.xcworkspace
+Podfile.lock
+

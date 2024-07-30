@@ -41,3 +41,4 @@ enum Colors {
     /// searchBar background with dark theme support
     static var searchBarBG: UIColor {UIColor(named: "YP SearchBarBG") ?? UIColor.systemBackground}  
 }
+

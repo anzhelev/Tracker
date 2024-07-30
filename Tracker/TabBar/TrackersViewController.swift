@@ -195,7 +195,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         
         let dateLabel = UILabel()
         dateLabel.textColor = .black
-        dateLabel.font = Fonts.SFPro17Regular
+        dateLabel.font = Fonts.sfPro17Regular
         dateLabel.text = getFormattedString(from: selectedDate)
         dateLabel.textAlignment = .center
         dateLabel.backgroundColor = Colors.grayDatePicker
@@ -222,7 +222,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
     private func setTitleLabel() {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("trackersViewController.title", comment: "")
-        titleLabel.font = Fonts.SFPro34Bold
+        titleLabel.font = Fonts.sfPro34Bold
         titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -275,7 +275,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         self.stubImageView = stubImageView
         
         stubLabel.text = ""
-        stubLabel.font = Fonts.SFPro12Semibold
+        stubLabel.font = Fonts.sfPro12Medium
         stubLabel.textColor = Colors.generalTextcolor
         stubLabel.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubLabel)
@@ -320,7 +320,7 @@ final class TrackersViewController: UIViewController, TrackersVCDelegate {
         filtersButton.addTarget(self, action: #selector(filtersButtonAction), for: .touchUpInside)
         filtersButton.backgroundColor = Colors.blue
         filtersButton.setTitle(NSLocalizedString("filtersVC.title", comment: ""), for: .normal)
-        filtersButton.titleLabel?.font = Fonts.SFPro16Medium
+        filtersButton.titleLabel?.font = Fonts.sfPro16Medium
         filtersButton.setTitleColor(Colors.white, for: .normal)
         filtersButton.layer.masksToBounds = true
         filtersButton.layer.cornerRadius = 16
@@ -388,7 +388,9 @@ extension TrackersViewController: UICollectionViewDataSource {
             
             return cell
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ TrackersViewController: Ошибка подготовки ячейки для коллекции трекеров.")
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -408,7 +410,8 @@ extension TrackersViewController: UICollectionViewDataSource {
             return footer
         }
         
-        fatalError("Проблема с подготовкой хедера")
+        debugPrint("@@@ TrackersViewController: Ошибка подготовки supplementary view для коллекции трекеров.")
+        return UICollectionReusableView()
     }
 }
 
@@ -549,7 +552,7 @@ extension TrackersViewController: UICollectionViewDelegate {
         
         let titleLabel = UITextView()
         titleLabel.textAlignment = .left
-        titleLabel.font = Fonts.SFPro12Semibold
+        titleLabel.font = Fonts.sfPro12Medium
         titleLabel.textColor = Colors.white
         titleLabel.text = tracker.name
         titleLabel.backgroundColor = .clear
@@ -618,7 +621,7 @@ extension TrackersViewController: UITextFieldDelegate {
 extension TrackersViewController: TrackersCVCellDelegate {
     
     func reportButtonClick() {
-        analyticsService.report(event: .click, screen: .main, item: .addTrack)
+        analyticsService.report(event: .click, screen: .main, item: .track)
     }
     
     func updateTrackerStatus(trackerID: UUID, indexPath: IndexPath, completeStatus: Bool) {

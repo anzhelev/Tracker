@@ -13,10 +13,10 @@
 "buttons.create" = "Создать";
 
 "onboardingViewController.button" = "Вот это технологии!";
-"onboardingViewController.view1.line1" = "Отслеживайте только";
-"onboardingViewController.view1.line2" = "то, что хотите";
-"onboardingViewController.view2.line1" = "Даже если это";
-"onboardingViewController.view2.line2" = "не литры воды и йога";
+"onboardingViewController.firstScreen.textLabel.line1" = "Отслеживайте только";
+"onboardingViewController.firstScreen.textLabel.line2" = "то, что хотите";
+"onboardingViewController.secondScreen.textLabel.line1" = "Даже если это";
+"onboardingViewController.secondScreen.textLabel.line2" = "не литры воды и йога";
 
 "trackersViewController.title" = "Трекеры";
 "trackersViewController.dateFormat" = "dd.MM.yy";
@@ -44,8 +44,6 @@
 "filtersVC.cell.uncompleted" = "Незавершенные";
 
 "storeService.pinnedCategoryName" = "Закрепленные";
-
-"statisticsViewController.title" = "Статистика";
 
 "newTrackerTypeChoiceVC.title" = "Создание трекера";
 "newTrackerTypeChoiceVC.habit" = "Привычка";

@@ -11,7 +11,7 @@ final class TCTableCellSingleLabel: UITableViewCell {
     // MARK: - Private Properties
     private lazy var singleLabel: UILabel = {
         let label = UILabel()
-        label.font = Fonts.SFPro17Regular
+        label.font = Fonts.sfPro17Regular
         label.textColor = Colors.red
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

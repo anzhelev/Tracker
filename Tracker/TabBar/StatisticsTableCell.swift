@@ -49,14 +49,14 @@ final class StatisticsTableCell: UITableViewCell {
         
         let titleLabel = UILabel()
         titleLabel.textColor = Colors.generalTextcolor
-        titleLabel.font = Fonts.SFPro34Bold
+        titleLabel.font = Fonts.sfPro34Bold
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         bordersView.addSubview(titleLabel)
         self.titleLabel = titleLabel
         
         let descriptionLabel = UILabel()
         descriptionLabel.textColor = Colors.generalTextcolor
-        descriptionLabel.font = Fonts.SFPro12Medium
+        descriptionLabel.font = Fonts.sfPro12Medium
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         bordersView.addSubview(descriptionLabel)
         self.descriptionLabel = descriptionLabel

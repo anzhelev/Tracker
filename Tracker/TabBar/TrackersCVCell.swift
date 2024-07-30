@@ -41,7 +41,14 @@ final class TrackersCVCell: UICollectionViewCell {
     }
     
     // MARK: - Public Methods
-    func configure(for tracker: Tracker, with index: IndexPath, isEvent: Bool, selectedDate: Date, isCompleted: Bool, isPinned: Bool, daysCount: Int) {
+    func configure(for tracker: Tracker,
+                   with index: IndexPath,
+                   isEvent: Bool,
+                   selectedDate: Date,
+                   isCompleted: Bool,
+                   isPinned: Bool,
+                   daysCount: Int
+    ) {
         trackerID = tracker.id
         trackerIndexPath = index
         self.isEvent = isEvent
@@ -106,7 +113,7 @@ final class TrackersCVCell: UICollectionViewCell {
         mainView.addSubview(pinView)
         
         titleLabel.textAlignment = .left
-        titleLabel.font = Fonts.SFPro12Semibold
+        titleLabel.font = Fonts.sfPro12Medium
         titleLabel.textColor = Colors.white
         titleLabel.backgroundColor = .clear
         titleLabel.isUserInteractionEnabled = false
@@ -117,7 +124,7 @@ final class TrackersCVCell: UICollectionViewCell {
         dayCounLabel.backgroundColor = .clear
         dayCounLabel.textAlignment = .left
         dayCounLabel.textColor = Colors.generalTextcolor
-        dayCounLabel.font = Fonts.SFPro12Semibold
+        dayCounLabel.font = Fonts.sfPro12Medium
         dayCounLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(dayCounLabel)
         
