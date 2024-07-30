@@ -45,8 +45,6 @@
 
 "storeService.pinnedCategoryName" = "Закрепленные";
 
-"statisticsViewController.title" = "Статистика";
-
 "newTrackerTypeChoiceVC.title" = "Создание трекера";
 "newTrackerTypeChoiceVC.habit" = "Привычка";
 "newTrackerTypeChoiceVC.event" = "Нерегулярное событие";

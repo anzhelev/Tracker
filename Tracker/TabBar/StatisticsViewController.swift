@@ -43,7 +43,7 @@ final class StatisticsViewController: UIViewController {
     private func setTitleLabel() {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("statisticsViewController.title", comment: "")
-        titleLabel.font = Fonts.SFPro34Bold
+        titleLabel.font = Fonts.sfPro34Bold
         titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -68,7 +68,7 @@ final class StatisticsViewController: UIViewController {
         
         let stubLabel = UILabel()
         stubLabel.text = NSLocalizedString("statisticsViewController.stub", comment: "")
-        stubLabel.font = Fonts.SFPro12Semibold
+        stubLabel.font = Fonts.sfPro12Medium
         stubLabel.textColor = Colors.generalTextcolor
         stubLabel.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(stubLabel)

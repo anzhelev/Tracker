@@ -13,7 +13,7 @@ final class TCTableCellDoubleLabel: UITableViewCell {
     private var titleLabel = UILabel()
     private lazy var valueLabel: UILabel = {
         let label = UILabel()
-        label.font = Fonts.SFPro17Regular
+        label.font = Fonts.sfPro17Regular
         label.textColor = Colors.grayDisabledButton
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +74,7 @@ final class TCTableCellDoubleLabel: UITableViewCell {
     }
     
     private func setTitleLabel() {
-        titleLabel.font = Fonts.SFPro17Regular
+        titleLabel.font = Fonts.sfPro17Regular
         titleLabel.textColor = Colors.generalTextcolor
         titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

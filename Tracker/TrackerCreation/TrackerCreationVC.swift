@@ -196,7 +196,7 @@ final class TrackerCreationVC: UIViewController {
             ? NSLocalizedString("trackerCreationVC.habitEditing.title", comment: "")
             : NSLocalizedString("trackerCreationVC.eventEditing.title", comment: "")
         }
-        titleLabel.font = Fonts.SFPro16Medium
+        titleLabel.font = Fonts.sfPro16Medium
         titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -214,7 +214,7 @@ final class TrackerCreationVC: UIViewController {
             NSLocalizedString("numberOfDays", comment: ""),
             editedTrackerDaysCount
         )
-        daysCountLabel.font = Fonts.SFPro32Bold
+        daysCountLabel.font = Fonts.sfPro32Bold
         daysCountLabel.textColor = Colors.generalTextcolor
         daysCountLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(daysCountLabel)
@@ -230,7 +230,7 @@ final class TrackerCreationVC: UIViewController {
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
         cancelButton.backgroundColor = Colors.generalBackground
         cancelButton.setTitle(NSLocalizedString("buttons.cancel", comment: ""), for: .normal)
-        cancelButton.titleLabel?.font = Fonts.SFPro16Medium
+        cancelButton.titleLabel?.font = Fonts.sfPro16Medium
         cancelButton.setTitleColor(Colors.red, for: .normal)
         cancelButton.clipsToBounds = true
         cancelButton.layer.borderWidth = 1
@@ -249,7 +249,7 @@ final class TrackerCreationVC: UIViewController {
                               : NSLocalizedString("buttons.create", comment: ""),
                               for: .normal
         )
-        createButton.titleLabel?.font = Fonts.SFPro16Medium
+        createButton.titleLabel?.font = Fonts.sfPro16Medium
         createButton.setTitleColor(Colors.generalBackground, for: .normal)
         createButton.layer.masksToBounds = true
         createButton.layer.cornerRadius = 16

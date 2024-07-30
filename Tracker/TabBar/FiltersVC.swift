@@ -63,7 +63,7 @@ final class FiltersVC: UIViewController {
     private func setTitle() {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("filtersVC.title", comment: "")
-        titleLabel.font = Fonts.SFPro16Medium
+        titleLabel.font = Fonts.sfPro16Medium
         titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)

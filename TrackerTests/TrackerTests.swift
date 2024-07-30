@@ -82,7 +82,7 @@ final class TrackerTests: XCTestCase {
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         let date = formatter.date(from: "2024/01/01 22:31")
         
-        let vc = TrackersViewController(storeService: StoreServiceSpy(), selectedDate: date) //"ru_RU"
+        let vc = TrackersViewController(storeService: StoreServiceSpy(), selectedDate: date)
         
         /// перезапись скриншота
 //        assertSnapshot(of: vc, as: .image(traits: .init(userInterfaceStyle: .dark)), record: true)

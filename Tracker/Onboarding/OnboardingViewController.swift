@@ -78,7 +78,7 @@ final class OnboardingViewController: UIPageViewController {
         let buttonView = UILabel()
         buttonView.backgroundColor = Colors.black
         buttonView.text = NSLocalizedString("onboardingViewController.button", comment: "")
-        buttonView.font = Fonts.SFPro16Medium
+        buttonView.font = Fonts.sfPro16Medium
         buttonView.textColor = Colors.white
         buttonView.textAlignment = .center
         setPosition(for: buttonView, on: vc)
@@ -117,14 +117,14 @@ final class OnboardingViewController: UIPageViewController {
         
         let label1 = UILabel()
         label1.text = labels[0]
-        label1.font = Fonts.SFPro32Bold
+        label1.font = Fonts.sfPro32Bold
         label1.textColor = Colors.black
         label1.translatesAutoresizingMaskIntoConstraints = false
         vc.view.addSubview(label1)
         
         let label2 = UILabel()
         label2.text = labels[1]
-        label2.font = Fonts.SFPro32Bold
+        label2.font = Fonts.sfPro32Bold
         label2.textColor = Colors.black
         label2.translatesAutoresizingMaskIntoConstraints = false
         vc.view.addSubview(label2)

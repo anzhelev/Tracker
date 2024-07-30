@@ -117,7 +117,7 @@ final class ScheduleVC: UIViewController {
     private func setTitle() {
         let titleLabel = UILabel()
         titleLabel.text = NSLocalizedString("trackerCreationVC.habit.schedule", comment: "")
-        titleLabel.font = Fonts.SFPro16Medium
+        titleLabel.font = Fonts.sfPro16Medium
         titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -153,7 +153,7 @@ final class ScheduleVC: UIViewController {
         confirmButton.addTarget(self, action: #selector(confirmButtonPressed), for: .touchUpInside)
         confirmButton.backgroundColor = Colors.grayDisabledButton
         confirmButton.setTitle(NSLocalizedString("buttons.done", comment: ""), for: .normal)
-        confirmButton.titleLabel?.font = Fonts.SFPro16Medium
+        confirmButton.titleLabel?.font = Fonts.sfPro16Medium
         confirmButton.setTitleColor(Colors.generalBackground, for: .normal)
         confirmButton.layer.masksToBounds = true
         confirmButton.layer.cornerRadius = 16
@@ -187,7 +187,7 @@ final class ScheduleVC: UIViewController {
         let label = UILabel()
         label.text = daysOfWeek[row]
         label.textColor = Colors.generalTextcolor
-        label.font = Fonts.SFPro17Regular
+        label.font = Fonts.sfPro17Regular
         label.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(label)
         

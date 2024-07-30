@@ -45,8 +45,6 @@
 
 "storeService.pinnedCategoryName" = "Pinned";
 
-"statisticsViewController.title" = "Statistics";
-
 "newTrackerTypeChoiceVC.title" = "Tracker creation";
 "newTrackerTypeChoiceVC.habit" = "Habit";
 "newTrackerTypeChoiceVC.event" = "Event";
