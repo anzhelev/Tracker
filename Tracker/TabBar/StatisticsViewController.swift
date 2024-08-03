@@ -139,7 +139,9 @@ extension StatisticsViewController: UITableViewDataSource {
             
             return cell
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ StatisticsViewController: Ошибка подготовки ячейки для таблицы статистики.")
+        return UITableViewCell()
     }
 }
 

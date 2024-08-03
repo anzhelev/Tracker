@@ -204,7 +204,9 @@ extension CategoryVC: UITableViewDataSource {
             
             return cell
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ CategoryVC: Ошибка подготовки ячейки для таблицы категорий.")
+        return UITableViewCell()
     }
 }
 

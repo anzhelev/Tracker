@@ -41,7 +41,14 @@ final class TrackersCVCell: UICollectionViewCell {
     }
     
     // MARK: - Public Methods
-    func configure(for tracker: Tracker, with index: IndexPath, isEvent: Bool, selectedDate: Date, isCompleted: Bool, isPinned: Bool, daysCount: Int) {
+    func configure(for tracker: Tracker,
+                   with index: IndexPath,
+                   isEvent: Bool,
+                   selectedDate: Date,
+                   isCompleted: Bool,
+                   isPinned: Bool,
+                   daysCount: Int
+    ) {
         trackerID = tracker.id
         trackerIndexPath = index
         self.isEvent = isEvent

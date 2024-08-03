@@ -6,52 +6,6 @@
 //
 import UIKit
 
-enum TrackerType: String {
-    case habit
-    case event
-}
-
-enum CellID: String {
-    case title = "title"
-    case warning = "warning"
-    case spacer = "spacer"
-    case category = "category"
-    case schedule = "shedule"
-    case emoji = "emoji"
-    case color = "color"
-}
-
-enum ReuseID: String {
-    case textInput = "textInput"
-    case singleLabel = "singleLabel"
-    case doubleLabel = "doubleLabel"
-    case spacer = "spacer"
-    case collection = "collection"
-}
-
-enum RoundedCorners: String {
-    case top
-    case bottom
-    case all
-    case none
-}
-
-struct EditModeParams {
-    let tracker: Tracker
-    let category: String
-    let daysCount: Int
-}
-
-struct CellParams {
-    let id: CellID
-    let reuseID: ReuseID
-    var cellHeight: CGFloat
-    let rounded: RoundedCorners
-    let separator: Bool
-    let title: String
-    var value: String? = nil
-}
-
 final class TrackerCreationVC: UIViewController {
     
     // MARK: - Public Properties
@@ -93,6 +47,7 @@ final class TrackerCreationVC: UIViewController {
     private var newTrackerEmoji: Int?
     private var newTrackerColor: Int?
     private var warningIsShown: Bool = false
+    private let dateFormatter = DateFormatter()
     
     // MARK: - Initializers
     init(newTrackerType: TrackerType, delegate: TrackersViewController, editModeParams: EditModeParams? = nil) {
@@ -293,17 +248,98 @@ final class TrackerCreationVC: UIViewController {
     
     
     private func configureMainTable(for tracker: TrackerType) {
-        self.mainTableCells.append(CellParams(id: .title, reuseID: .textInput, cellHeight: 75, rounded: .all, separator: false, title: NSLocalizedString("trackerCreationVC.enterTrackerName", comment: ""), value: editMode ? newTrackerTitle : nil))
-        self.mainTableCells.append(CellParams(id: .warning, reuseID: .singleLabel, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.limit", comment: "")))
-        self.mainTableCells.append(CellParams(id: .spacer, reuseID: .spacer, cellHeight: 24, rounded: .none, separator: false, title: ""))
+        
+        self.mainTableCells.append(
+            .init(id: .title,
+                  reuseID: .textInput,
+                  cellHeight: 75,
+                  rounded: .all,
+                  separator: false,
+                  title: NSLocalizedString(CellID.title.rawValue, comment: ""),
+                  value: editMode ?
+                  newTrackerTitle : nil
+                 )
+        )
+        
+        self.mainTableCells.append(
+            .init(id: .warning,
+                  reuseID: .singleLabel,
+                  cellHeight: 0,
+                  rounded: .none,
+                  separator: false,
+                  title: NSLocalizedString(CellID.warning.rawValue, comment: "")
+                 )
+        )
+        
+        self.mainTableCells.append(
+            .init(id: .spacer,
+                  reuseID: .spacer,
+                  cellHeight: 24,
+                  rounded: .none,
+                  separator: false,
+                  title: ""
+                 )
+        )
+        
         if tracker == .habit {
-            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .top, separator: true, title: NSLocalizedString("trackerCreationVC.category", comment: ""), value: editMode ? newTrackerCategory : nil))
-            self.mainTableCells.append(CellParams(id: .schedule, reuseID: .doubleLabel, cellHeight: 75, rounded: .bottom, separator: false, title: NSLocalizedString("trackerCreationVC.habit.schedule", comment: ""), value: editMode ? getTrackerScheduleLabelText() : nil))
+            self.mainTableCells.append(
+                .init(id: .category,
+                      reuseID: .doubleLabel,
+                      cellHeight: 75,
+                      rounded: .top,
+                      separator: true,
+                      title: NSLocalizedString(CellID.category.rawValue, comment: ""),
+                      value: editMode ?
+                      newTrackerCategory : nil
+                     )
+            )
+            
+            self.mainTableCells.append(
+                .init(id: .schedule,
+                      reuseID: .doubleLabel,
+                      cellHeight: 75,
+                      rounded: .bottom,
+                      separator: false,
+                      title: NSLocalizedString(CellID.schedule.rawValue, comment: ""),
+                      value: editMode ?
+                      getTrackerScheduleLabelText() : nil
+                     )
+            )
+            
         } else {
-            self.mainTableCells.append(CellParams(id: .category, reuseID: .doubleLabel, cellHeight: 75, rounded: .all, separator: false, title: NSLocalizedString("trackerCreationVC.category", comment: ""), value: editMode ? newTrackerCategory : nil))
+            
+            self.mainTableCells.append(
+                .init(id: .category,
+                      reuseID: .doubleLabel,
+                      cellHeight: 75,
+                      rounded: .all,
+                      separator: false,
+                      title: NSLocalizedString(CellID.category.rawValue, comment: ""),
+                      value: editMode ?
+                      newTrackerCategory : nil
+                     )
+            )
         }
-        self.mainTableCells.append(CellParams(id: .emoji, reuseID: .collection, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.emoji", comment: "")))
-        self.mainTableCells.append(CellParams(id: .color, reuseID: .collection, cellHeight: 0, rounded: .none, separator: false, title: NSLocalizedString("trackerCreationVC.color", comment: "")))
+        
+        self.mainTableCells.append(
+            .init(id: .emoji,
+                  reuseID: .collection,
+                  cellHeight: 0,
+                  rounded: .none,
+                  separator: false,
+                  title: NSLocalizedString(CellID.emoji.rawValue, comment: "")
+                 )
+        )
+        
+        self.mainTableCells.append(
+            .init(id: .color,
+                  reuseID: .collection,
+                  cellHeight: 0,
+                  rounded: .none,
+                  separator: false,
+                  title: NSLocalizedString(CellID.color.rawValue, comment: "")
+                 )
+        )
         
         mainTable.register(TCTableCellTextInput.self, forCellReuseIdentifier: ReuseID.textInput.rawValue)
         mainTable.register(TCTableCellSingleLabel.self, forCellReuseIdentifier: ReuseID.singleLabel.rawValue)
@@ -336,12 +372,11 @@ final class TrackerCreationVC: UIViewController {
             return NSLocalizedString("trackerCreationVC.habit.schedule.everyDay", comment: "")
         }
         
-        let fmt = DateFormatter()
-        guard let shortDays = fmt.shortWeekdaySymbols else {
+        guard let shortDays = dateFormatter.shortWeekdaySymbols else {
             return nil
         }
         
-        var firstDay = fmt.calendar.firstWeekday
+        var firstDay = dateFormatter.calendar.firstWeekday
         var daysOrder: [Int] = []
         var days: [String] = []
         
@@ -406,7 +441,9 @@ extension TrackerCreationVC: UITableViewDataSource {
                 return cell
             }
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ TrackerCreationVC: Ошибка подготовки ячейки для таблицы создания трекера.")
+        return UITableViewCell()
     }
 }
 

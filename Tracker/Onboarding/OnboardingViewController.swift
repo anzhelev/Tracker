@@ -9,10 +9,10 @@ import UIKit
 final class OnboardingViewController: UIPageViewController {
     
     private let labels = [
-        [NSLocalizedString("onboardingViewController.view1.line1", comment: ""),
-         NSLocalizedString("onboardingViewController.view1.line2", comment: "")],
-        [NSLocalizedString("onboardingViewController.view2.line1", comment: ""),
-         NSLocalizedString("onboardingViewController.view2.line2", comment: "")]
+        [NSLocalizedString("onboardingViewController.firstScreen.textLabel.line1", comment: ""),
+         NSLocalizedString("onboardingViewController.firstScreen.textLabel.line2", comment: "")],
+        [NSLocalizedString("onboardingViewController.secondScreen.textLabel.line1", comment: ""),
+         NSLocalizedString("onboardingViewController.secondScreen.textLabel.line2", comment: "")]
     ]
     
     private lazy var pages: [UIViewController] = {

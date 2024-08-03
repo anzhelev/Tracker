@@ -17,7 +17,7 @@ struct FiltersTableCellParams {
     let title: String
     let corners: RoundedCorners
     let separator: Bool
-    var isSelected: Bool
+    let isSelected: Bool
 }
 
 protocol FiltersVCDelegate: AnyObject {
@@ -139,7 +139,9 @@ extension FiltersVC: UITableViewDataSource {
             
             return cell
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ FiltersVC: Ошибка подготовки ячейки для таблицы фильтров.")
+        return UITableViewCell()
     }
 }
 

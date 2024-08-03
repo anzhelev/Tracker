@@ -388,7 +388,9 @@ extension TrackersViewController: UICollectionViewDataSource {
             
             return cell
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ TrackersViewController: Ошибка подготовки ячейки для коллекции трекеров.")
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -408,7 +410,8 @@ extension TrackersViewController: UICollectionViewDataSource {
             return footer
         }
         
-        fatalError("Проблема с подготовкой хедера")
+        debugPrint("@@@ TrackersViewController: Ошибка подготовки supplementary view для коллекции трекеров.")
+        return UICollectionReusableView()
     }
 }
 
@@ -618,7 +621,7 @@ extension TrackersViewController: UITextFieldDelegate {
 extension TrackersViewController: TrackersCVCellDelegate {
     
     func reportButtonClick() {
-        analyticsService.report(event: .click, screen: .main, item: .addTrack)
+        analyticsService.report(event: .click, screen: .main, item: .track)
     }
     
     func updateTrackerStatus(trackerID: UUID, indexPath: IndexPath, completeStatus: Bool) {
