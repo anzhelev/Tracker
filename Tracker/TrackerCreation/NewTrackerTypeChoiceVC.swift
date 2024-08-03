@@ -39,32 +39,32 @@ final class NewTrackerTypeChoiceVC: UIViewController {
     
     // MARK: - Private Methods
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         
         let titleLabel = UILabel()
-        titleLabel.text = "Создание трекера"
-        titleLabel.font = Fonts.SFPro16Semibold
-        titleLabel.textColor = Colors.black
+        titleLabel.text = NSLocalizedString("newTrackerTypeChoiceVC.title", comment: "")
+        titleLabel.font = Fonts.sfPro16Medium
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
         let newHabitCreationButton = UIButton()
-        newHabitCreationButton.backgroundColor = Colors.black
-        newHabitCreationButton.setTitle("Привычка", for: .normal)
+        newHabitCreationButton.backgroundColor = Colors.generalTextcolor
+        newHabitCreationButton.setTitle(NSLocalizedString("newTrackerTypeChoiceVC.habit", comment: ""), for: .normal)
         newHabitCreationButton.addTarget(self, action: #selector(createNewHabit), for: .touchUpInside)
-        newHabitCreationButton.setTitleColor(Colors.white, for: .normal)
-        newHabitCreationButton.titleLabel?.font = Fonts.SFPro16Semibold
+        newHabitCreationButton.setTitleColor(Colors.generalBackground, for: .normal)
+        newHabitCreationButton.titleLabel?.font = Fonts.sfPro16Medium
         newHabitCreationButton.layer.masksToBounds = true
         newHabitCreationButton.layer.cornerRadius = 16
         newHabitCreationButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(newHabitCreationButton)
         
         let newEventCreationButton = UIButton()
-        newEventCreationButton.backgroundColor = Colors.black
-        newEventCreationButton.setTitle("Нерегулярное событие", for: .normal)
+        newEventCreationButton.backgroundColor = Colors.generalTextcolor
+        newEventCreationButton.setTitle(NSLocalizedString("newTrackerTypeChoiceVC.event", comment: ""), for: .normal)
         newEventCreationButton.addTarget(self, action: #selector(createNewEvent), for: .touchUpInside)
-        newEventCreationButton.setTitleColor(Colors.white, for: .normal)
-        newEventCreationButton.titleLabel?.font = Fonts.SFPro16Semibold
+        newEventCreationButton.setTitleColor(Colors.generalBackground, for: .normal)
+        newEventCreationButton.titleLabel?.font = Fonts.sfPro16Medium
         newEventCreationButton.layer.masksToBounds = true
         newEventCreationButton.layer.cornerRadius = 16
         newEventCreationButton.translatesAutoresizingMaskIntoConstraints = false

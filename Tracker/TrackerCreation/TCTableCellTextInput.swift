@@ -76,9 +76,10 @@ final class TCTableCellTextInput: UITableViewCell {
         titleTextField = UITextField()
         titleTextField.delegate = self
         titleTextField.clearButtonMode = .always
-        titleTextField.textColor = Colors.black
+        titleTextField.tintColor = Colors.generalTextcolor
+        titleTextField.textColor = Colors.generalTextcolor
         
-        titleTextField.font = Fonts.SFPro17Regular
+        titleTextField.font = Fonts.sfPro17Regular
         titleTextField.enablesReturnKeyAutomatically = false
         titleTextField.addTarget(self, action: #selector(updateTitle), for: .editingChanged)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false

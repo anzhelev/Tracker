@@ -1,0 +1,71 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Andrey Zhelev on 14.07.2024.
+  
+*/
+
+"buttons.ok" = "Ок";
+"buttons.cancel" = "Отменить";
+"buttons.save" = "Сохранить";
+"buttons.done" = "Готово";
+"buttons.create" = "Создать";
+
+"onboardingViewController.button" = "Вот это технологии!";
+"onboardingViewController.firstScreen.textLabel.line1" = "Отслеживайте только";
+"onboardingViewController.firstScreen.textLabel.line2" = "то, что хотите";
+"onboardingViewController.secondScreen.textLabel.line1" = "Даже если это";
+"onboardingViewController.secondScreen.textLabel.line2" = "не литры воды и йога";
+
+"trackersViewController.title" = "Трекеры";
+"trackersViewController.dateFormat" = "dd.MM.yy";
+"trackersViewController.searchBarPlaceholder" = "Поиск";
+"trackersViewController.stub.empty" = "Что будем отслеживать?";
+"trackersViewController.stub.nothingFound" = "Ничего не найдено";
+"trackersViewController.cell.unique" = "Уникальное";
+"trackersViewController.contextMenu.pin" = "Закрепить";
+"trackersViewController.contextMenu.unpin" = "Открепить";
+"trackersViewController.contextMenu.edit" = "Редактировать";
+"trackersViewController.contextMenu.delete" = "Удалить";
+"trackersViewController.contextMenu.delete.alert" = "Уверены, что хотите удалить трекер?";
+
+"statisticsViewController.title" = "Статистика";
+"statisticsViewController.stub" = "Пока нечего анализировать";
+"statisticsViewController.cell0" = "Лучший период";
+"statisticsViewController.cell1" = "Идеальные дни";
+"statisticsViewController.cell2" = "Трекеров завершено";
+"statisticsViewController.cell3" = "Среднее значение";
+
+"filtersVC.title" = "Фильтры";
+"filtersVC.cell.all" = "Все трекеры";
+"filtersVC.cell.today" = "Трекеры на сегодня";
+"filtersVC.cell.completed" = "Завершенные";
+"filtersVC.cell.uncompleted" = "Незавершенные";
+
+"storeService.pinnedCategoryName" = "Закрепленные";
+
+"newTrackerTypeChoiceVC.title" = "Создание трекера";
+"newTrackerTypeChoiceVC.habit" = "Привычка";
+"newTrackerTypeChoiceVC.event" = "Нерегулярное событие";
+
+"trackerCreationVC.event.title" = "Новое нерегулярное событие";
+"trackerCreationVC.eventEditing.title" = "Редактирование события";
+
+"trackerCreationVC.habit.title" = "Новая привычка";
+"trackerCreationVC.habitEditing.title" = "Редактирование привычки";
+"trackerCreationVC.habit.schedule" = "Расписание";
+"trackerCreationVC.habit.schedule.everyDay" = "Каждый день";
+"trackerCreationVC.enterTrackerName" = "Введите название трекера";
+"trackerCreationVC.limit" = "Ограниение 38 символов";
+"trackerCreationVC.category" = "Категория";
+"trackerCreationVC.category.stub.line1" = "Привычки и события можно";
+"trackerCreationVC.category.stub.line2" = "объединить по смыслу";
+"trackerCreationVC.addCategory" = "Добавить категорию";
+"trackerCreationVC.enterCategoryName" = "Введите название категории";
+"trackerCreationVC.emoji" = "Эмоджи";
+"trackerCreationVC.color" = "Цвет";
+
+"categoryCreationVC.title" = "Редактирование категории";
+"categoryCreationVC.contextMenu.delete.alert" = "Вы уверены, что хотите удалить категорию?";
+"categoryCreationVC.contextMenu.canNotDelete.alert" = "В данной категории %@, поэтому она не может быть удалена";

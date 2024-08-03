@@ -19,8 +19,9 @@ final class ScheduleVC: UIViewController {
     private var titleLabel = UILabel()
     private let weekDaysTableView = UITableView()
     private var confirmButton = UIButton()
-    private let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    private let daysOfWeekShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+    private var daysOfWeek: [String] = []
+    private var daysOfWeekShort: [String] = []
+    private var daysOrder: [Int] = []
     private var schedule: Set<Int>
     
     // MARK: - Initializers
@@ -45,9 +46,9 @@ final class ScheduleVC: UIViewController {
     @objc private func switcherChanged(_ sender: UISwitch) {
         switch sender.isOn {
         case true:
-            self.schedule.insert(getDayIndexFromRowIndex(for: sender.tag))
+            self.schedule.insert(daysOrder[sender.tag])
         case false:
-            self.schedule.remove(getDayIndexFromRowIndex(for: sender.tag))
+            self.schedule.remove(daysOrder[sender.tag])
         }
         updateButtonState()
     }
@@ -58,11 +59,11 @@ final class ScheduleVC: UIViewController {
         if schedule.count > 0 {
             newSchedule = schedule
             if schedule.count == 7 {
-                newScheduleLabelText = "Каждый день"
+                newScheduleLabelText = NSLocalizedString("trackerCreationVC.habit.schedule.everyDay", comment: "")
             } else {
                 var selectedIndexes: Set<Int> = []
                 for index in 0...6 {
-                    if schedule.contains(getDayIndexFromRowIndex(for: index)) {
+                    if schedule.contains(daysOrder[index]) {
                         selectedIndexes.insert(index)
                     }
                 }
@@ -73,25 +74,51 @@ final class ScheduleVC: UIViewController {
                 newScheduleLabelText = days.joined(separator: ", ")
             }
         }
- 
+        
         delegate?.updateNewTrackerSchedule(newTrackerSchedule: newSchedule, newTrackerScheduleLabelText: newScheduleLabelText)
         self.dismiss(animated: true)
     }
     
     // MARK: - Private Properties
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
+        setWeekdaySymbols()
         setTitle()
         setTableView()
         setButton()
         updateButtonState()
     }
     
+    private func setWeekdaySymbols() {
+        let fmt = DateFormatter()
+        guard let days = fmt.weekdaySymbols,
+              let shortDays = fmt.shortWeekdaySymbols else {
+            return
+        }
+        
+        var firstDay = fmt.calendar.firstWeekday
+        self.daysOrder = []
+        
+        for _ in 0...6 {
+            daysOrder.append(firstDay)
+            if firstDay == 7 {
+                firstDay = 1
+            } else {
+                firstDay += 1
+            }
+        }
+        
+        for day in 0...6 {
+            daysOfWeek.append(days[daysOrder[day]-1].capitalized)
+            daysOfWeekShort.append(shortDays[daysOrder[day]-1].capitalized)
+        }
+    }
+    
     private func setTitle() {
         let titleLabel = UILabel()
-        titleLabel.text = "Расписание"
-        titleLabel.font = Fonts.SFPro16Semibold
-        titleLabel.textColor = Colors.black
+        titleLabel.text = NSLocalizedString("trackerCreationVC.habit.schedule", comment: "")
+        titleLabel.font = Fonts.sfPro16Medium
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         self.titleLabel = titleLabel
@@ -106,7 +133,8 @@ final class ScheduleVC: UIViewController {
         weekDaysTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         weekDaysTableView.delegate = self
         weekDaysTableView.dataSource = self
-        weekDaysTableView.backgroundColor = Colors.white
+        weekDaysTableView.backgroundColor = Colors.generalBackground
+        weekDaysTableView.separatorColor = Colors.grayCellsSeparator
         weekDaysTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         weekDaysTableView.isScrollEnabled = false
         weekDaysTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -124,9 +152,9 @@ final class ScheduleVC: UIViewController {
         let confirmButton = UIButton()
         confirmButton.addTarget(self, action: #selector(confirmButtonPressed), for: .touchUpInside)
         confirmButton.backgroundColor = Colors.grayDisabledButton
-        confirmButton.setTitle("Готово", for: .normal)
-        confirmButton.titleLabel?.font = Fonts.SFPro16Semibold
-        confirmButton.setTitleColor(Colors.white, for: .normal)
+        confirmButton.setTitle(NSLocalizedString("buttons.done", comment: ""), for: .normal)
+        confirmButton.titleLabel?.font = Fonts.sfPro16Medium
+        confirmButton.setTitleColor(Colors.generalBackground, for: .normal)
         confirmButton.layer.masksToBounds = true
         confirmButton.layer.cornerRadius = 16
         confirmButton.translatesAutoresizingMaskIntoConstraints = false
@@ -158,14 +186,14 @@ final class ScheduleVC: UIViewController {
         
         let label = UILabel()
         label.text = daysOfWeek[row]
-        label.textColor = Colors.black
-        label.font = Fonts.SFPro17Regular
+        label.textColor = Colors.generalTextcolor
+        label.font = Fonts.sfPro17Regular
         label.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(label)
         
         let switcher = UISwitch()
         switcher.onTintColor = Colors.blue
-        switcher.setOn(schedule.contains(getDayIndexFromRowIndex(for: row)), animated: true)
+        switcher.setOn(schedule.contains(daysOrder[row]), animated: true)
         switcher.tag = row
         switcher.addTarget(self, action: #selector(switcherChanged(_:)), for: .valueChanged)
         switcher.translatesAutoresizingMaskIntoConstraints = false
@@ -179,12 +207,12 @@ final class ScheduleVC: UIViewController {
     
     private func updateButtonState() {
         confirmButton.isEnabled = !schedule.isEmpty
-        confirmButton.backgroundColor = confirmButton.isEnabled ? Colors.black : Colors.grayDisabledButton
-    }
-    
-    private func getDayIndexFromRowIndex(for row: Int) -> Int {
-        let index = row + Calendar.current.firstWeekday
-        return index > 7 ? index - 7 : index
+        confirmButton.backgroundColor = confirmButton.isEnabled ? Colors.generalTextcolor : Colors.grayDisabledButton
+        confirmButton.setTitleColor(confirmButton.isEnabled
+                                    ? Colors.generalBackground
+                                    : Colors.white,
+                                    for: .normal
+        )
     }
 }
 

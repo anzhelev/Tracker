@@ -29,7 +29,7 @@ final class CategoryViewModel {
     init (delegate: CategoryViewModelDelegate, selectedCategory: String?) {
         self.delegate = delegate
         self.selectedCategory = selectedCategory
-        self.storeService = StoreService(delegate: nil)
+        self.storeService = StoreService()
         updateCategoryList()
     }
     
@@ -62,6 +62,10 @@ final class CategoryViewModel {
         selectedCategoryDidUpdate?(true)
     }
     
+    func getTrackersCountFor(categoryName: String) -> Int {
+        self.storeService?.getTrackersCountForCategory(categoryName: categoryName) ?? 0
+    }
+    
     // MARK: - Private Methods
     private func updateCategoryList() {
         self.storeService?.fetchCategoryList()
@@ -75,6 +79,16 @@ final class CategoryViewModel {
 extension CategoryViewModel: CategoryCreationVCDelegate {
     func addNewCategory(category: String) {
         self.storeService?.addCategoriesToStore(newlist: [category])
+        updateCategoryList()
+    }
+    
+    func editCategory(oldName: String, newName: String) {
+        self.storeService?.updateCategoryNameInStore(oldName: oldName, newName: newName)
+        updateCategoryList()
+    }
+    
+    func deleteCategory(categoryName: String) {
+        self.storeService?.deleteCategoryFromStore(categoryName: categoryName)
         updateCategoryList()
     }
 }

@@ -7,12 +7,21 @@
 import CoreData
 import UIKit
 
+protocol TrackerRecordStoreDelegate: AnyObject {
+    
+    var context: NSManagedObjectContext {get set}
+    func getStoredRecords()
+    func addTrackerRecordToStore(record: TrackerRecord)
+    func deleteRecordFromStore(record: TrackerRecord)
+    func saveContext()
+}
+
 final class TrackerRecordStore {
     
-    private weak var delegate: StoreService?
+    private weak var delegate: TrackerRecordStoreDelegate?
     private let context: NSManagedObjectContext
     
-    init(delegate: StoreService) {
+    init(delegate: TrackerRecordStoreDelegate) {
         self.delegate = delegate
         self.context = delegate.context
     }

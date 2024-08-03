@@ -55,12 +55,12 @@ final class TCTableCellCollection: UITableViewCell {
             collection.register(ColorCollectionCell.self, forCellWithReuseIdentifier: CellReuseID.color.rawValue)
         default:
             return
-        }        
+        }
     }
     
     // MARK: - Private Methods
     private func setUIElements() {
-        backgroundColor = Colors.white
+        backgroundColor = Colors.generalBackground
     }
     
     private func setCollection() {
@@ -68,7 +68,7 @@ final class TCTableCellCollection: UITableViewCell {
         collection.delegate = self
         collection.register(CollectionCellHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         
-        collection.backgroundColor = Colors.white
+        collection.backgroundColor = Colors.generalBackground
         collection.showsVerticalScrollIndicator = false
         collection.isScrollEnabled = false
         collection.translatesAutoresizingMaskIntoConstraints = false
@@ -109,7 +109,9 @@ extension TCTableCellCollection: UICollectionViewDataSource {
         default:
             break
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ TCTableCellCollection: Ошибка подготовки ячейки для коллекции.")
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -117,7 +119,9 @@ extension TCTableCellCollection: UICollectionViewDataSource {
             headerView.configure(with: headerTitle)
             return headerView
         }
-        fatalError("Проблема с подготовкой хедера")
+        
+        debugPrint("@@@ TCTableCellCollection: Ошибка подготовки supplementary view.")
+        return UICollectionReusableView()
     }
 }
 

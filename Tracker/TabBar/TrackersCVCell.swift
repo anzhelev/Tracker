@@ -7,6 +7,7 @@
 import UIKit
 
 protocol TrackersCVCellDelegate: AnyObject {
+    func reportButtonClick()
     func updateTrackerStatus(trackerID: UUID, indexPath: IndexPath, completeStatus: Bool)
 }
 
@@ -19,6 +20,7 @@ final class TrackersCVCell: UICollectionViewCell {
     private var mainView = UIView()
     private var titleLabel = UITextView()
     private var emojiView = UIImageView()
+    private var pinView = UIImageView()
     private var dayCounLabel = UILabel()
     private var completeButton = UIButton()
     private var completeButtonBGView = UIView()
@@ -31,7 +33,6 @@ final class TrackersCVCell: UICollectionViewCell {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         configureUIElements()
     }
     
@@ -40,7 +41,14 @@ final class TrackersCVCell: UICollectionViewCell {
     }
     
     // MARK: - Public Methods
-    func configure(for tracker: Tracker, with index: IndexPath, isEvent: Bool, selectedDate: Date, isCompleted: Bool, daysCount: Int) {
+    func configure(for tracker: Tracker,
+                   with index: IndexPath,
+                   isEvent: Bool,
+                   selectedDate: Date,
+                   isCompleted: Bool,
+                   isPinned: Bool,
+                   daysCount: Int
+    ) {
         trackerID = tracker.id
         trackerIndexPath = index
         self.isEvent = isEvent
@@ -49,9 +57,16 @@ final class TrackersCVCell: UICollectionViewCell {
         
         mainView.backgroundColor = UIColor(named: "Color\(tracker.color ?? 1)")
         titleLabel.text = tracker.name
-        dayCounLabel.text = self.isEvent ? "Уникальное" : setStringFor(daysCount)
+        dayCounLabel.text = self.isEvent
+        ? NSLocalizedString("trackersViewController.cell.unique", comment: "")
+        : String.localizedStringWithFormat(
+            NSLocalizedString("numberOfDays", comment: ""),
+            daysCount
+        )
+        
         setCompleteButtomImage(with: UIColor(named: "Color\(tracker.color ?? 1)"))
         emojiView.image = UIImage(named: "emoji\(tracker.emoji ?? 1)")
+        pinView.image = isPinned ? UIImage(named: "pin") : nil
     }
     
     // MARK: - IBAction
@@ -72,10 +87,13 @@ final class TrackersCVCell: UICollectionViewCell {
             return
         }
         delegate?.updateTrackerStatus(trackerID: trackerID, indexPath: trackerIndexPath, completeStatus: isCompleted)
+        delegate?.reportButtonClick()
     }
     
     // MARK: - Private Methods
     private func configureUIElements() {
+        self.layer.cornerRadius = 16
+        
         mainView.layer.masksToBounds = true
         mainView.layer.cornerRadius = 16
         mainView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,8 +109,11 @@ final class TrackersCVCell: UICollectionViewCell {
         emojiView.translatesAutoresizingMaskIntoConstraints = false
         emojiCircleView.addSubview(emojiView)
         
+        pinView.translatesAutoresizingMaskIntoConstraints = false
+        mainView.addSubview(pinView)
+        
         titleLabel.textAlignment = .left
-        titleLabel.font = Fonts.SFPro12Semibold
+        titleLabel.font = Fonts.sfPro12Medium
         titleLabel.textColor = Colors.white
         titleLabel.backgroundColor = .clear
         titleLabel.isUserInteractionEnabled = false
@@ -102,8 +123,8 @@ final class TrackersCVCell: UICollectionViewCell {
         
         dayCounLabel.backgroundColor = .clear
         dayCounLabel.textAlignment = .left
-        dayCounLabel.textColor = Colors.black
-        dayCounLabel.font = Fonts.SFPro12Semibold
+        dayCounLabel.textColor = Colors.generalTextcolor
+        dayCounLabel.font = Fonts.sfPro12Medium
         dayCounLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(dayCounLabel)
         
@@ -132,6 +153,11 @@ final class TrackersCVCell: UICollectionViewCell {
             emojiView.centerXAnchor.constraint(equalTo: emojiCircleView.centerXAnchor),
             emojiView.centerYAnchor.constraint(equalTo: emojiCircleView.centerYAnchor),
             
+            pinView.heightAnchor.constraint(equalToConstant: 12),
+            pinView.widthAnchor.constraint(equalToConstant: 8),
+            pinView.centerYAnchor.constraint(equalTo: emojiCircleView.centerYAnchor),
+            pinView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -12),
+            
             titleLabel.topAnchor.constraint(equalTo: emojiCircleView.bottomAnchor, constant: 8),
             titleLabel.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: 12),
             titleLabel.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 12),
@@ -155,9 +181,9 @@ final class TrackersCVCell: UICollectionViewCell {
     }
     
     private func setCompleteButtomImage(with color: UIColor?) {
-                guard let image = isCompleted ? UIImage(named: "doneSignForCell") : UIImage(named: "plusButtonForCell") else {
-                    return
-                }
+        guard let image = isCompleted ? UIImage(named: "doneSignForCell") : UIImage(named: "plusButtonForCell") else {
+            return
+        }
         switch isCompleted {
             
         case true:
@@ -171,20 +197,6 @@ final class TrackersCVCell: UICollectionViewCell {
             let buttonImage = image.withRenderingMode(.alwaysTemplate)
             completeButton.setImage(buttonImage, for: .normal)
             completeButton.tintColor = color
-        }
-    }
-    
-    private func setStringFor(_ count: Int) -> String {
-        let days = count % 10
-        switch days {
-        case 0, 5, 6, 7, 8, 9:
-            return "\(count) дней"
-        case 1:
-            return "\(count) день"
-        case 2, 3, 4:
-            return "\(count) дня"
-        default:
-            return ""
         }
     }
 }

@@ -44,7 +44,13 @@ final class CategoryVC: UIViewController {
     
     // MARK: - IBAction
     @objc private func categoryCreationButtonPressed() {
-        let vc = CategoryCreationVC(delegate: viewModel)
+        let vc = CategoryCreationVC(delegate: viewModel, editMode: false, categoryName: nil)
+        let newTrackerNavigation = UINavigationController(rootViewController: vc)
+        present(newTrackerNavigation, animated: true)
+    }
+    
+    private func categoryEditButtonPressed(categoryName: String) {
+        let vc = CategoryCreationVC(delegate: viewModel, editMode: true, categoryName: categoryName)
         let newTrackerNavigation = UINavigationController(rootViewController: vc)
         present(newTrackerNavigation, animated: true)
     }
@@ -62,7 +68,7 @@ final class CategoryVC: UIViewController {
     }
     
     private func configureUIElements() {
-        view.backgroundColor = Colors.white
+        view.backgroundColor = Colors.generalBackground
         setTitle()
         setTableView()
         setStubImage()
@@ -72,9 +78,9 @@ final class CategoryVC: UIViewController {
     
     private func setTitle() {
         let titleLabel = UILabel()
-        titleLabel.text = "Категория"
-        titleLabel.font = Fonts.SFPro16Semibold
-        titleLabel.textColor = Colors.black
+        titleLabel.text = NSLocalizedString("trackerCreationVC.category", comment: "")
+        titleLabel.font = Fonts.sfPro16Medium
+        titleLabel.textColor = Colors.generalTextcolor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         self.titleLabel = titleLabel
@@ -97,16 +103,16 @@ final class CategoryVC: UIViewController {
         stubView.addSubview(stubImageView)
         
         let label1 = UILabel()
-        label1.text = "Привычки и события можно"
-        label1.font = Fonts.SFPro12Semibold
-        label1.textColor = Colors.black
+        label1.text = NSLocalizedString("trackerCreationVC.category.stub.line1", comment: "")
+        label1.font = Fonts.sfPro12Medium
+        label1.textColor = Colors.generalTextcolor
         label1.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(label1)
         
         let label2 = UILabel()
-        label2.text = "объединить по смыслу"
-        label2.font = Fonts.SFPro12Semibold
-        label2.textColor = Colors.black
+        label2.text = NSLocalizedString("trackerCreationVC.category.stub.line2", comment: "")
+        label2.font = Fonts.sfPro12Medium
+        label2.textColor = Colors.generalTextcolor
         label2.translatesAutoresizingMaskIntoConstraints = false
         stubView.addSubview(label2)
         
@@ -138,8 +144,9 @@ final class CategoryVC: UIViewController {
         categoriesTableView.register(CategoryTableCell.self, forCellReuseIdentifier: "cell")
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
-        categoriesTableView.backgroundColor = Colors.white
+        categoriesTableView.backgroundColor = Colors.generalBackground
         categoriesTableView.showsVerticalScrollIndicator = false
+        categoriesTableView.separatorColor = Colors.grayCellsSeparator
         categoriesTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         categoriesTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(categoriesTableView)
@@ -155,10 +162,10 @@ final class CategoryVC: UIViewController {
     private func setButton() {
         let categoryCreationButton = UIButton()
         categoryCreationButton.addTarget(self, action: #selector(categoryCreationButtonPressed), for: .touchUpInside)
-        categoryCreationButton.backgroundColor = Colors.black
-        categoryCreationButton.setTitle("Добавить категорию", for: .normal)
-        categoryCreationButton.titleLabel?.font = Fonts.SFPro16Semibold
-        categoryCreationButton.setTitleColor(Colors.white, for: .normal)
+        categoryCreationButton.backgroundColor = Colors.generalTextcolor
+        categoryCreationButton.setTitle(NSLocalizedString("trackerCreationVC.addCategory", comment: ""), for: .normal)
+        categoryCreationButton.titleLabel?.font = Fonts.sfPro16Medium
+        categoryCreationButton.setTitleColor(Colors.generalBackground, for: .normal)
         categoryCreationButton.layer.masksToBounds = true
         categoryCreationButton.layer.cornerRadius = 16
         categoryCreationButton.translatesAutoresizingMaskIntoConstraints = false
@@ -197,7 +204,9 @@ extension CategoryVC: UITableViewDataSource {
             
             return cell
         }
-        fatalError("Проблема с подготовкой ячейки")
+        
+        debugPrint("@@@ CategoryVC: Ошибка подготовки ячейки для таблицы категорий.")
+        return UITableViewCell()
     }
 }
 
@@ -210,5 +219,63 @@ extension CategoryVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.updateSelectedCategory(with: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        return UIContextMenuConfiguration(actionProvider: { actions in
+            return UIMenu(children: [
+                
+                UIAction(title: NSLocalizedString("trackersViewController.contextMenu.edit", comment: "")) { [weak self] _ in
+                    if let categoryName = self?.viewModel.categoryList[indexPath.row] {
+                        self?.categoryEditButtonPressed(categoryName: categoryName)
+                    }
+                },
+                
+                UIAction(title: NSLocalizedString("trackersViewController.contextMenu.delete", comment: ""), attributes: .destructive) { [weak self] _ in
+                    if let categoryName = self?.viewModel.categoryList[indexPath.row] {
+                        self?.present(self?.getDeleteAlertView(for: categoryName) ?? UIViewController(), animated: true)
+                    }
+                },
+            ])
+        })
+    }
+    
+    private func getDeleteAlertView(for categoryName: String) -> UIAlertController {
+        let trackersCount = viewModel.getTrackersCountFor(categoryName: categoryName)
+        
+        if trackersCount > 0 {
+            let alert = UIAlertController(title: nil,
+                                          message: String(
+                                            format: NSLocalizedString("categoryCreationVC.contextMenu.canNotDelete.alert", comment: ""),
+                                            String.localizedStringWithFormat(NSLocalizedString("numberOfTrackers", comment: ""), trackersCount)
+                                          ),
+                                          preferredStyle: .actionSheet
+            )
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("buttons.ok", comment: ""),
+                                          style: .default) {_ in
+                alert.dismiss(animated: true)
+            })
+            
+            return alert
+        }
+        
+        let alert = UIAlertController(title: nil,
+                                      message: NSLocalizedString("categoryCreationVC.contextMenu.delete.alert", comment: ""),
+                                      preferredStyle: .actionSheet
+        )
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("trackersViewController.contextMenu.delete", comment: ""),
+                                      style: .destructive) {_ in
+            self.viewModel.deleteCategory(categoryName: categoryName)
+        })
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("buttons.cancel", comment: ""),
+                                      style: .cancel) {_ in
+            alert.dismiss(animated: true)
+        })
+        
+        return alert
     }
 }

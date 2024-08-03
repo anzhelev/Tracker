@@ -1,0 +1,71 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Andrey Zhelev on 14.07.2024.
+  
+*/
+
+"buttons.ok" = "Ok";
+"buttons.cancel" = "Cancel";
+"buttons.save" = "Save";
+"buttons.done" = "Done";
+"buttons.create" = "Create";
+
+"onboardingViewController.button" = "This is technology!";
+"onboardingViewController.firstScreen.textLabel.line1" = "Track only";
+"onboardingViewController.firstScreen.textLabel.line2" = "what you want";
+"onboardingViewController.secondScreen.textLabel.line1" = "Even if it's not";
+"onboardingViewController.secondScreen.textLabel.line2" = "liters of water and yoga";
+
+"trackersViewController.title" = "Trackers";
+"trackersViewController.dateFormat" = "MM/dd/yy";
+"trackersViewController.searchBarPlaceholder" = "Search";
+"trackersViewController.stub.empty" = "What will we track?";
+"trackersViewController.stub.nothingFound" = "Nothing found";
+"trackersViewController.cell.unique" = "Unique event";
+"trackersViewController.contextMenu.pin" = "Pin";
+"trackersViewController.contextMenu.unpin" = "Unpin";
+"trackersViewController.contextMenu.edit" = "Edit";
+"trackersViewController.contextMenu.delete" = "Delete";
+"trackersViewController.contextMenu.delete.alert" = "Are you sure you want to delete this tracker?";
+
+"statisticsViewController.title" = "Statistics";
+"statisticsViewController.stub" = "There is nothing to analise yet";
+"statisticsViewController.cell0" = "Best period";
+"statisticsViewController.cell1" = "Perfect days";
+"statisticsViewController.cell2" = "Completed trackers";
+"statisticsViewController.cell3" = "Avarage count";
+
+"filtersVC.title" = "Filters";
+"filtersVC.cell.all" = "All trackers";
+"filtersVC.cell.today" = "Trackers for today";
+"filtersVC.cell.completed" = "Completed";
+"filtersVC.cell.uncompleted" = "Uncompleted";
+
+"storeService.pinnedCategoryName" = "Pinned";
+
+"newTrackerTypeChoiceVC.title" = "Tracker creation";
+"newTrackerTypeChoiceVC.habit" = "Habit";
+"newTrackerTypeChoiceVC.event" = "Event";
+
+"trackerCreationVC.event.title" = "New event";
+"trackerCreationVC.eventEditing.title" = "Event edit";
+
+"trackerCreationVC.habit.title" = "New habit";
+"trackerCreationVC.habitEditing.title" = "Habit edit";
+"trackerCreationVC.habit.schedule" = "Schedule";
+"trackerCreationVC.habit.schedule.everyDay" = "Every day";
+"trackerCreationVC.enterTrackerName" = "Enter tracker name";
+"trackerCreationVC.limit" = "38 characters allowed";
+"trackerCreationVC.category" = "Category";
+"trackerCreationVC.category.stub.line1" = "Habits and events can";
+"trackerCreationVC.category.stub.line2" = "be combined by meaning";
+"trackerCreationVC.addCategory" = "Add new category";
+"trackerCreationVC.enterCategoryName" = "Enter category name";
+"trackerCreationVC.emoji" = "Emoji";
+"trackerCreationVC.color" = "Color";
+
+"categoryCreationVC.title" = "Category edit";
+"categoryCreationVC.contextMenu.delete.alert" = "Are you sure you want to delete this category?";
+"categoryCreationVC.contextMenu.canNotDelete.alert" = "There %@ in this category, so it cannot be deleted";
