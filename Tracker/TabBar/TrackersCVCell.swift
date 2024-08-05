@@ -189,13 +189,13 @@ final class TrackersCVCell: UICollectionViewCell {
         case true:
             completeButtonBGView.backgroundColor = color?.withAlphaComponent(0.3)
             let buttonImage = image.withRenderingMode(.alwaysOriginal)
-            completeButton.setImage(buttonImage, for: .normal)
+            completeButton.setImage(buttonImage.withTintColor(Colors.generalBackground), for: .normal)
             completeButton.tintColor = .clear
             
         case false:
-            completeButtonBGView.backgroundColor = Colors.white
+            completeButtonBGView.backgroundColor = Colors.generalBackground
             let buttonImage = image.withRenderingMode(.alwaysTemplate)
-            completeButton.setImage(buttonImage, for: .normal)
+            completeButton.setImage(buttonImage.withTintColor(Colors.generalBackground), for: .normal)
             completeButton.tintColor = color
         }
     }
